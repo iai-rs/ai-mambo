@@ -20,6 +20,8 @@ model Post {
 }
 
 model BiradsResults {
-    studyUID String   @id @default(cuid())
-    model1Result Float
+    study_uid      String @id @default(cuid())
+    model_1_result Float?
+
+    @@map("birads_results")
 }
