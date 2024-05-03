@@ -1,4 +1,4 @@
-import { biradsRouter } from "~/server/api/routers/post";
+import { biradsRouter, minioRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
@@ -8,6 +8,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   birads: biradsRouter,
+  minio: minioRouter,
 });
 
 // export type definition of API

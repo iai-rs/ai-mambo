@@ -8,6 +8,8 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
+    MINI_SECRET_KEY: z.string(),
+    MINI_ACCESS_KEY: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -29,6 +31,8 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    MINI_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+    MINI_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
