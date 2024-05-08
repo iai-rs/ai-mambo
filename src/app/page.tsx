@@ -13,12 +13,12 @@ export default async function Home() {
           Mambo <span className="text-[hsl(280,100%,70%)]">AI</span>
         </h1>
         <div className="flex flex-col gap-3">
-          {birads.map(({ model_1_result, study_uid }) => {
+          {birads.map(({ model_1_result, study_uid }, index) => {
             return (
               <Link
                 href={`/image/${study_uid}`}
                 className="flex flex-col"
-                key={study_uid}
+                key={study_uid + index}
               >
                 <span>Study UID: {study_uid}</span>
                 <span>Model 1 Results: {model_1_result}</span>
