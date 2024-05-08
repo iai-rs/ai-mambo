@@ -23,3 +23,4 @@ jobs:
             docker stop nextjs-app
             docker rm nextjs-app
             docker run -d -p 55614:3000 --name nextjs-app nextjs-app
+            docker network connect backend_test nextjs-app
