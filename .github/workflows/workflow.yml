@@ -18,6 +18,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ai-mambo/
+            git checkout development
             git pull
             docker build -t nextjs-app .
             docker stop nextjs-app
