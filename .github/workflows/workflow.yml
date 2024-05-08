@@ -17,6 +17,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            whoami
-            ls -al
-            pwd
+            cd ai-mambo/
+            git pull
+            docker build -t nextjs-app .
+            docker stop nextjs-app
+            docker rm nextjs-app
+            docker run -d -p 55614:3000 --name nextjs-app nextjs-app
