@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
+import { api } from "~/trpc/server";
 // import { sql } from '@vercel/postgres';
 // import type { User } from '@/app/lib/definitions';
 
@@ -12,13 +13,10 @@ type User = {
     password: string,
 }
 
-const users: User[] = [
-    { id: "1", name: "Alice", email: "admin@example.com", password: "admin1" },
-    { id: "2", name: "Bob", email: "bob@example.com", password: "pass456" }
-];
-
 async function getUser(email: string): Promise<User | undefined> {
-    return users.find(user => user.email === email);
+  const users = await api.users.getUsers();
+  const user = users.find(user => user.email === email);
+  return user;
 }
 
 export const { auth, signIn, signOut } = NextAuth({
@@ -35,11 +33,8 @@ export const { auth, signIn, signOut } = NextAuth({
           const user = await getUser(email);
             if (!user) return null;
             // check password
-            if (password === user.password) {
-                return user;
-            } else {
-                return null;
-            }
+            if (password === user.password) return user;
+            return null;
         }
 
         return null;
