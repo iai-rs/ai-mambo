@@ -9,6 +9,12 @@ export const biradsRouter = createTRPCRouter({
   }),
 });
 
+export const usersRouter = createTRPCRouter({
+  getUsers: publicProcedure.query(({ ctx }) => {
+    return ctx.db.users.findMany();
+  }),
+});
+
 // pages/api/getImage.js
 
 const temp_img =
