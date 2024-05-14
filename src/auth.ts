@@ -13,13 +13,12 @@ type User = {
 }
 
 const users: User[] = [
-    { id: "1", name: "Alice", email: "alice@example.com", password: "pass123" },
+    { id: "1", name: "Alice", email: "admin@example.com", password: "admin1" },
     { id: "2", name: "Bob", email: "bob@example.com", password: "pass456" }
 ];
 
 async function getUser(email: string): Promise<User | undefined> {
-    const user = users[0];
-    return user
+    return users.find(user => user.email === email);
 }
 
 export const { auth, signIn, signOut } = NextAuth({
