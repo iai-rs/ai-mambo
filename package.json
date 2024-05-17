@@ -23,6 +23,7 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "bcrypt": "^5.1.1",
     "cornerstone-wado-image-loader": "^4.13.2",
     "dicom-parser": "^1.8.21",
     "minio": "^8.0.0",
@@ -32,6 +33,7 @@
     "react-dom": "18.2.0",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
+    "uuid": "^9.0.1",
     "zod": "^3.23.3"
   },
   "devDependencies": {

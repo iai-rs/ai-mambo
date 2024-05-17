@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
 import { api } from "~/trpc/server";
+import bcrypt from 'bcrypt';
 // import { sql } from '@vercel/postgres';
 // import type { User } from '@/app/lib/definitions';
 
@@ -31,12 +32,11 @@ export const { auth, signIn, signOut } = NextAuth({
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
           const user = await getUser(email);
-            if (!user) return null;
-            // check password
-            if (password === user.password) return user;
-            return null;
+          if (!user) return null;
+          // check password
+          const passwordsMatch = await bcrypt.compare(password, user.password);
+          if (passwordsMatch) return user;
         }
-
         return null;
       },
     }),
