@@ -6,6 +6,9 @@ import { z } from 'zod';
 import { api } from "~/trpc/server";
 import { hash } from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
+import nodemailer from 'nodemailer';
+import { env } from "../../env";
+
  
 export async function authenticate(
   prevState: string | undefined,
@@ -25,6 +28,32 @@ export async function authenticate(
     throw error;
   }
 }
+
+const sendVerificationEmail = async(email: string) => {
+  // Configure your SMTP server credentials
+  const MAIL_USER=env.MAIL_USER;
+  const MAIL_PASSWORD=env.MAIL_PASSWORD;
+  const MAIL_SENDER_EMAIL=env.MAIL_SENDER_EMAIL;
+
+  const transporter = nodemailer.createTransport({
+    host: 'live.smtp.mailtrap.io', // Use your email service
+    port: 587,
+    secure: false, // Use `true` for port 465, `false` for all other ports
+    auth: {
+      user: MAIL_USER,
+      pass: MAIL_PASSWORD,
+    },
+  });
+
+  await transporter.sendMail({
+    from: MAIL_SENDER_EMAIL,
+    to: email, // list of receivers
+    subject: "Hello", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>", // html body
+  });
+  console.log("EMAIL SENT");
+};
 
 const RegisterUser = z.object({
   name: z.string({
@@ -80,9 +109,9 @@ export async function register(
         email: email,
         password: hashedPassword,
       });
-      console.log("***********************************")
       console.log(addedUser);
-      console.log("***********************************")
+      await sendVerificationEmail(env.MAIL_RECEIVER_EMAIL);
+      
     } else {
         console.log("User with this email already exists");
     }
