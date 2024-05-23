@@ -1,27 +1,38 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-}
-
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([name])
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model BiradsResults {
-    study_uid      String @id @default(cuid())
-    model_1_result Float?
+  study_uid      String  @default(cuid())
+  model_1_result Decimal @db.Decimal
+  patient_name   String? @db.VarChar(255)
+  id             Int     @id @default(autoincrement())
 
-    @@map("birads_results")
+  @@map("birads_results")
+}
+
+model users {
+  id       String @id @db.VarChar(255)
+  name     String @db.VarChar(255)
+  email    String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+}
+
+model dicom_metadata {
+  mammography_id     String  @id(map: "dicom_metadata_pk")
+  patient_name       String?
+  patient_id         String
+  acquisition_date   String?
+  acquisition_time   String?
+  view               String?
+  laterality         String?
+  implant            String?
+  manufacturer       String?
+  manufacturer_model String?
+  institution        String?
 }
