@@ -1,10 +1,7 @@
-import {
-  biradsRouter,
-  minioRouter,
-  usersRouter,
-} from "~/server/api/routers/post";
+import { biradsRouter, minioRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { metadataRouter } from "./routers/metadata";
+import { usersRouter } from "./routers/users";
 
 /**
  * This is the primary router for your server.

@@ -24,8 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <TopBar />
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <div className="flex flex-col">
+          <TopBar />
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </div>
       </body>
     </html>
   );

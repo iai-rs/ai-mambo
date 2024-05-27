@@ -24,7 +24,7 @@ export const metadataRouter = createTRPCRouter({
         patient_id: z.string().optional(), // JMBG
         patient_name: z.string().optional(),
         laterality: z.enum(["L", "R"]).optional(),
-        implant: z.enum(["YES", "NO"]).optional(),
+        // implant: z.enum(["YES", "NO"]).optional(),
         institution: z.string().optional(),
       }),
     )
@@ -62,9 +62,9 @@ export const metadataRouter = createTRPCRouter({
       if (input.laterality) {
         whereClause.laterality = input.laterality;
       }
-      if (input.implant) {
-        whereClause.implant = input.implant;
-      }
+      // if (input.implant) {
+      //   whereClause.implant = input.implant;
+      // }
       if (input.institution) {
         whereClause.institution = {
           contains: input.institution,
