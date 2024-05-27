@@ -23,6 +23,18 @@ importers:
       '@prisma/client':
         specifier: ^5.10.2
         version: 5.13.0(prisma@5.13.0)
+      '@prisma/client':
+        specifier: ^5.10.2
+        version: 5.13.0(prisma@5.13.0)
+      '@radix-ui/react-avatar':
+        specifier: ^1.0.4
+        version: 1.0.4(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-label':
+        specifier: ^2.0.2
+        version: 2.0.2(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-slot':
+        specifier: ^1.0.2
+        version: 1.0.2(@types/react@18.3.1)(react@18.2.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.4.5)(zod@3.23.4)
@@ -38,24 +50,24 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-rc.354
-      '@types/bcrypt':
-        specifier: ^5.0.2
-        version: 5.0.2
-      '@types/nodemailer':
-        specifier: ^6.4.15
-        version: 6.4.15
-      '@types/uuid':
-        specifier: ^9.0.8
-        version: 9.0.8
-      bcrypt:
-        specifier: ^5.1.1
-        version: 5.1.1
+      class-variance-authority:
+        specifier: ^0.7.0
+        version: 0.7.0
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       cornerstone-wado-image-loader:
         specifier: ^4.13.2
         version: 4.13.2(@babel/core@7.24.5)(cornerstone-core@2.6.1)(eslint@8.57.0)
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
       dicom-parser:
         specifier: ^1.8.21
         version: 1.8.21
+      lucide-react:
+        specifier: ^0.379.0
+        version: 0.379.0(react@18.2.0)
       minio:
         specifier: ^8.0.0
         version: 8.0.0
