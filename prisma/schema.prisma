@@ -21,6 +21,7 @@ model users {
   name     String @db.VarChar(255)
   email    String @unique @db.VarChar(255)
   password String @db.VarChar(255)
+  change_password_secret_key String? @db.VarChar(255)
 }
 
 model dicom_metadata {

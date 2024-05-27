@@ -8,7 +8,6 @@ import { hash } from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
 import nodemailer from 'nodemailer';
 import { env } from "../../env";
-
  
 export async function authenticate(
   prevState: string | undefined,
@@ -29,7 +28,7 @@ export async function authenticate(
   }
 }
 
-const sendVerificationEmail = async(email: string) => {
+const sendVerificationEmail = async(email: string, changePasswordSecretKey: string) => {
   // Configure your SMTP server credentials
   const MAIL_USER=env.MAIL_USER;
   const MAIL_PASSWORD=env.MAIL_PASSWORD;
@@ -45,12 +44,14 @@ const sendVerificationEmail = async(email: string) => {
     },
   });
 
+  const setPasswordUrl = `http://localhost:3000/set_password?tempkey=${changePasswordSecretKey}&email=${email}`
+
   await transporter.sendMail({
     from: MAIL_SENDER_EMAIL,
     to: email, // list of receivers
     subject: "Hello", // Subject line
     text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
+    html: `<b>Set password url: ${setPasswordUrl}</b>`, // html body
   });
   console.log("EMAIL SENT");
 };
@@ -70,6 +71,27 @@ const RegisterUser = z.object({
   }),
 })
 
+
+export async function setPassword(
+  changePasswordSecretKey: string,
+  email: string,
+  password: string,
+) {
+  const user = await api.users.getUserByEmail({email: email});
+  if (user === null) {
+    console.log("User with this email doesn't exists");
+  } else {
+    if (user.change_password_secret_key !== changePasswordSecretKey) {
+      console.log("Change password secret key is wrong");
+    } else {
+      const hashedPassword = await hash(password, 10);
+      const modifiedUser = await api.users.updateUserPassword({
+        email: email,
+        newPassword: hashedPassword
+      });
+    }
+  }
+}
 
 export async function register(
   prevState: string | null,
@@ -102,15 +124,17 @@ export async function register(
     if (user === null) {
       const id = uuidv4()
       const hashedPassword = await hash(password, 10);
+      const changePasswordSecretKey = uuidv4();
 
       const addedUser = await api.users.addUser({
         id: id,
         name: name,
         email: email,
         password: hashedPassword,
+        change_password_secret_key: changePasswordSecretKey,
       });
       console.log(addedUser);
-      await sendVerificationEmail(env.MAIL_RECEIVER_EMAIL);
+      await sendVerificationEmail(env.MAIL_RECEIVER_EMAIL, changePasswordSecretKey);
       
     } else {
         console.log("User with this email already exists");
