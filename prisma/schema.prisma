@@ -24,29 +24,25 @@ model users {
     change_password_secret_key String? @db.VarChar(255)
 }
 
-model dicom_metadata {
-    mammography_id     String  @id(map: "dicom_metadata_pk")
-    patient_name       String?
-    patient_id         String
-    acquisition_date   String?
-    acquisition_time   String?
-    view               String?
-    laterality         String?
-    implant            String?
-    manufacturer       String?
-    manufacturer_model String?
-    institution        String?
+enum Laterality {
+    L
+    R
+}
+
+enum Implant {
+    YES
+    NO
 }
 
 model DicomMetadata {
-    mammography_id     String  @id @default(uuid())
+    mammography_id     String      @id @default(uuid())
     patient_name       String?
     patient_id         String
     acquisition_date   String
     acquisition_time   String?
     view               String?
-    laterality         String?
-    implant            String?
+    laterality         Laterality?
+    implant            Implant?
     manufacturer       String?
     manufacturer_model String?
     institution        String?
