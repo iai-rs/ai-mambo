@@ -16,7 +16,7 @@ const Dashboard = () => {
   const [institution, setInstitution] = useState("");
 
   const [queryVariables, setQueryVariables] = useState({
-    days: 7,
+    days: 1000,
     patient_id: "",
     patient_name: "",
     // laterality: "",
@@ -54,7 +54,7 @@ const Dashboard = () => {
         <div className="flex flex-col gap-2 p-2">
           <h2 className="mb-4 text-lg">{"PRETRAGA PREGLEDA"}</h2>
           <RadioGroup
-            defaultValue="7"
+            defaultValue="1000"
             value={days}
             onValueChange={(val) => setDays(val)}
           >

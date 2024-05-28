@@ -25,7 +25,6 @@ export const usersRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         name: z.string(),
-        password: z.string(),
         email: z.string().email(),
         change_password_secret_key: z.string(),
       }),
@@ -35,7 +34,7 @@ export const usersRouter = createTRPCRouter({
         data: {
           id: input.id,
           name: input.name,
-          password: input.password,
+          password: "",
           email: input.email,
           change_password_secret_key: input.change_password_secret_key,
         },

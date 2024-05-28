@@ -1,11 +1,6 @@
 "use client";
 import { type ReactNode, useState } from "react";
-import {
-  Search,
-  ArrowLeftRight,
-  ArrowLeftToLine,
-  ArrowRightToLine,
-} from "lucide-react";
+import { Search, ArrowLeftToLine } from "lucide-react";
 
 import { Button } from "../ui/button";
 
@@ -14,7 +9,7 @@ type Props = {
 };
 
 const SideMenu = ({ children }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

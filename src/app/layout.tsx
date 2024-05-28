@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import TopBar from "../components/TopBar";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,7 +17,7 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -25,8 +26,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <div className="flex flex-col">
-          <TopBar />
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <SessionProvider>
+            <TopBar />
+            <TRPCReactProvider>{children}</TRPCReactProvider>
+          </SessionProvider>
         </div>
       </body>
     </html>
