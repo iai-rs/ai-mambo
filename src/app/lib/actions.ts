@@ -7,6 +7,7 @@ import { api } from "~/trpc/server";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import { env } from "../../env";
+import { redirect } from "next/dist/server/api-utils";
 
 export async function authenticate(
   prevState: string | undefined,

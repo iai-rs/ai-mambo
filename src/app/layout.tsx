@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import TopBar from "../components/TopBar";
 import { SessionProvider } from "next-auth/react";
+import { auth } from "~/auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,11 +23,14 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  console.log("SESS", { session });
+
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <div className="flex flex-col">
-          <SessionProvider>
+          <SessionProvider session={session}>
             <TopBar />
             <TRPCReactProvider>{children}</TRPCReactProvider>
           </SessionProvider>

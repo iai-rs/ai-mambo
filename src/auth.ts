@@ -18,8 +18,10 @@ async function getUser(email: string): Promise<User | undefined> {
   return user;
 }
 
-export const { auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  debug: true,
   ...authConfig,
+  session: { strategy: "jwt" },
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -47,16 +49,18 @@ export const { auth, signIn, signOut } = NextAuth({
       // Always redirect to the homepage after login
       return baseUrl;
     },
-    async session({ session, user }) {
+    async session({ session, user, token }) {
+      console.log("TOKEN", { token, session, user });
+
       // `user` here is the user returned from the `authorize` function
-      session.user = user; // Now all user details returned from `authorize` are attached to the session
-      console.log("ovde session", session);
+      session.user.email = token.email ?? ""; // Now all user details returned from `authorize` are attached to the session
+      session.user.name = token.name; // Now all user details returned from `authorize` are attached to the session
 
       return session;
     },
     async jwt({ token, user }) {
       // `user` here is the user returned from the `authorize` function
-      console.log("jwt user", user, token);
+      console.log("JWT", { token, user });
 
       if (user) {
         token.id = user.id; // You can add more user properties here
