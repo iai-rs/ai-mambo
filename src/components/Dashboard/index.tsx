@@ -1,12 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
+
+import React, { useMemo, useState } from "react";
 import { Button } from "../ui/button";
-import { api } from "~/trpc/react";
 import SearchMenu from "../SearchMenu";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { api } from "~/trpc/react";
+import DataTable from "../common/DataTable";
+import { format, parse } from "date-fns";
+
+interface DicomMetadata {
+  name: string | undefined;
+  jmbg: string;
+  id: string;
+  acquisition_date: string | null;
+  laterality: string | null;
+  implant: string | null;
+  institution: string | null;
+}
+
+const columnHelper = createColumnHelper<DicomMetadata>();
+
 const Dashboard = () => {
   const [days, setDays] = useState<string>();
   const [patientId, setPatientId] = useState("");
@@ -29,13 +46,36 @@ const Dashboard = () => {
       queryVariables,
       {
         staleTime: 0,
-        // enabled: false,
-        // cacheTime: 0,
-        // refetchOnWindowFocus: true,
-        // refetchOnReconnect: true,
-        // refetchOnMount: true,
       }, // Disable automatic query execution
     );
+
+  const columns: ColumnDef<DicomMetadata, never>[] = useMemo(
+    () => [
+      // columnHelper.accessor("id", {
+      //   header: "ID",
+      // }),
+      columnHelper.accessor("name", {
+        // enableSorting: false,
+        enableColumnFilter: true,
+        header: "Name",
+      }),
+      columnHelper.accessor("jmbg", {
+        enableColumnFilter: false,
+        header: "JMBG",
+      }),
+      columnHelper.accessor("acquisition_date", {
+        enableColumnFilter: false,
+        header: "Datum",
+        cell: (props) => {
+          const parsedDate = parse(props.getValue(), "yyyyMMdd", new Date());
+          // Format the Date object to a human-readable string
+          const formattedDate = format(parsedDate, "dd/MM/yyyy");
+          return formattedDate;
+        },
+      }),
+    ],
+    [],
+  );
 
   const handleSearch = () => {
     setQueryVariables({
@@ -49,8 +89,19 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <SearchMenu>
+    <div className="flex">
+      <SearchMenu
+        rightContent={
+          <div className="min-w-[700px] overflow-y-auto p-3">
+            <DataTable
+              columns={columns}
+              data={data ?? []}
+              enableSorting
+              isLoading={isLoading}
+            />
+          </div>
+        }
+      >
         <div className="flex flex-col gap-2 p-2">
           <h2 className="mb-4 text-lg">{"PRETRAGA PREGLEDA"}</h2>
           <RadioGroup
@@ -90,11 +141,6 @@ const Dashboard = () => {
           <Button onClick={() => handleSearch()}>PRETRAGA</Button>
         </div>
       </SearchMenu>
-      <div className="flex max-w-[500px] flex-col">
-        {data?.map((item, index) => {
-          return <div key={item.id + index}>{item.name}</div>;
-        })}
-      </div>
     </div>
   );
 };

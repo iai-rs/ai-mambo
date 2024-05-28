@@ -29,7 +29,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <div className="flex flex-col">
+        <div
+        // className="flex "
+        >
           <SessionProvider session={session}>
             <TopBar />
             <TRPCReactProvider>{children}</TRPCReactProvider>
