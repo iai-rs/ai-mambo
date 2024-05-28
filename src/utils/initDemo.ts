@@ -9,5 +9,5 @@ export default async function initDemo() {
   initCornerstoneDICOMImageLoader();
   // initVolumeLoader();
   await csRenderInit();
-  await csToolsInit();
+  csToolsInit();
 }

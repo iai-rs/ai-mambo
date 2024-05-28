@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { env } from "../../../env";
 import { Client } from "minio";
+
 import { z } from "zod";
 
 export const biradsRouter = createTRPCRouter({
@@ -8,65 +9,6 @@ export const biradsRouter = createTRPCRouter({
     return ctx.db.biradsResults.findMany();
   }),
 });
-
-export const usersRouter = createTRPCRouter({
-  getUsers: publicProcedure.query(({ ctx }) => {
-    return ctx.db.users.findMany();
-  }),
-
-  getUserByEmail: publicProcedure.input(z.object({
-    email: z.string().email()
-  }))
-  .query(({ ctx, input }) => {
-    return ctx.db.users.findUnique({
-      where: {
-        email: input.email // Assuming 'input' is the email passed to the query
-      }
-    });
-  }),
-
-  addUser: publicProcedure.input(z.object({
-    id: z.string(),
-    name: z.string(),
-    password: z.string(),
-    email: z.string().email(),
-    change_password_secret_key: z.string(),
-  }))
-  .mutation(({ ctx, input }) => {
-    return ctx.db.users.create({
-      data: {
-        id: input.id,
-        name: input.name,
-        password: input.password,
-        email: input.email,
-        change_password_secret_key: input.change_password_secret_key
-      }
-    })
-  }),
-
-  updateUserPassword: publicProcedure.input(z.object({
-    email: z.string().email(),
-    newPassword: z.string()
-  }))
-  .mutation(async ({ ctx, input }) => {
-    // Update the user's password
-    const updatedUser = await ctx.db.users.update({
-      where: { email: input.email },
-      data: { 
-        password: input.newPassword,
-        change_password_secret_key: null
-      }
-    });
-
-    return updatedUser;
-  })
-
-});
-
-// pages/api/getImage.js
-
-const temp_img =
-  "DXm.1.2.276.0.7230010.3.1.2.1834151193.3620.1690353389.855.2.1";
 
 // Initialize MinIO Client
 const minioClient = new Client({
@@ -86,12 +28,10 @@ export const minioRouter = createTRPCRouter({
       const url = await minioClient.presignedGetObject(
         "firstbucket",
         input,
-        // temp_img,
         expiry,
       );
       return { url };
     } catch (error) {
-      console.log("HOJOOOOOO", error);
       throw new Error("Failed to generate signed URL");
     }
   }),
