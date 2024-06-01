@@ -7,11 +7,7 @@ export default async function Home() {
   if (!birads) return null;
   return (
     <main>
-      <div
-      // className="gap-12 px-4 py-16 "
-      >
-        <Dashboard />
-      </div>
+      <Dashboard />
     </main>
   );
 }

@@ -25,7 +25,7 @@ const NoData = ({ columnsLength }: Props) => {
       >
         <TableCell colSpan={columnsLength}>
           <div className="text-step-table-border flex justify-center">
-            NO DATA
+            {"Nema podataka za navedenu pretragu".toUpperCase()}
           </div>
         </TableCell>
       </TableRow>

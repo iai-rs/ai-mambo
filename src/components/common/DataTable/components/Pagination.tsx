@@ -69,7 +69,8 @@ const Pagination = ({ table, enable }: Props) => {
           />
         </div>
         {/* Page count */}
-        <div className="flex gap-2">
+        <div>{`Strana ${table.getState().pagination.pageIndex + 1} od ${table.getPageCount()}`}</div>
+        {/* <div className="flex gap-2">
           <span className="border-step-table-border flex items-center gap-1">
             Strana
           </span>
@@ -83,10 +84,10 @@ const Pagination = ({ table, enable }: Props) => {
               }}
               className="max-w-[70px] dark:bg-muted"
             />
-            <span>of</span>
+            <span>od</span>
             <strong>{table.getPageCount()}</strong>
           </span>
-        </div>
+        </div> */}
         {/* Buttons */}
         <div className="flex gap-2">
           <Button

@@ -17,18 +17,32 @@ const SideMenu = ({ children, rightContent }: Props) => {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center overflow-y-hidden">
       <div
-        className={`relative top-[86px] h-[calc(100vh-86px)] border-r border-input bg-white transition-transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } w-64`}
+        className={`
+          relative
+          h-[calc(100vh-86px)]
+          border-r
+          border-input
+          bg-white
+          transition-transform ${isOpen ? "visible " : "hidden "} min-w-64
+        `}
       >
         {children}
       </div>
 
       {/* Content next to Side Menu */}
       <div
-        className={`ml-0 flex-grow ${isOpen ? "ml-4" : "ml-0"} transition-margin mt-[140px] h-[calc(100vh-220px)] overflow-x-auto p-4`}
+        className={
+          `
+          ml-0
+          ${isOpen ? "ml-4" : "ml-0"}
+          transition-margin
+          overflow-x-auto
+          p-4
+          `
+          // h-[calc(100vh-220px)]
+        }
       >
         {rightContent}
       </div>

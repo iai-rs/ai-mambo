@@ -57,7 +57,7 @@ const MSelect = ({
           w-auto
           max-w-[180px]
           gap-2
-          font-bold
+          font-semibold
           ring-offset-white
           focus:outline-none
           focus:ring-neutral-950
@@ -72,14 +72,7 @@ const MSelect = ({
       <SelectContent className="dark:bg-step-black">
         <SelectGroup>
           {items.map(({ key, label }) => (
-            <SelectItem
-              key={key}
-              value={key}
-              // dark:focus:bg-step-selected
-              className={`
-                font-bold
-                `}
-            >
+            <SelectItem key={key} value={key}>
               {label}
             </SelectItem>
           ))}

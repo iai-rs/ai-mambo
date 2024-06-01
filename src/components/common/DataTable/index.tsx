@@ -34,10 +34,8 @@ export type TableProps<TData, TValue> = {
   title?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  // favoriteId?: (typeof FAVORITES)[keyof typeof FAVORITES];
   enableColumnResizing?: boolean;
   enablePagination?: boolean;
-  enableFavoriteFilter?: boolean;
   enableColumnsHiding?: boolean;
   enableSorting?: boolean;
   enableFiltering?: boolean;
@@ -54,7 +52,6 @@ const DataTable = <TData, TValue>({
   enableColumnResizing = false,
   enablePagination = true,
   enableColumnsHiding = false,
-  enableFavoriteFilter = true,
   enableSorting = true,
   enableFiltering = true,
   isLoading = false,
@@ -75,7 +72,7 @@ const DataTable = <TData, TValue>({
   const isDataAvailable = tableRows.length > 0;
 
   return (
-    <div className="mb-3 flex flex-col gap-3 p-2 shadow-lg">
+    <div className="mb-3 flex flex-col gap-3 rounded-md border border-slate-400/15 p-2 shadow-lg">
       <div className="flex items-center justify-between">
         {/* Table title */}
         <span className="text-sm font-semibold">{title}</span>
@@ -84,7 +81,6 @@ const DataTable = <TData, TValue>({
           {enableColumnsHiding && (
             <HidingColumns<TData> table={table} isTableLoading={isLoading} />
           )}
-          {/* CSV export */}
         </div>
       </div>
       <Table>

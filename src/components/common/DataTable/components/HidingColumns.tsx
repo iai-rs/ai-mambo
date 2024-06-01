@@ -30,7 +30,7 @@ const HidingColumns = <TData,>({ table, isTableLoading }: Props<TData>) => {
           variant="outline"
           className="dark:bg-step-table-even-row ml-auto"
         >
-          Columns
+          Kolone
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

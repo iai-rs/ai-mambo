@@ -7,15 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model BiradsResults {
-  study_uid      String  @default(cuid())
-  model_1_result Decimal @db.Decimal
-  patient_name   String? @db.VarChar(255)
-  id             Int     @id @default(autoincrement())
-
-  @@map("birads_results")
-}
-
 model users {
   id                         String  @id @db.VarChar(255)
   name                       String  @db.VarChar(255)
@@ -25,7 +16,7 @@ model users {
 }
 
 model DicomMetadata {
-  mammography_id     String  @id(map: "dicom_metadata_pk") @default(uuid())
+  mammography_id     String         @id(map: "dicom_metadata_pk") @default(uuid())
   patient_name       String?
   patient_id         String
   acquisition_date   String?
@@ -36,6 +27,17 @@ model DicomMetadata {
   manufacturer       String?
   manufacturer_model String?
   institution        String?
+  biradsResults      BiradsResults? @relation(fields: [mammography_id], references: [study_uid]) // TODO: name birads_study_uid
 
   @@map("dicom_metadata")
+}
+
+model BiradsResults {
+  study_uid      String         @unique // TODO: check with GPT if ID
+  model_1_result Decimal        @db.Decimal
+  patient_name   String?        @db.VarChar(255)
+  id             Int            @id @default(autoincrement())
+  dicomMetadata  DicomMetadata?
+
+  @@map("birads_results")
 }

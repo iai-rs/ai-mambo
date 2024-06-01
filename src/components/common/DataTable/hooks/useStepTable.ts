@@ -1,4 +1,12 @@
-import type { ColumnDef, ColumnFiltersState, SortingState, VisibilityState } from "@tanstack/react-table";
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+} from "@tanstack/react-table";
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -7,8 +15,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-
-import type { FavoriteFilterOptions } from "../types";
 
 type Props<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
@@ -26,7 +32,9 @@ const useStepTable = <TData, TValue>({
   pageSize = 10,
 }: Props<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting ?? []);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(defaultFilters ?? []);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    defaultFilters ?? [],
+  );
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
@@ -44,17 +52,6 @@ const useStepTable = <TData, TValue>({
       },
     },
     filterFns: {
-      favoriteFilter: (row, columnId, filterValue: FavoriteFilterOptions) => {
-        const isFavorite = row.original?.isFavorite;
-
-        // If filterValue is "all", always return true.
-        // Otherwise, return true if filterValue aligns with the isFavorite status.
-        return (
-          filterValue === "all" ||
-          (filterValue === "watched" && isFavorite) ||
-          (filterValue === "unwatched" && !isFavorite)
-        );
-      },
       checkboxFilter: (row, columnId, filterValue: string[]) => {
         // Access the original value for the specified column
         const item = row.original[columnId];

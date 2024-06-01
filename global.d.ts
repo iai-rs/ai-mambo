@@ -19,7 +19,6 @@ declare module "@tanstack/react-table" {
   }
 
   interface FilterFns {
-    favoriteFilter: FilterFn<unknown>;
     checkboxFilter: FilterFn<unknown>;
   }
 }

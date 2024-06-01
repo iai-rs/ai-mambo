@@ -24,14 +24,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  console.log("SESS", { session });
 
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
-        <div
-        // className="flex "
-        >
+        <div>
           <SessionProvider session={session}>
             <TopBar />
             <TRPCReactProvider>{children}</TRPCReactProvider>

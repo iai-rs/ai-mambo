@@ -11,18 +11,21 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { api } from "~/trpc/react";
 import DataTable from "../common/DataTable";
 import { format, parse } from "date-fns";
+import { type Decimal } from "@prisma/client/runtime/library";
+import PatientTable from "./PatientTable";
 
-interface DicomMetadata {
-  name: string | undefined;
-  jmbg: string;
-  id: string;
-  acquisition_date: string | null;
-  laterality: string | null;
-  implant: string | null;
-  institution: string | null;
-}
-
-const columnHelper = createColumnHelper<DicomMetadata>();
+// interface DicomMetadata {
+//   name: string | undefined;
+//   jmbg: string;
+//   id: string;
+//   acquisition_date: string | null;
+//   laterality: string | null;
+//   implant: string | null;
+//   institution: string | null;
+//   manufacturer: string | null;
+//   manufacturerModel: string | null;
+//   modelResult: Decimal | null | undefined;
+// }
 
 const Dashboard = () => {
   const [days, setDays] = useState<string>();
@@ -49,34 +52,6 @@ const Dashboard = () => {
       }, // Disable automatic query execution
     );
 
-  const columns: ColumnDef<DicomMetadata, never>[] = useMemo(
-    () => [
-      // columnHelper.accessor("id", {
-      //   header: "ID",
-      // }),
-      columnHelper.accessor("name", {
-        // enableSorting: false,
-        enableColumnFilter: true,
-        header: "Name",
-      }),
-      columnHelper.accessor("jmbg", {
-        enableColumnFilter: false,
-        header: "JMBG",
-      }),
-      columnHelper.accessor("acquisition_date", {
-        enableColumnFilter: false,
-        header: "Datum",
-        cell: (props) => {
-          const parsedDate = parse(props.getValue(), "yyyyMMdd", new Date());
-          // Format the Date object to a human-readable string
-          const formattedDate = format(parsedDate, "dd/MM/yyyy");
-          return formattedDate;
-        },
-      }),
-    ],
-    [],
-  );
-
   const handleSearch = () => {
     setQueryVariables({
       days: Number(days),
@@ -92,13 +67,8 @@ const Dashboard = () => {
     <div className="flex">
       <SearchMenu
         rightContent={
-          <div className="min-w-[700px] overflow-y-auto p-3">
-            <DataTable
-              columns={columns}
-              data={data ?? []}
-              enableSorting
-              isLoading={isLoading}
-            />
+          <div className="overflow-y-auto p-3">
+            <PatientTable data={data} isLoading={isLoading} />
           </div>
         }
       >
