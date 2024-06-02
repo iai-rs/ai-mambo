@@ -13,7 +13,7 @@ import { Badge } from "../ui/badge";
 import { type PatientData } from "types";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { log } from "util";
+import { modelResultFormatter } from "../common/Formaters";
 
 const columnHelper = createColumnHelper<PatientData>();
 
@@ -51,8 +51,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
         },
       }),
       columnHelper.accessor(
-        ({ modelResult }) =>
-          modelResult ? Math.round(modelResult * 100) + "%" : "-",
+        ({ modelResult }) => modelResultFormatter(modelResult),
         {
           id: "modelResult",
           enableColumnFilter: false,
@@ -69,7 +68,6 @@ const PatientTable = ({ data, isLoading }: Props) => {
           const parsedDate = parse(props.getValue(), "yyyyMMdd", new Date());
           if (isNaN(parsedDate.getTime())) return "-";
           // Format the Date object to a human-readable string
-          console.log({ parsedDate });
 
           const formattedDate = format(parsedDate, "dd/MM/yyyy");
           return formattedDate;
