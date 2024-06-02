@@ -72,7 +72,7 @@ const DataTable = <TData, TValue>({
   const isDataAvailable = tableRows.length > 0;
 
   return (
-    <div className="mb-3 flex flex-col gap-3 rounded-md border border-slate-400/15 p-2 shadow-lg">
+    <div className="mb-3 flex h-[calc(100vh-200px)] flex-col gap-3 overflow-y-auto rounded-md border border-slate-400/15 p-2 shadow-lg">
       <div className="flex items-center justify-between">
         {/* Table title */}
         <span className="text-sm font-semibold">{title}</span>
@@ -86,11 +86,15 @@ const DataTable = <TData, TValue>({
       <Table>
         {/* HEADER */}
         <TableHeader
-        // className="bg-[#a8a8a8]"
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+          }}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
-              className="p-3 dark:hover:bg-transparent [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
+              className="bg-white p-3 hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
               key={headerGroup.id}
             >
               {headerGroup.headers.map((header, index) => {
@@ -104,9 +108,12 @@ const DataTable = <TData, TValue>({
                 return (
                   <TableHead
                     colSpan={header.colSpan}
-                    style={headerCustomStyle}
+                    style={{
+                      ...headerCustomStyle,
+                      boxShadow: "inset 0 -3px 0 #cbd5e1",
+                    }}
                     className={cn({
-                      "hover:bg-step-table-hover relative whitespace-nowrap text-right":
+                      "relative whitespace-nowrap text-right shadow-inner hover:bg-slate-200/30":
                         isSortable && !isLoading,
                     })}
                     key={header.id}

@@ -1,6 +1,5 @@
 /**
  * Returns a Tailwind CSS class for a table row's background based on its index.
- * Odd-indexed rows receive "bg-step-table-even-row," while even-indexed rows get "bg-step-dark-gray-2."
  *
  * @param index The 0-based index of the row.
  * @returns The Tailwind CSS class name for the background color.

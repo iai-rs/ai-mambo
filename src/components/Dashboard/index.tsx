@@ -1,47 +1,31 @@
 "use client";
 
-import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import React, { useState } from "react";
 
-import React, { useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import SearchMenu from "../SearchMenu";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { api } from "~/trpc/react";
-import DataTable from "../common/DataTable";
-import { format, parse } from "date-fns";
-import { type Decimal } from "@prisma/client/runtime/library";
 import PatientTable from "./PatientTable";
 
-// interface DicomMetadata {
-//   name: string | undefined;
-//   jmbg: string;
-//   id: string;
-//   acquisition_date: string | null;
-//   laterality: string | null;
-//   implant: string | null;
-//   institution: string | null;
-//   manufacturer: string | null;
-//   manufacturerModel: string | null;
-//   modelResult: Decimal | null | undefined;
-// }
+const DEFAULT_DAYS = 7;
 
 const Dashboard = () => {
-  const [days, setDays] = useState<string>();
+  const [days, setDays] = useState(DEFAULT_DAYS);
+  const [fromBeginningOfYear, setFromBeginningOfYear] =
+    useState<boolean>(false);
+  const [allData, setAllData] = useState<boolean>(false);
   const [patientId, setPatientId] = useState("");
   const [patientName, setPatientName] = useState("");
-  const [laterality, setLaterality] = useState("");
-  const [implant, setImplant] = useState("");
-  const [institution, setInstitution] = useState("");
 
   const [queryVariables, setQueryVariables] = useState({
-    days: 1000,
+    days: DEFAULT_DAYS,
+    fromBeginningOfYear: false,
+    allData: false,
     patient_id: "",
     patient_name: "",
-    // laterality: "",
-    // implant: "",
-    // institution: "",
   });
 
   const { data, isLoading, error, refetch } =
@@ -54,12 +38,11 @@ const Dashboard = () => {
 
   const handleSearch = () => {
     setQueryVariables({
-      days: Number(days),
+      days,
+      fromBeginningOfYear,
+      allData,
       patient_id: patientId,
       patient_name: patientName,
-      // laterality,
-      // implant,
-      // institution,
     });
   };
 
@@ -75,21 +58,36 @@ const Dashboard = () => {
         <div className="flex flex-col gap-2 p-2">
           <h2 className="mb-4 text-lg">{"PRETRAGA PREGLEDA"}</h2>
           <RadioGroup
-            defaultValue="1000"
-            value={days}
-            onValueChange={(val) => setDays(val)}
+            defaultValue="7"
+            onValueChange={(val) => {
+              if (val === "startOfYear") {
+                setFromBeginningOfYear(true);
+                setAllData(false);
+              }
+              if (val === "allData") {
+                setAllData(true);
+                setFromBeginningOfYear(false);
+              }
+              if (!isNaN(Number(val))) {
+                setDays(Number(val));
+              }
+            }}
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="7" id="r1" />
-              <Label htmlFor="r1">7 dana</Label>
+              <Label htmlFor="r1">{"7 dana"}</Label>
             </div>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="30" id="r2" />
-              <Label htmlFor="r2">30 dana</Label>
+              <Label htmlFor="r2">{"30 dana"}</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="1000" id="r3" />
-              <Label htmlFor="r3">3 meseca</Label>
+              <RadioGroupItem value="startOfYear" id="r3" />
+              <Label htmlFor="r3">{"Od početka godine"}</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="allData" id="r4" />
+              <Label htmlFor="r4">{"Sve"}</Label>
             </div>
           </RadioGroup>
           {/* JMBG */}

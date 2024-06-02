@@ -7,8 +7,8 @@ const svgOptions = {
 };
 
 const lookupSort = {
-  asc: <ArrowUp {...svgOptions} className="stroke-step-light-green" />,
-  desc: <ArrowDown {...svgOptions} className="stroke-step-light-green" />,
+  asc: <ArrowUp {...svgOptions} className="stroke-blue-500" />,
+  desc: <ArrowDown {...svgOptions} className="stroke-blue-500" />,
 };
 
 type Props = { sort: "asc" | "desc" | false };

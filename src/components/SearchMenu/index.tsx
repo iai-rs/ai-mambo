@@ -36,6 +36,7 @@ const SideMenu = ({ children, rightContent }: Props) => {
         className={
           `
           ml-0
+          max-h-[1000px]
           ${isOpen ? "ml-4" : "ml-0"}
           transition-margin
           overflow-x-auto

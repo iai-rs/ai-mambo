@@ -1,15 +1,18 @@
 import type { Column } from "@tanstack/react-table";
 import { Filter } from "lucide-react";
 import { X } from "lucide-react";
-import { useTranslations } from "next-intl";
 import type { MouseEventHandler } from "react";
 import React from "react";
 
-import { Button } from "~/components/ui/lib/button";
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/lib/popover";
-import { cn } from "~/utils/cn";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 
 import { DebouncedInput } from "../../DebouncedInput";
+import { cn } from "~/lib/utils";
+import { Button } from "~/components/ui/button";
 
 type Props = { column: Column<any, unknown> };
 
@@ -20,34 +23,56 @@ type Props = { column: Column<any, unknown> };
  * @returns A min max filter UI or null if disabled.
  */
 const MinMaxFilter = ({ column }: Props) => {
-  const t = useTranslations("table.minMaxFilter");
   const columnFilterValue = column.getFilterValue() ?? "";
 
   return (
     <Popover>
-      <PopoverTrigger onClick={(e) => e.stopPropagation()} className="table__filter-icon">
-        <Filter className={cn({ ["stroke-step-light-green"]: !!column.getIsFiltered() })} width={16} height={16} />
+      <PopoverTrigger
+        onClick={(e: MouseEvent) => e.stopPropagation()}
+        className="table__filter-icon"
+      >
+        <Filter
+          className={cn({ ["stroke-green-400"]: !!column.getIsFiltered() })}
+          width={16}
+          height={16}
+        />
       </PopoverTrigger>
-      <PopoverContent className=" dark:bg-step-black">
+      <PopoverContent className=" dark:bg-slate-800">
         <div className="flex items-center gap-3">
           <FilterInput
             autoFocus
-            placeholder={t("min")}
+            placeholder={"MIN"}
             value={(columnFilterValue as [number, number])?.[0] ?? ""}
             onClear={(e) => {
               e.stopPropagation();
-              column.setFilterValue((prev: [number, number]) => ["", prev?.[1]]);
+              column.setFilterValue((prev: [number, number]) => [
+                "",
+                prev?.[1],
+              ]);
             }}
-            onChange={(value) => column.setFilterValue((prev: [number, number]) => [value, prev?.[1]])}
+            onChange={(value) =>
+              column.setFilterValue((prev: [number, number]) => [
+                value,
+                prev?.[1],
+              ])
+            }
           />
           <FilterInput
-            placeholder={t("max")}
+            placeholder={"MAX"}
             value={(columnFilterValue as [number, number])?.[1] ?? ""}
-            onClear={(e) => {
+            onClear={(e: Event) => {
               e.stopPropagation();
-              column.setFilterValue((prev: [number, number]) => [prev?.[0], ""]);
+              column.setFilterValue((prev: [number, number]) => [
+                prev?.[0],
+                "",
+              ]);
             }}
-            onChange={(value) => column.setFilterValue((prev: [number, number]) => [prev?.[0], value])}
+            onChange={(value) =>
+              column.setFilterValue((prev: [number, number]) => [
+                prev?.[0],
+                value,
+              ])
+            }
           />
         </div>
       </PopoverContent>
@@ -66,11 +91,17 @@ type FilterInputProps = {
 /**
  * A sub-component for rendering a debounced input field with a clear button.
  */
-const FilterInput = ({ autoFocus = false, placeholder, value, onChange, onClear }: FilterInputProps) => (
+const FilterInput = ({
+  autoFocus = false,
+  placeholder,
+  value,
+  onChange,
+  onClear,
+}: FilterInputProps) => (
   <div className="flex items-center gap-3">
     <DebouncedInput
       autoFocus={autoFocus}
-      className="h-8 dark:bg-step-black"
+      className="h-8 dark:bg-slate-700"
       placeholder={placeholder}
       value={value as string}
       onChange={onChange}

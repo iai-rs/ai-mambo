@@ -53,7 +53,6 @@ const MSelect = ({
       <SelectTrigger
         disabled={disabled}
         className="
-          dark:bg-step-black
           w-auto
           max-w-[180px]
           gap-2
@@ -69,7 +68,7 @@ const MSelect = ({
           {fixedTitle ?? selectedItemLabel}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="dark:bg-step-black">
+      <SelectContent>
         <SelectGroup>
           {items.map(({ key, label }) => (
             <SelectItem key={key} value={key}>

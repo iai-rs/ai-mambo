@@ -15,16 +15,9 @@ type Props = {
 const NoData = ({ columnsLength }: Props) => {
   return (
     <TableBody>
-      <TableRow
-        className="
-        bg-step-table-odd-row
-        border-step-table-border
-        h-[200px]
-        border-b
-        "
-      >
+      <TableRow className="h-[calc(100vh-400px)] border-b">
         <TableCell colSpan={columnsLength}>
-          <div className="text-step-table-border flex justify-center">
+          <div className="flex justify-center">
             {"Nema podataka za navedenu pretragu".toUpperCase()}
           </div>
         </TableCell>

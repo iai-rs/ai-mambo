@@ -9,9 +9,6 @@ import React from "react";
 import MSelect from "~/components/common/MSelect";
 
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-
-// import StepSelect from "../../Select";
 
 type Props = {
   /** An instance of a Table object from @tanstack/react-table */
@@ -49,7 +46,7 @@ const Pagination = ({ table, enable }: Props) => {
   if (!enable) return null;
 
   return (
-    <div className="mt-2 flex flex-row-reverse">
+    <div className="mt-2 flex flex-row-reverse border-t border-slate-300/50 pt-2">
       <div className="flex flex-wrap items-center gap-6">
         {/* Rows per page */}
         <div className="flex items-center gap-1 font-normal">
@@ -70,29 +67,11 @@ const Pagination = ({ table, enable }: Props) => {
         </div>
         {/* Page count */}
         <div>{`Strana ${table.getState().pagination.pageIndex + 1} od ${table.getPageCount()}`}</div>
-        {/* <div className="flex gap-2">
-          <span className="border-step-table-border flex items-center gap-1">
-            Strana
-          </span>
-          <span className="flex items-center gap-1 font-normal">
-            <Input
-              type="number"
-              value={table.getState().pagination.pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                table.setPageIndex(page);
-              }}
-              className="max-w-[70px] dark:bg-muted"
-            />
-            <span>od</span>
-            <strong>{table.getPageCount()}</strong>
-          </span>
-        </div> */}
         {/* Buttons */}
         <div className="flex gap-2">
           <Button
             variant="ghost"
-            className="border-step-table-border h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-muted p-1"
             onClick={() => table.setPageIndex(0)}
             disabled={!isPreviousPageAvailable}
           >
@@ -102,7 +81,7 @@ const Pagination = ({ table, enable }: Props) => {
           </Button>
           <Button
             variant="ghost"
-            className="border-step-table-border h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-muted p-1"
             onClick={() => table.previousPage()}
             disabled={!isPreviousPageAvailable}
           >
@@ -110,7 +89,7 @@ const Pagination = ({ table, enable }: Props) => {
           </Button>
           <Button
             variant="ghost"
-            className="border-step-table-border h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-muted p-1"
             onClick={() => table.nextPage()}
             disabled={!isNextPageAvailable}
           >
@@ -118,7 +97,7 @@ const Pagination = ({ table, enable }: Props) => {
           </Button>
           <Button
             variant="ghost"
-            className="border-step-table-border h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-muted p-1"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!isNextPageAvailable}
           >

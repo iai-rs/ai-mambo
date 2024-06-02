@@ -30,7 +30,6 @@ const SearchFilter = ({ column }: Props) => {
       <PopoverTrigger
         onClick={(e: Event) => e.stopPropagation()}
         className="
-          hover:bg-step-table-border
           rounded-md
           p-1.5
           focus:outline-transparent
@@ -39,21 +38,21 @@ const SearchFilter = ({ column }: Props) => {
       >
         <Search
           className={cn({
-            ["stroke-step-light-green"]: !!column.getIsFiltered(),
+            ["stroke-green-500"]: !!column.getIsFiltered(),
           })}
           width={16}
           height={16}
         />
       </PopoverTrigger>
       <PopoverContent
-        className=" dark:bg-step-black"
+        className=" dark:bg-slate-700"
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         onClick={(e: Event) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3">
           <DebouncedInput
             autoFocus
-            className="dark:bg-step-black h-8"
+            className="h-8 dark:bg-slate-700"
             placeholder={"pretraga"}
             value={columnFilterValue as string}
             onChange={(value) => column.setFilterValue(value)}

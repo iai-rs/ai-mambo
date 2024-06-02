@@ -27,7 +27,7 @@ const SkeletonsLoader = ({ rowsLength, columnsLength }: Props) => (
     {generateSequentialNumbers(rowsLength).map((index) => (
       <TableRow
         key={`i-${index}`}
-        className={cn("bg-step-dark-gray-2 h-[53px] dark:hover:bg-transparent")}
+        className={cn("h-[53px] bg-white dark:hover:bg-transparent")}
       >
         {generateSequentialNumbers(columnsLength).map((item) => (
           <TableCell key={item}>

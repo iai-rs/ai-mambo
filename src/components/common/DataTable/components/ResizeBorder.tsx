@@ -36,7 +36,7 @@ const ResizeBorder = ({ isResizing, onMouseDown, onTouchStart }: Props) => {
       bg-[#303030]
       opacity-0 hover:opacity-100
       `,
-        isResizing ? "bg-step-dark-gray-5 opacity-100" : "hover:opacity-100",
+        isResizing ? "bg-slate-700 opacity-100" : "hover:opacity-100",
       )}
     ></div>
   );
