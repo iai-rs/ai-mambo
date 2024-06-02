@@ -50,8 +50,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return baseUrl;
     },
     async session({ session, user, token }) {
-      console.log("TOKEN", { token, session, user });
-
       // `user` here is the user returned from the `authorize` function
       session.user.email = token.email ?? ""; // Now all user details returned from `authorize` are attached to the session
       session.user.name = token.name; // Now all user details returned from `authorize` are attached to the session
@@ -60,7 +58,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async jwt({ token, user }) {
       // `user` here is the user returned from the `authorize` function
-      console.log("JWT", { token, user });
 
       if (user) {
         token.id = user.id; // You can add more user properties here

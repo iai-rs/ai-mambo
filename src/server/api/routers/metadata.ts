@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { subDays, format, startOfYear } from "date-fns";
+import { type PatientData } from "types";
 
 export const metadataRouter = createTRPCRouter({
   getMetadata: publicProcedure.query(async ({ ctx }) => {
@@ -15,6 +16,41 @@ export const metadataRouter = createTRPCRouter({
     });
   }),
 
+  getMetadataById: publicProcedure
+    .input(
+      z.object({
+        mammography_id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const metadata = await ctx.db.dicomMetadata.findUnique({
+        where: {
+          mammography_id: input.mammography_id,
+        },
+        include: {
+          biradsResults: true, // Include related data from biradsResults if necessary
+        },
+      });
+
+      if (!metadata) {
+        throw new Error("Metadata not found");
+      }
+
+      return {
+        patientName: metadata.patient_name?.replace("^", " "),
+        patientId: metadata.patient_id,
+        id: metadata.mammography_id,
+        acquisitionDate: metadata.acquisition_date,
+        laterality: metadata.laterality,
+        implant: metadata.implant,
+        institution: metadata.institution,
+        manufacturer: metadata.manufacturer,
+        manufacturerModel: metadata.manufacturer_model,
+        modelResult: metadata.biradsResults?.model_1_result, // Include model_1_result from biradsResults
+        view: metadata.view,
+      };
+    }),
+
   getMetadataDays: publicProcedure
     .input(
       z.object({
@@ -24,7 +60,6 @@ export const metadataRouter = createTRPCRouter({
         patient_id: z.string().optional(), // JMBG
         patient_name: z.string().optional(),
         laterality: z.enum(["L", "R"]).optional(),
-        // implant: z.enum(["YES", "NO"]).optional(),
         institution: z.string().optional(),
       }),
     )
@@ -62,9 +97,6 @@ export const metadataRouter = createTRPCRouter({
       if (input.laterality) {
         whereClause.laterality = input.laterality;
       }
-      // if (input.implant) {
-      //   whereClause.implant = input.implant;
-      // }
       if (input.institution) {
         whereClause.institution = {
           contains: input.institution,
@@ -78,18 +110,25 @@ export const metadataRouter = createTRPCRouter({
 
       const metadata = await ctx.db.dicomMetadata.findMany({
         where: whereClause,
+        include: {
+          biradsResults: true, // Include related data from biradsResults
+        },
       });
 
       return metadata.map((item) => {
         return {
-          name: item.patient_name?.replace("^", " "),
-          jmbg: item.patient_id,
+          patientName: item.patient_name?.replace("^", " "),
+          patientId: item.patient_id,
           id: item.mammography_id,
-          acquisition_date: item.acquisition_date,
+          acquisitionDate: item.acquisition_date,
           laterality: item.laterality,
           implant: item.implant,
           institution: item.institution,
-        };
+          manufacturer: item.manufacturer,
+          manufacturerModel: item.manufacturer_model,
+          modelResult: item.biradsResults?.model_1_result, // Include model_1_result from biradsResults
+          view: item.view,
+        } as PatientData;
       });
     }),
 });

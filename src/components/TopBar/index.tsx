@@ -5,7 +5,7 @@ import SignedUser from "./SignedUser";
 
 const TopBar = () => {
   return (
-    <div className="fixed w-full bg-muted p-2">
+    <div className="sticky w-full bg-muted p-2">
       <div className="flex items-center justify-between">
         <Image src={IorsLogo} alt="iors" />
         <div className="flex gap-2">
