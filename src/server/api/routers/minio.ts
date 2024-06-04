@@ -13,7 +13,7 @@ export const biradsRouter = createTRPCRouter({
 // Initialize MinIO Client
 const minioClient = new Client({
   // endPoint: "127.0.0.1",
-  endPoint: "localhost",
+  endPoint: env.MINI_ENDPOINT,
   port: 9000,
   useSSL: false,
   accessKey: env.MINI_ACCESS_KEY,
