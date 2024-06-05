@@ -3,13 +3,13 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { register } from "~/app/lib/actions";
 
-export default function RegisterForm() {
+export default function InviteUserForm() {
   const [errorMessage, formAction] = useFormState(register, null);
 
   return (
     <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl">Register by email.</h1>
+        <h1 className="mb-3 text-2xl">Invite by email</h1>
         <div className="w-full">
           <div>
             <label
@@ -48,7 +48,7 @@ export default function RegisterForm() {
             </div>
           </div>
         </div>
-        <RegisterButton />
+        <InviteUserButton />
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
@@ -65,12 +65,12 @@ export default function RegisterForm() {
   );
 }
 
-function RegisterButton() {
+function InviteUserButton() {
   const { pending } = useFormStatus();
 
   return (
     <button className="mt-4 w-full" aria-disabled={pending}>
-      Register
+      Invite user
     </button>
   );
 }
