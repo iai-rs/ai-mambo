@@ -4,6 +4,7 @@ import { api } from "~/trpc/server";
 import InviteUserForm from "../register/components/invite-user-form";
 import { auth } from "~/auth";
 import { Role } from "@prisma/client";
+import User from "./components/User";
 
 export const metadata: Metadata = {
   title: "Users",
@@ -25,7 +26,6 @@ export default async function Users() {
   return (
     <main className="">
         <InviteUserForm />
-        {/* Invite user section */}
         <hr/>
         <h1>List of users</h1>
         <table>
@@ -38,16 +38,14 @@ export default async function Users() {
                 </tr>
             </thead>
             <tbody>
-        {users.map(user => (
-            <tr key={user.id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td>
-                    <button>Delete user</button>
-                </td>
-            </tr>
-        ))}
+                {users.map(user => (
+                    <User user={{
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role
+                    }}/>
+                ))}
             </tbody>
         </table>
     </main>
