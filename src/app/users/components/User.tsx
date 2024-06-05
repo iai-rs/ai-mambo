@@ -1,7 +1,8 @@
 "use client";
 
 import { Role } from "@prisma/client";
-import { getUsers } from "~/app/lib/actions";
+import { useState } from "react";
+import { changeUserRole } from "~/app/lib/actions";
 
 interface Props {
     user: {
@@ -13,14 +14,20 @@ interface Props {
 }
 
 export default function User( {user} : Props ) {
+    const [userState, setUser] = useState(user);
+
+    const handleRoleChange = (userId: string, newRole: Role) => {
+        const changeRole = changeUserRole(userId, newRole);
+        setUser({...user, role: newRole});
+    }
   return (
-    <tr key={user.id}>
-        <td>{user.name}</td>
-        <td>{user.email}</td>
+    <tr key={userState.id}>
+        <td>{userState.name}</td>
+        <td>{userState.email}</td>
         <td>
             <select
-                value={user.role}
-                onChange={(e) => {}}>
+                value={userState.role}
+                onChange={(e) => handleRoleChange(userState.id, e.target.value as Role)}>
                 {Object.values(Role).map(role => (
                     <option key={role} value={role}>
                         {role}

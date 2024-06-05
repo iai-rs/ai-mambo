@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import { env } from "../../env";
 import { redirect } from "next/dist/server/api-utils";
+import { Role } from "@prisma/client";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -115,4 +116,11 @@ export async function register(prevState: string | null, formData: FormData) {
   } else {
     console.log("User with this email already exists");
   }
+}
+
+export async function changeUserRole(userId: string, newRole: Role) {
+  const user = await api.users.getUserById({ id: userId });
+  if (!user)
+    return null;
+  const updatedUser = await api.users.updateUserRole({id: user.id, role: newRole});
 }

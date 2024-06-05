@@ -39,7 +39,7 @@ export default async function Users() {
             </thead>
             <tbody>
                 {users.map(user => (
-                    <User user={{
+                    <User key={user.id} user={{
                         id: user.id,
                         name: user.name,
                         email: user.email,
