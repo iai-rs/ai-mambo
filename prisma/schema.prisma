@@ -13,10 +13,11 @@ model users {
   email                      String  @unique @db.VarChar(255)
   password                   String? @db.VarChar(255)
   change_password_secret_key String? @db.VarChar(255)
+  role                       Role    @default(USER)
 }
 
 model DicomMetadata {
-  mammography_id     String         @id(map: "dicom_metadata_pk") @default(uuid())
+  mammography_id     String        @id(map: "dicom_metadata_pk") @default(uuid())
   patient_name       String?
   patient_id         String
   acquisition_date   String?
@@ -27,17 +28,22 @@ model DicomMetadata {
   manufacturer       String?
   manufacturer_model String?
   institution        String?
-  biradsResults      BiradsResults? @relation(fields: [mammography_id], references: [study_uid]) // TODO: name birads_study_uid
+  birads_results     BiradsResults @relation(fields: [mammography_id], references: [study_uid])
 
   @@map("dicom_metadata")
 }
 
 model BiradsResults {
-  study_uid      String         @unique // TODO: check with GPT if ID
+  study_uid      String         @unique
   model_1_result Decimal        @db.Decimal
   patient_name   String?        @db.VarChar(255)
   id             Int            @id @default(autoincrement())
-  dicomMetadata  DicomMetadata?
+  dicom_metadata DicomMetadata?
 
   @@map("birads_results")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
