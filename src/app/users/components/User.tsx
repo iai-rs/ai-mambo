@@ -2,7 +2,7 @@
 
 import { Role } from "@prisma/client";
 import { useState } from "react";
-import { changeUserRole } from "~/app/lib/actions";
+import { changeUserRole, deleteUser } from "~/app/lib/actions";
 
 interface Props {
     user: {
@@ -20,6 +20,11 @@ export default function User( {user} : Props ) {
         const changeRole = changeUserRole(userId, newRole);
         setUser({...user, role: newRole});
     }
+
+    const handleDeleteUser = (userId: string) => {
+        const deletedUser = deleteUser(userId);
+    }
+
   return (
     <tr key={userState.id}>
         <td>{userState.name}</td>
@@ -36,7 +41,7 @@ export default function User( {user} : Props ) {
             </select>
         </td>
         <td>
-            <button>Delete user</button>
+            <button onClick={() => handleDeleteUser(userState.id)}>Delete user</button>
         </td>
     </tr>
   )

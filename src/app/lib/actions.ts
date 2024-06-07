@@ -124,3 +124,8 @@ export async function changeUserRole(userId: string, newRole: Role) {
     return null;
   const updatedUser = await api.users.updateUserRole({id: user.id, role: newRole});
 }
+
+export async function deleteUser(userId: string) {
+  const deletedUser = await api.users.deleteUserById({id: userId});
+  return deleteUser;
+}
