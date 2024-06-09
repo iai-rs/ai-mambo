@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {
+  Column,
   ColumnDef,
   ColumnFilter,
   SortingState,
 } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
-import React from "react";
+import React, { type CSSProperties } from "react";
 
 import {
   Table,
@@ -41,8 +43,32 @@ export type TableProps<TData, TValue> = {
   enableFiltering?: boolean;
   isLoading?: boolean;
   pageSize?: number;
+  leftColumnsPin?: string[];
+  rightColumnsPin?: string[];
   defaultFilters?: ColumnFilter[];
   defaultSorting?: SortingState;
+};
+
+const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
+  const isPinned = column.getIsPinned();
+  const isLastLeftPinnedColumn =
+    isPinned === "left" && column.getIsLastColumn("left");
+  const isFirstRightPinnedColumn =
+    isPinned === "right" && column.getIsFirstColumn("right");
+
+  return {
+    boxShadow: isLastLeftPinnedColumn
+      ? "-4px 0 4px -4px gray inset"
+      : isFirstRightPinnedColumn
+        ? "4px 0 4px -4px gray inset"
+        : undefined,
+    left: isPinned === "left" ? `${column.getStart("left")}px` : undefined,
+    right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
+    opacity: isPinned ? 1 : 1,
+    position: isPinned ? "sticky" : "relative",
+    width: column.getSize(),
+    zIndex: isPinned ? 1 : 0,
+  };
 };
 
 const DataTable = <TData, TValue>({
@@ -56,6 +82,8 @@ const DataTable = <TData, TValue>({
   enableFiltering = true,
   isLoading = false,
   pageSize = DEFAULT_PAGE_SIZE,
+  leftColumnsPin = [],
+  rightColumnsPin = [],
   defaultFilters,
   defaultSorting,
 }: TableProps<TData, TValue>) => {
@@ -64,6 +92,8 @@ const DataTable = <TData, TValue>({
     data,
     defaultFilters,
     defaultSorting,
+    leftColumnsPin,
+    rightColumnsPin,
     pageSize,
   });
   const tableRows = table.getRowModel().rows;
@@ -111,8 +141,9 @@ const DataTable = <TData, TValue>({
                     style={{
                       ...headerCustomStyle,
                       boxShadow: "inset 0 -3px 0 #cbd5e1",
+                      ...getCommonPinningStyles(header.column),
                     }}
-                    className={cn({
+                    className={cn("bg-slate-100", {
                       "relative whitespace-nowrap text-right shadow-inner hover:bg-slate-200/30":
                         isSortable && !isLoading,
                     })}
@@ -180,14 +211,17 @@ const DataTable = <TData, TValue>({
                   className={cn(
                     { ["[&_td:first-child]:rounded-bl-md"]: isLastRow },
                     { ["[&_td:last-child]:rounded-br-md"]: isLastRow },
-                    resolveRowBackground(index),
                   )}
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      style={{ width: cell.column.getSize() }}
+                      style={{
+                        width: cell.column.getSize(),
+                        ...getCommonPinningStyles(cell.column),
+                      }}
+                      className={resolveRowBackground(index)}
                       align={cell.column.columnDef.meta?.align}
                     >
                       {flexRender(
