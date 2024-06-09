@@ -1,7 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { subDays, format, startOfYear } from "date-fns";
-import { type PatientData } from "types";
+import { type PatientData } from "~/types";
 
 export const metadataRouter = createTRPCRouter({
   getMetadata: publicProcedure.query(async ({ ctx }) => {
@@ -48,7 +48,7 @@ export const metadataRouter = createTRPCRouter({
         manufacturerModel: metadata.manufacturer_model,
         modelResult: metadata.biradsResults?.model_1_result, // Include model_1_result from biradsResults
         view: metadata.view,
-      };
+      } as PatientData;
     }),
 
   getMetadataDays: publicProcedure

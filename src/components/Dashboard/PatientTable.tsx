@@ -10,7 +10,7 @@ import {
 
 import DataTable from "../common/DataTable";
 import { Badge } from "../ui/badge";
-import { type PatientData } from "types";
+import { type PatientData } from "~/types";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { modelResultFormatter } from "../common/Formaters";
