@@ -6,15 +6,15 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { type SearchType } from "~/types";
 
 type Props = {
-  setFromBeginningOfYear: Dispatch<SetStateAction<boolean>>;
-  setAllData: Dispatch<SetStateAction<boolean>>;
-  setDays: Dispatch<SetStateAction<number>>;
   patientId: string;
   patientName: string;
   setPatientId: Dispatch<SetStateAction<string>>;
   setPatientName: Dispatch<SetStateAction<string>>;
+  setSearch: Dispatch<SetStateAction<SearchType>>;
+  search: SearchType;
   handleSearch: () => void;
 };
 
@@ -24,9 +24,7 @@ const SearchMenu = ({
   patientName,
   setPatientName,
   setPatientId,
-  setDays,
-  setAllData,
-  setFromBeginningOfYear,
+  setSearch,
 }: Props) => {
   return (
     <div className="flex flex-col gap-2 p-2">
@@ -34,19 +32,13 @@ const SearchMenu = ({
       <RadioGroup
         defaultValue="allData"
         onValueChange={(val) => {
-          if (val === "startOfYear") {
-            setFromBeginningOfYear(true);
-            setAllData(false);
-          }
-          if (val === "allData") {
-            setAllData(true);
-            setFromBeginningOfYear(false);
-          }
-          if (!isNaN(Number(val))) {
-            setDays(Number(val));
-          }
+          setSearch(val as SearchType);
         }}
       >
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="today" id="r4" />
+          <Label htmlFor="r4">{"Danas"}</Label>
+        </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="7" id="r1" />
           <Label htmlFor="r1">{"7 dana"}</Label>

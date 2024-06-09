@@ -6,27 +6,28 @@ import DashboardLayout from "./layout";
 import { api } from "~/trpc/react";
 import PatientTable from "./PatientTable";
 import SearchMenu from "./SearchMenu";
-
-const DEFAULT_DAYS = 7;
+import { type SearchType } from "~/types";
+import getDateRange from "~/utils/getDateRange";
 
 const Dashboard = () => {
-  const [days, setDays] = useState(DEFAULT_DAYS);
-  const [fromBeginningOfYear, setFromBeginningOfYear] =
-    useState<boolean>(false);
-  const [allData, setAllData] = useState<boolean>(true);
+  const [search, setSearch] = useState<SearchType>("allData");
   const [patientId, setPatientId] = useState("");
   const [patientName, setPatientName] = useState("");
 
-  const [queryVariables, setQueryVariables] = useState({
-    days: DEFAULT_DAYS,
-    fromBeginningOfYear: false,
-    allData: true,
+  const [queryVariables, setQueryVariables] = useState<{
+    patient_id: string;
+    patient_name: string;
+    gte: string | undefined;
+    lte: string;
+  }>({
     patient_id: "",
     patient_name: "",
+    gte: undefined,
+    lte: "",
   });
 
   const { data, isLoading, error, refetch } =
-    api.metadata.getMetadataDays.useQuery(
+    api.metadata.getMetadataByRange.useQuery(
       queryVariables,
       {
         staleTime: 0,
@@ -35,11 +36,9 @@ const Dashboard = () => {
 
   const handleSearch = () => {
     setQueryVariables({
-      days,
-      fromBeginningOfYear,
-      allData,
       patient_id: patientId,
       patient_name: patientName,
+      ...getDateRange(search),
     });
   };
 
@@ -57,12 +56,11 @@ const Dashboard = () => {
         }
       >
         <SearchMenu
+          search={search}
+          setSearch={setSearch}
           handleSearch={handleSearch}
           patientId={patientId}
           patientName={patientName}
-          setAllData={setAllData}
-          setDays={setDays}
-          setFromBeginningOfYear={setFromBeginningOfYear}
           setPatientId={setPatientId}
           setPatientName={setPatientName}
         />

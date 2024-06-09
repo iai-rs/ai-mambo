@@ -11,3 +11,5 @@ export interface PatientData {
   modelResult: number | null | undefined;
   view: number | null | undefined;
 }
+
+export type SearchType = "allData" | "startOfYear" | "today" | number;
