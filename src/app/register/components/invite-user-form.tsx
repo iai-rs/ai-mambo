@@ -2,6 +2,7 @@
 
 import { useFormState, useFormStatus } from "react-dom";
 import { register } from "~/app/lib/actions";
+import { Button } from "~/components/ui/button";
 
 export default function InviteUserForm() {
   const [errorMessage, formAction] = useFormState(register, null);
@@ -69,8 +70,8 @@ function InviteUserButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button className="mt-4 w-full" aria-disabled={pending}>
+    <Button className="mt-4 w-full" aria-disabled={pending}>
       Invite user
-    </button>
+    </Button>
   );
 }

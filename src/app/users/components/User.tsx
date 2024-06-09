@@ -3,6 +3,7 @@
 import { Role } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { changeUserRole, deleteUser } from "~/app/lib/actions";
+import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 
 interface Props {
@@ -57,9 +58,9 @@ export default function User({ user, onDelete }: Props) {
         </select>
       </td>
       <td>
-        <button onClick={() => handleDeleteUser(userState.id)}>
+        <Button onClick={() => handleDeleteUser(userState.id)}>
           Delete user
-        </button>
+        </Button>
       </td>
     </tr>
   );
