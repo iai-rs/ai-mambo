@@ -10,10 +10,6 @@ export const metadata: Metadata = {
   title: "Users",
 };
 
-interface Props {
-  searchParams: { sortOrder: string };
-}
-
 export default async function UsersServer() {
   const session = await auth();
   const userEmail = session?.user?.email;

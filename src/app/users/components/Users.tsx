@@ -18,6 +18,7 @@ interface Props {
 
 export default function Users({ users }: Props) {
   const searchParams = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
   const [usersState, setUsers] = useState(users);
 
   const onDelete = (userId: string) => {
@@ -27,8 +28,22 @@ export default function Users({ users }: Props) {
     });
   };
 
+  const sortUsersBy = (sortOrder: string) => {
+    setUsers((currentUsers) => {
+      if (sortOrder === "role") {
+        users = sort(currentUsers).asc((user) => user.role);
+      } else if (sortOrder === "email") {
+        users = sort(currentUsers).asc((user) => user.email);
+      } else {
+        users = sort(currentUsers).asc((user) => user.name.toLowerCase());
+      }
+      return users;
+    });
+  };
+
   useEffect(() => {
     const sortOrder = searchParams.toString().slice(10);
+    sortUsersBy(sortOrder);
     setUsers((currentUsers) => {
       if (sortOrder === "role") {
         users = sort(currentUsers).asc((user) => user.role);
@@ -41,8 +56,27 @@ export default function Users({ users }: Props) {
     });
   }, [searchParams]);
 
+  useEffect(() => {
+    setUsers((currentUsers) => {
+      const sortedUsers = users.filter(
+        (user) =>
+          user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      return sortedUsers;
+    });
+    const sortOrder = searchParams.toString().slice(10);
+    sortUsersBy(sortOrder);
+  }, [searchTerm]);
+
   return (
     <>
+      <input
+        type="text"
+        placeholder="Search users by username or email"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      ></input>
       {usersState.map((user) => (
         <User
           key={user.id}
