@@ -2,9 +2,10 @@
 
 import { Role } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { changeUserRole, deleteUser } from "~/app/lib/actions";
 import { api } from "~/trpc/react";
 import User from "./User";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { sort } from "fast-sort";
 
 interface Props {
   users: {
@@ -16,7 +17,7 @@ interface Props {
 }
 
 export default function Users({ users }: Props) {
-  const getUsersQuery = api.users.getUsers.useQuery();
+  const searchParams = useSearchParams();
   const [usersState, setUsers] = useState(users);
 
   const onDelete = (userId: string) => {
@@ -25,6 +26,20 @@ export default function Users({ users }: Props) {
       return newUsers;
     });
   };
+
+  useEffect(() => {
+    const sortOrder = searchParams.toString().slice(10);
+    setUsers((currentUsers) => {
+      if (sortOrder === "role") {
+        users = sort(currentUsers).asc((user) => user.role);
+      } else if (sortOrder === "email") {
+        users = sort(currentUsers).asc((user) => user.email);
+      } else {
+        users = sort(currentUsers).asc((user) => user.name.toLowerCase());
+      }
+      return users;
+    });
+  }, [searchParams]);
 
   return (
     <>
