@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 import Link from "next/link";
 import { api } from "~/trpc/server";
-import InviteUserForm from "../register/components/invite-user-form";
+import InviteUserForm from "./components/invite-user-form";
 import { auth } from "~/auth";
 import { Role } from "@prisma/client";
 import Users from "./components/Users";

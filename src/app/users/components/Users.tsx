@@ -6,6 +6,7 @@ import { api } from "~/trpc/react";
 import User from "./User";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { sort } from "fast-sort";
+import { Input } from "~/components/ui/input";
 
 interface Props {
   users: {
@@ -71,12 +72,12 @@ export default function Users({ users }: Props) {
 
   return (
     <>
-      <input
+      <Input
         type="text"
         placeholder="Search users by username or email"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-      ></input>
+      ></Input>
       {usersState.map((user) => (
         <User
           key={user.id}
