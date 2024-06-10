@@ -7,12 +7,15 @@ import { api } from "~/trpc/react";
 import PatientTable from "./PatientTable";
 import SearchMenu from "./SearchMenu";
 import { type SearchType } from "~/types";
-import getDateRange from "~/utils/getDateRange";
+import { getDateRange, getCustomDateRange } from "~/utils/getDateRange";
+import { type DateRangePicker } from "./SearchMenu/RangePicker";
 
 const Dashboard = () => {
   const [search, setSearch] = useState<SearchType>("allData");
   const [patientId, setPatientId] = useState("");
   const [patientName, setPatientName] = useState("");
+  const [isCustomDate, setIsCustomDate] = useState(false);
+  const [customDate, setCustomDate] = useState<DateRangePicker | undefined>();
 
   const [queryVariables, setQueryVariables] = useState<{
     patient_id: string;
@@ -38,7 +41,9 @@ const Dashboard = () => {
     setQueryVariables({
       patient_id: patientId,
       patient_name: patientName,
-      ...getDateRange(search),
+      ...(!isCustomDate
+        ? getDateRange(search)
+        : getCustomDateRange(customDate)),
     });
   };
 
@@ -56,6 +61,10 @@ const Dashboard = () => {
         }
       >
         <SearchMenu
+          customDate={customDate}
+          setCustomDate={setCustomDate}
+          isCustomDate={isCustomDate}
+          setIsCustomDate={setIsCustomDate}
           search={search}
           setSearch={setSearch}
           handleSearch={handleSearch}
