@@ -1,7 +1,6 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { subDays, format, startOfYear } from "date-fns";
-import { type PatientData } from "types";
+import { type PatientData } from "~/types";
 
 export const metadataRouter = createTRPCRouter({
   getMetadata: publicProcedure.query(async ({ ctx }) => {
@@ -48,15 +47,14 @@ export const metadataRouter = createTRPCRouter({
         manufacturerModel: metadata.manufacturer_model,
         modelResult: metadata.biradsResults?.model_1_result, // Include model_1_result from biradsResults
         view: metadata.view,
-      };
+      } as PatientData;
     }),
 
-  getMetadataDays: publicProcedure
+  getMetadataByRange: publicProcedure
     .input(
       z.object({
-        days: z.number().min(0).default(7),
-        fromBeginningOfYear: z.boolean().optional(), // New parameter
-        allData: z.boolean().optional(), // New parameter
+        gte: z.string().optional(), // start date
+        lte: z.string(), // end date
         patient_id: z.string().optional(), // JMBG
         patient_name: z.string().optional(),
         laterality: z.enum(["L", "R"]).optional(),
@@ -64,32 +62,13 @@ export const metadataRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      let pastDate: Date | undefined;
-      const today = new Date();
-
-      if (input.allData) {
-        // No time limit, don't set pastDate
-        pastDate = undefined;
-      } else if (input.fromBeginningOfYear) {
-        pastDate = startOfYear(today);
-      } else {
-        pastDate = subDays(today, input.days);
-      }
-
-      const formatDate = (date: Date) => format(date, "yyyyMMdd");
-
-      const todayStr = formatDate(today);
-      const pastDateStr = pastDate ? formatDate(pastDate) : undefined;
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const whereClause: Record<string, any> = {};
 
-      if (!input.allData && pastDateStr) {
-        whereClause.acquisition_date = {
-          gte: pastDateStr,
-          lte: todayStr,
-        };
-      }
+      whereClause.acquisition_date = {
+        gte: input.gte,
+        lte: input.lte,
+      };
 
       if (input.patient_id) {
         whereClause.patient_id = input.patient_id;

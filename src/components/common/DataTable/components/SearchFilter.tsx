@@ -3,7 +3,7 @@
 import type { Column } from "@tanstack/react-table";
 import { Search } from "lucide-react";
 import { X } from "lucide-react";
-import React from "react";
+import React, { type MouseEvent } from "react";
 
 import {
   Popover,
@@ -28,7 +28,7 @@ const SearchFilter = ({ column }: Props) => {
   return (
     <Popover>
       <PopoverTrigger
-        onClick={(e: Event) => e.stopPropagation()}
+        onClick={(e: MouseEvent) => e.stopPropagation()}
         className="
           rounded-md
           p-1.5
@@ -38,7 +38,7 @@ const SearchFilter = ({ column }: Props) => {
       >
         <Search
           className={cn({
-            ["stroke-green-500"]: !!column.getIsFiltered(),
+            ["stroke-blue-500"]: !!column.getIsFiltered(),
           })}
           width={16}
           height={16}
@@ -47,7 +47,7 @@ const SearchFilter = ({ column }: Props) => {
       <PopoverContent
         className=" dark:bg-slate-700"
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        onClick={(e: Event) => e.stopPropagation()}
+        onClick={(e: MouseEvent) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3">
           <DebouncedInput

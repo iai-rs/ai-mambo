@@ -1,9 +1,7 @@
 import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
-import { modelResultFormatter } from "~/components/common/Formaters";
-import { Badge } from "~/components/ui/badge";
+import ImageWithDetails from "~/components/ImageWithDetails";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -12,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Separator } from "~/components/ui/separator";
 import { api } from "~/trpc/server";
 
 const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
@@ -36,14 +33,7 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
               <CardDescription>{data.acquisitionDate}</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="mb-2 flex">
-                <span className="mr-1">Resultat:</span>
-                <Badge>
-                  {modelResultFormatter(data.modelResult as unknown as number)}
-                </Badge>
-              </div>
               <div className="flex">JMBG: {data.patientId}</div>
-              <div className="flex">ID: {data.id}</div>
             </CardContent>
           </Card>
           <Card>
@@ -51,16 +41,10 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
               <div className="flex">Institucija: {data.institution}</div>
               <div className="flex">Proizvođač: {data.manufacturer}</div>
               <div className="flex">Model: {data.manufacturerModel}</div>
-              <div className="my-2">
-                <Separator />
-              </div>
-              <div className="flex">Implant: {data.implant}</div>
-              <div className="flex">Pogled: {data.view}</div>
-              <div className="flex">Laterality: {data.laterality}</div>
             </CardContent>
           </Card>
         </div>
-        <Image width={500} height={500} src={image.url} alt="img" />
+        <ImageWithDetails data={data} url={image.url} />
       </div>
     </Suspense>
   );

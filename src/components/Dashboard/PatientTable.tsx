@@ -10,7 +10,7 @@ import {
 
 import DataTable from "../common/DataTable";
 import { Badge } from "../ui/badge";
-import { type PatientData } from "types";
+import { type PatientData } from "~/types";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { modelResultFormatter } from "../common/Formaters";
@@ -55,15 +55,15 @@ const PatientTable = ({ data, isLoading }: Props) => {
         {
           id: "modelResult",
           enableColumnFilter: false,
-          header: "Rezultat",
+          header: "Verovatnoća suspektnosti",
           meta: {
-            name: "Rezultat",
+            name: "Verovatnoća suspektnosti",
           },
         },
       ),
       columnHelper.accessor("acquisitionDate", {
         enableColumnFilter: false,
-        header: "Datum",
+        header: "Datum pregleda",
         cell: (props) => {
           const parsedDate = parse(props.getValue(), "yyyyMMdd", new Date());
           if (isNaN(parsedDate.getTime())) return "-";
@@ -73,7 +73,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
           return formattedDate;
         },
         meta: {
-          name: "Datum",
+          name: "Datum pregleda",
         },
       }),
       columnHelper.accessor("implant", {
@@ -109,9 +109,15 @@ const PatientTable = ({ data, isLoading }: Props) => {
       }),
       columnHelper.accessor("manufacturerModel", {
         enableColumnFilter: false,
-        header: "Model proizvođača",
+        header: "Model",
         meta: {
-          name: "Model proizvođača",
+          name: "Model",
+        },
+      }),
+      columnHelper.accessor("institution", {
+        header: "Institucija",
+        meta: {
+          name: "Institucija",
         },
       }),
       columnHelper.accessor("id", {
@@ -139,11 +145,14 @@ const PatientTable = ({ data, isLoading }: Props) => {
   return (
     <div className="min-w-[700px] overflow-y-scroll px-5 py-3">
       <DataTable
+        defaultSorting={[{ id: "modelResult", desc: true }]}
         columns={columns}
         data={data ?? []}
         enableSorting
         isLoading={isLoading}
         enableColumnsHiding
+        leftColumnsPin={["patientName"]}
+        // rightColumnsPin={["id"]}
       />
     </div>
   );
