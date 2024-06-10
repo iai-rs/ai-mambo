@@ -24,9 +24,9 @@ const ImageWithDetails = ({ data, url }: Props) => {
           id="show-details"
           disabled={!imageLoaded}
         />
-        <Label htmlFor="show-details">{"Prikaži detalje"}</Label>
+        <Label htmlFor="show-details">{"Prikaži rezultate AI pregleda"}</Label>
       </div>
-      <div className="relative h-auto w-[500px] text-red-500">
+      <div className="relative h-auto w-[500px] text-red-600">
         {!imageLoaded && <div>Slika se učitava</div>}
         <Image
           width={500}
@@ -39,7 +39,7 @@ const ImageWithDetails = ({ data, url }: Props) => {
         {/* Image details */}
         {showDetails && imageLoaded && (
           <div>
-            <div className="absolute left-0 top-0 m-2 flex flex-col gap-1 text-sm ">
+            <div className="absolute left-0 top-0 m-4 flex flex-col gap-1 text-lg ">
               <span>
                 {data.laterality}
                 {data.view}
