@@ -47,24 +47,24 @@ const SearchMenu = ({
         }}
       >
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="today" id="r4" />
-          <Label htmlFor="r4">{"Danas"}</Label>
+          <RadioGroupItem value="today" id="r1" />
+          <Label htmlFor="r1">{"Danas"}</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="7" id="r1" />
-          <Label htmlFor="r1">{"7 dana"}</Label>
+          <RadioGroupItem value="7" id="r2" />
+          <Label htmlFor="r2">{"7 dana"}</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="30" id="r2" />
-          <Label htmlFor="r2">{"30 dana"}</Label>
+          <RadioGroupItem value="30" id="r3" />
+          <Label htmlFor="r3">{"30 dana"}</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="startOfYear" id="r3" />
-          <Label htmlFor="r3">{"Od početka godine"}</Label>
+          <RadioGroupItem value="startOfYear" id="r4" />
+          <Label htmlFor="r4">{"Od početka godine"}</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="allData" id="r4" />
-          <Label htmlFor="r4">{"Sve"}</Label>
+          <RadioGroupItem value="allData" id="r5" />
+          <Label htmlFor="r5">{"Sve"}</Label>
         </div>
       </RadioGroup>
       <div className="my-4 flex items-center gap-1">
