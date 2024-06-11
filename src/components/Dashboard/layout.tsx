@@ -9,8 +9,6 @@ type Props = {
   rightContent?: ReactNode;
 };
 
-const TOP_MARGIN = 96;
-
 const SideMenu = ({ children, rightContent }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -23,7 +21,7 @@ const SideMenu = ({ children, rightContent }: Props) => {
       <div
         className={`
           relative
-          h-[calc(100vh-${TOP_MARGIN}px)]
+          h-[calc(100vh-96px)]
           border-r
           border-input
           bg-background
@@ -50,7 +48,7 @@ const SideMenu = ({ children, rightContent }: Props) => {
       {/* Toggle Button */}
       <Button
         variant="outline"
-        className={`fixed left-0 top-[${TOP_MARGIN}px] ml-1 transform ${
+        className={`fixed left-0 top-[96px] ml-1 transform ${
           isOpen ? "translate-x-64" : "translate-x-0"
         } p-2`}
         onClick={toggleMenu}
