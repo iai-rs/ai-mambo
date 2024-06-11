@@ -27,7 +27,7 @@ type Props<TData, TValue> = {
   rightColumnsPin?: string[];
 };
 
-const useStepTable = <TData, TValue>({
+const useDataTable = <TData, TValue>({
   columns,
   data,
   defaultFilters,
@@ -89,4 +89,4 @@ const useStepTable = <TData, TValue>({
   return { table };
 };
 
-export { useStepTable };
+export { useDataTable };

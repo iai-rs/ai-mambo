@@ -39,10 +39,6 @@ const Pagination = ({ table, enable }: Props) => {
   const isPreviousPageAvailable = table.getCanPreviousPage();
   const isNextPageAvailable = table.getCanNextPage();
 
-  /** Determines the stroke color for pagination buttons based on their availability.*/
-  const resolveStrokeColor = (isAvailable: boolean) =>
-    isAvailable ? "#000000" : "#303030";
-
   if (!enable) return null;
 
   return (
@@ -71,37 +67,35 @@ const Pagination = ({ table, enable }: Props) => {
         <div className="flex gap-2">
           <Button
             variant="ghost"
-            className="h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-card p-1"
             onClick={() => table.setPageIndex(0)}
             disabled={!isPreviousPageAvailable}
           >
-            <ChevronFirst
-              stroke={resolveStrokeColor(isPreviousPageAvailable)}
-            />
+            <ChevronFirst />
           </Button>
           <Button
             variant="ghost"
-            className="h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-card p-1"
             onClick={() => table.previousPage()}
             disabled={!isPreviousPageAvailable}
           >
-            <ChevronLeft stroke={resolveStrokeColor(isPreviousPageAvailable)} />
+            <ChevronLeft />
           </Button>
           <Button
             variant="ghost"
-            className="h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-card p-1"
             onClick={() => table.nextPage()}
             disabled={!isNextPageAvailable}
           >
-            <ChevronRight stroke={resolveStrokeColor(isNextPageAvailable)} />
+            <ChevronRight />
           </Button>
           <Button
             variant="ghost"
-            className="h-fit rounded border bg-muted p-1"
+            className="h-fit rounded border bg-card p-1"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!isNextPageAvailable}
           >
-            <ChevronLast stroke={resolveStrokeColor(isNextPageAvailable)} />
+            <ChevronLast />
           </Button>
         </div>
       </div>

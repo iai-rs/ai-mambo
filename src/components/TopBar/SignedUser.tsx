@@ -27,7 +27,7 @@ const SignedUser = async () => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarFallback className="bg-slate-300">
+          <AvatarFallback className="bg-slate-400">
             {name?.[0]?.toUpperCase() ?? "-"}
           </AvatarFallback>
         </Avatar>

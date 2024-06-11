@@ -5,7 +5,7 @@
  * @returns The Tailwind CSS class name for the background color.
  */
 const resolveRowBackground = (index: number): string =>
-  index % 2 !== 0 ? "bg-neutral-50" : "bg-neutral-50";
+  index % 2 !== 0 ? "bg-background" : "bg-background";
 
 /**
  * Generates an array containing a sequence of numbers from 0 to the specified number (exclusive).

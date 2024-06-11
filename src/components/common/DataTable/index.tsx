@@ -26,7 +26,7 @@ import ResizeBorder from "./components/ResizeBorder";
 import SearchFilter from "./components/SearchFilter";
 import SkeletonsLoader from "./components/SkeletonsLoader";
 import SortingIndicators from "./components/SortingIndicators";
-import { useStepTable } from "./hooks/useStepTable";
+import { useDataTable } from "./hooks/useDataTable";
 import { resolveRowBackground } from "./utils/common";
 import { cn } from "~/lib/utils";
 
@@ -88,7 +88,7 @@ const DataTable = <TData, TValue>({
   defaultFilters,
   defaultSorting,
 }: TableProps<TData, TValue>) => {
-  const { table } = useStepTable({
+  const { table } = useDataTable({
     columns,
     data,
     defaultFilters,
@@ -120,12 +120,12 @@ const DataTable = <TData, TValue>({
           style={{
             position: "sticky",
             top: 0,
-            zIndex: 99,
+            zIndex: 3,
           }}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
-              className="shadow-inner-bottom bg-white p-3 hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
+              className="shadow-inner-bottom bg-background p-3 hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
               key={headerGroup.id}
             >
               {headerGroup.headers.map((header, index) => {
@@ -144,8 +144,8 @@ const DataTable = <TData, TValue>({
                       boxShadow: "inset 0 -3px 0 #cbd5e1",
                       ...getCommonPinningStyles(header.column),
                     }}
-                    className={cn(" bg-slate-100", {
-                      "relative whitespace-nowrap text-right hover:bg-slate-200/80":
+                    className={cn("bg-secondary", {
+                      "relative whitespace-nowrap text-right hover:bg-secondary/80":
                         isSortable && !isLoading,
                     })}
                     key={header.id}
