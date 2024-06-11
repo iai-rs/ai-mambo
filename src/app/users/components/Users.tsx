@@ -94,7 +94,9 @@ export default function Users({ users }: Props) {
 
   return (
     <>
-      <h1>List of users:</h1>
+      <div className="flex justify-center">
+        <h1 className="text-2xl">List of users</h1>
+      </div>
       <Input
         type="text"
         placeholder="Search users by username or email"

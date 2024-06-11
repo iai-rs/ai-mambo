@@ -37,28 +37,6 @@ export default async function UsersServer() {
 
       <div className="col-span-8 w-full bg-gray-200 p-4">
         <Users users={usersWithFilteredData} />
-
-        {/*
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th>
-                <Link href="/users?sortOrder=name">Name</Link>
-              </th>
-              <th>
-                <Link href="/users?sortOrder=email">Email</Link>
-              </th>
-              <th>
-                <Link href="/users?sortOrder=role">Role</Link>
-              </th>
-              <th>Delete user</th>
-            </tr>
-          </thead>
-          <tbody>
-            <Users users={usersWithFilteredData} />
-          </tbody>
-        </table>
-  */}
       </div>
     </main>
   );

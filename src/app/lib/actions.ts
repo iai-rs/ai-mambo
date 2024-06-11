@@ -88,7 +88,6 @@ export async function register(prevState: string | null, formData: FormData) {
     name: formData.get("name"),
     email: formData.get("email"),
   });
-  console.log("HOJ", { validatedFields });
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
@@ -113,19 +112,22 @@ export async function register(prevState: string | null, formData: FormData) {
       env.MAIL_RECEIVER_EMAIL,
       changePasswordSecretKey,
     );
+    return "User added" as string;
   } else {
-    console.log("User with this email already exists");
+    return "User with this email already exists";
   }
 }
 
 export async function changeUserRole(userId: string, newRole: Role) {
   const user = await api.users.getUserById({ id: userId });
-  if (!user)
-    return null;
-  const updatedUser = await api.users.updateUserRole({id: user.id, role: newRole});
+  if (!user) return null;
+  const updatedUser = await api.users.updateUserRole({
+    id: user.id,
+    role: newRole,
+  });
 }
 
 export async function deleteUser(userId: string) {
-  const deletedUser = await api.users.deleteUserById({id: userId});
+  const deletedUser = await api.users.deleteUserById({ id: userId });
   return deleteUser;
 }

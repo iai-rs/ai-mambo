@@ -1,11 +1,23 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { register } from "~/app/lib/actions";
 import { Button } from "~/components/ui/button";
+import Spinner from "~/components/ui/Spinner";
 
 export default function InviteUserForm() {
   const [errorMessage, formAction] = useFormState(register, null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (errorMessage === "User added") {
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+  }, [errorMessage]);
 
   return (
     <form action={formAction} className="space-y-3">
@@ -70,8 +82,9 @@ function InviteUserButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button className="mt-4 w-full" aria-disabled={pending}>
-      Invite user
+    <Button className="mt-4 flex w-full gap-2" aria-disabled={pending}>
+      <span>Invite user</span>
+      {pending && <Spinner />}
     </Button>
   );
 }
