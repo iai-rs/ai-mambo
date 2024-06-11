@@ -28,7 +28,7 @@ model DicomMetadata {
   manufacturer       String?
   manufacturer_model String?
   institution        String?
-  birads_results     BiradsResults @relation(fields: [mammography_id], references: [study_uid])
+  biradsResults      BiradsResults @relation(fields: [mammography_id], references: [study_uid])
 
   @@map("dicom_metadata")
 }
@@ -41,7 +41,7 @@ model BiradsResults {
   birads_feedback birads_feedback?
   dicom_metadata  DicomMetadata?
 
-  @@map("birads_results")
+  @@map("biradsResults")
 }
 
 model birads_feedback {
@@ -54,7 +54,7 @@ model birads_feedback {
   birads_class        birads_classification
   user_email          String
   study_uid           String                @unique
-  birads_results      BiradsResults         @relation(fields: [study_uid], references: [study_uid])
+  biradsResults       BiradsResults         @relation(fields: [study_uid], references: [study_uid])
 }
 
 enum Role {
