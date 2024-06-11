@@ -17,7 +17,7 @@ model users {
 }
 
 model DicomMetadata {
-  mammography_id     String        @id(map: "dicom_metadata_pk") @default(uuid())
+  mammography_id     String        @id @default(uuid())
   patient_name       String?
   patient_id         String
   acquisition_date   String?
@@ -34,11 +34,12 @@ model DicomMetadata {
 }
 
 model BiradsResults {
-  study_uid      String         @unique
-  model_1_result Decimal        @db.Decimal
-  patient_name   String?        @db.VarChar(255)
-  id             Int            @id @default(autoincrement())
-  dicom_metadata DicomMetadata?
+  study_uid       String           @unique
+  model_1_result  Decimal          @db.Decimal
+  patient_name    String?          @db.VarChar(255)
+  id              Int              @id @default(autoincrement())
+  birads_feedback birads_feedback?
+  dicom_metadata  DicomMetadata?
 
   @@map("birads_results")
 }
@@ -52,6 +53,8 @@ model birads_feedback {
   architectonics      Boolean
   birads_class        birads_classification
   user_email          String
+  study_uid           String                @unique
+  birads_results      BiradsResults         @relation(fields: [study_uid], references: [study_uid])
 }
 
 enum Role {
