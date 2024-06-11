@@ -13,14 +13,14 @@ type Props = {
 const PatientGallery = ({ data }: Props) => {
   const [showDetails, setShowDetails] = useState(false);
   return (
-    <div>
+    <div className="pb-4">
       <div className="mb-2 flex items-center gap-1">
         <Switch
           checked={showDetails}
           onCheckedChange={setShowDetails}
           id="show-details"
         />
-        <Label htmlFor="show-details">{"Prikaži rezultate AI pregleda"}</Label>
+        <Label htmlFor="show-details">{"Prikaži anotacije"}</Label>
       </div>
       <div className="flex flex-wrap gap-2">
         {data.map((d) => {

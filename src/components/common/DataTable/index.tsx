@@ -51,6 +51,7 @@ export type TableProps<TData, TValue> = {
 
 const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
   const isPinned = column.getIsPinned();
+  const slateColor = "#94a3b8";
   const isLastLeftPinnedColumn =
     isPinned === "left" && column.getIsLastColumn("left");
   const isFirstRightPinnedColumn =
@@ -58,9 +59,9 @@ const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
 
   return {
     boxShadow: isLastLeftPinnedColumn
-      ? "-4px 0 4px -4px gray inset"
+      ? `-4px 0 4px -4px ${slateColor} inset`
       : isFirstRightPinnedColumn
-        ? "4px 0 4px -4px gray inset"
+        ? `4px 0 4px -4px ${slateColor} inset`
         : undefined,
     left: isPinned === "left" ? `${column.getStart("left")}px` : undefined,
     right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
@@ -119,12 +120,12 @@ const DataTable = <TData, TValue>({
           style={{
             position: "sticky",
             top: 0,
-            zIndex: 1,
+            zIndex: 99,
           }}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
-              className="bg-white p-3 hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
+              className="shadow-inner-bottom bg-white p-3 hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
               key={headerGroup.id}
             >
               {headerGroup.headers.map((header, index) => {
@@ -143,8 +144,8 @@ const DataTable = <TData, TValue>({
                       boxShadow: "inset 0 -3px 0 #cbd5e1",
                       ...getCommonPinningStyles(header.column),
                     }}
-                    className={cn("bg-slate-100", {
-                      "relative whitespace-nowrap text-right shadow-inner hover:bg-slate-200/30":
+                    className={cn(" bg-slate-100", {
+                      "relative whitespace-nowrap text-right hover:bg-slate-200/80":
                         isSortable && !isLoading,
                     })}
                     key={header.id}
