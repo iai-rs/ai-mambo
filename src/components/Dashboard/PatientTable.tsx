@@ -9,6 +9,7 @@ import { type MetadataResponse } from "~/types";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { modelResultFormatter } from "../common/Formaters";
+import { Badge } from "../ui/badge";
 
 const columnHelper = createColumnHelper<MetadataResponse>();
 
@@ -41,6 +42,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
           id: "modelResult",
           enableColumnFilter: false,
           header: "Verovatnoća suspektnosti",
+          cell: (props) => <Badge variant="outline">{props.getValue()}</Badge>,
           meta: {
             name: "Verovatnoća suspektnosti",
           },
@@ -101,8 +103,9 @@ const PatientTable = ({ data, isLoading }: Props) => {
             const url = `detail/${id}`;
             return (
               <Link href={url}>
-                <Button variant="ghost">
-                  <Search />
+                <Button variant="outline">
+                  {/* <Search /> */}
+                  {"Detalji".toUpperCase()}
                 </Button>
               </Link>
             );
@@ -125,7 +128,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
         isLoading={isLoading}
         enableColumnsHiding
         leftColumnsPin={["patientName"]}
-        // rightColumnsPin={["id"]}
+        rightColumnsPin={["action"]}
       />
     </div>
   );

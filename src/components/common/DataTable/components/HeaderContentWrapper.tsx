@@ -55,7 +55,7 @@ const HeaderContentWrapper = ({
 }: Props) => {
   return (
     <div
-      className={cn("w-auto border-r-muted px-3", {
+      className={cn("w-auto border-r-slate-500/30 px-3", {
         "border-r": !isLastItem,
       })}
     >
