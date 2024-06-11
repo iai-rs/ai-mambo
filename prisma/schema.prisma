@@ -17,7 +17,7 @@ model users {
 }
 
 model DicomMetadata {
-  mammography_id     String        @id @default(uuid())
+  mammography_id     String         @id @default(uuid())
   patient_name       String?
   patient_id         String
   acquisition_date   String?
@@ -28,20 +28,9 @@ model DicomMetadata {
   manufacturer       String?
   manufacturer_model String?
   institution        String?
-  biradsResults      BiradsResults @relation(fields: [mammography_id], references: [study_uid])
+  biradsResults      birads_results @relation(fields: [mammography_id], references: [study_uid])
 
   @@map("dicom_metadata")
-}
-
-model BiradsResults {
-  study_uid       String           @unique
-  model_1_result  Decimal          @db.Decimal
-  patient_name    String?          @db.VarChar(255)
-  id              Int              @id @default(autoincrement())
-  birads_feedback birads_feedback?
-  dicom_metadata  DicomMetadata?
-
-  @@map("biradsResults")
 }
 
 model birads_feedback {
@@ -54,7 +43,16 @@ model birads_feedback {
   birads_class        birads_classification
   user_email          String
   study_uid           String                @unique
-  biradsResults       BiradsResults         @relation(fields: [study_uid], references: [study_uid])
+  biradsResults       birads_results        @relation(fields: [study_uid], references: [study_uid])
+}
+
+model birads_results {
+  study_uid       String           @unique
+  model_1_result  Decimal          @db.Decimal
+  patient_name    String?          @db.VarChar(255)
+  id              Int              @id @default(autoincrement())
+  birads_feedback birads_feedback?
+  dicom_metadata  DicomMetadata?
 }
 
 enum Role {
