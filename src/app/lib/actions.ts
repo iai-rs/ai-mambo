@@ -9,6 +9,7 @@ import nodemailer from "nodemailer";
 import { env } from "../../env";
 import { redirect } from "next/dist/server/api-utils";
 import { Role } from "@prisma/client";
+import { hash } from "bcrypt";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -69,19 +70,14 @@ const RegisterUser = z.object({
   }),
 });
 
-export async function setPassword(
-  changePasswordSecretKey: string,
-  email: string,
-) {
-  const user = await api.users.getUserByEmail({ email: email });
-  if (user === null) {
-    console.log("User with this email doesn't exists");
-  } else {
-    if (user.change_password_secret_key !== changePasswordSecretKey) {
-      console.log("Change password secret key is wrong");
-    }
-  }
-}
+const SetPassword = z.object({
+  password: z.string({
+    invalid_type_error: "Please enter password.",
+  }),
+  confirmPassword: z.string({
+    invalid_type_error: "Please enter confirm passwor.",
+  }),
+});
 
 export async function register(prevState: string | null, formData: FormData) {
   const validatedFields = RegisterUser.safeParse({
@@ -130,4 +126,47 @@ export async function changeUserRole(userId: string, newRole: Role) {
 export async function deleteUser(userId: string) {
   const deletedUser = await api.users.deleteUserById({ id: userId });
   return deleteUser;
+}
+
+export async function setPassword(
+  urlData: {changePasswordSecretKey: string | null, email: string | null},
+  prevState: string | null,
+  formData: FormData
+) {
+ const validatedFields = SetPassword.safeParse({
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirm-password"),
+  });
+
+  if (!validatedFields.success) {
+    return "Missing Fields. Failed to set password.";
+  }
+
+  const { password, confirmPassword } = validatedFields.data;
+  const { changePasswordSecretKey, email } = urlData;
+
+  if ((typeof(changePasswordSecretKey) !== "string") || (typeof(email) !== "string")) {
+    return "Something is wrong with url. Please check your email";
+  }
+
+  if (password !== confirmPassword) {
+    return "Password and confirm password fields doesn't match";
+  }
+
+  const user = await api.users.getUserByEmail({ email: email });
+  if (!user) {
+    console.log("User with this email doesn't exists");
+    return "Something went wrong";
+  }
+  if (user.change_password_secret_key !== changePasswordSecretKey) {
+    console.log("Change password secret key is wrong");
+    return "Something went wrong";
+  }
+
+  const hashedPassword = await hash(password, 10);
+  const modifiedUser = await api.users.updateUserPassword({
+    email: email,
+    newPassword: hashedPassword
+  });
+  return "Password set";
 }

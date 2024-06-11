@@ -4,6 +4,7 @@
 import type {
   ColumnDef,
   ColumnFiltersState,
+  ColumnPinningState,
   SortingState,
   VisibilityState,
 } from "@tanstack/react-table";
@@ -22,6 +23,8 @@ type Props<TData, TValue> = {
   defaultSorting?: SortingState;
   defaultFilters?: ColumnFiltersState;
   pageSize?: number;
+  leftColumnsPin?: string[];
+  rightColumnsPin?: string[];
 };
 
 const useStepTable = <TData, TValue>({
@@ -29,6 +32,8 @@ const useStepTable = <TData, TValue>({
   data,
   defaultFilters,
   defaultSorting,
+  leftColumnsPin = [],
+  rightColumnsPin = [],
   pageSize = 10,
 }: Props<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>(defaultSorting ?? []);
@@ -36,6 +41,10 @@ const useStepTable = <TData, TValue>({
     defaultFilters ?? [],
   );
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
+    left: leftColumnsPin,
+    right: rightColumnsPin,
+  });
 
   const table = useReactTable({
     data,
@@ -44,6 +53,7 @@ const useStepTable = <TData, TValue>({
       sorting,
       columnFilters,
       columnVisibility,
+      columnPinning,
     },
     initialState: {
       pagination: {
@@ -68,6 +78,7 @@ const useStepTable = <TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     enableColumnResizing: true,
     columnResizeMode: "onChange",
+    onColumnPinningChange: setColumnPinning,
     defaultColumn: {
       size: 200, //starting column size
       minSize: 50, //enforced during column resizing

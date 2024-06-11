@@ -46,7 +46,7 @@ const Pagination = ({ table, enable }: Props) => {
   if (!enable) return null;
 
   return (
-    <div className="mt-2 flex flex-row-reverse border-t border-slate-300/50 pt-2">
+    <div className="mt-2 flex flex-row-reverse  pt-2">
       <div className="flex flex-wrap items-center gap-6">
         {/* Rows per page */}
         <div className="flex items-center gap-1 font-normal">

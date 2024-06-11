@@ -43,7 +43,30 @@ model BiradsResults {
   @@map("birads_results")
 }
 
+model birads_feedback {
+  id                  Int                   @id @default(autoincrement())
+  suspect_lesion      Boolean
+  shadow              Boolean
+  microcalcifications Boolean
+  symmetry            Boolean
+  architectonics      Boolean
+  birads_class        birads_classification
+  user_email          String
+}
+
 enum Role {
   USER
   ADMIN
+}
+
+enum birads_classification {
+  birads_0  @map("0")
+  birads_1  @map("1")
+  birads_2  @map("2")
+  birads_3  @map("3")
+  birads_4a @map("4a")
+  birads_4b @map("4b")
+  birads_4c @map("4c")
+  birads_5  @map("5")
+  birads_6  @map("6")
 }
