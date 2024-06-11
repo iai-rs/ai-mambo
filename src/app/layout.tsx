@@ -13,8 +13,8 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Title", // TODO: title
-  description: "description", // TODO: description
+  title: "INSTITUT ZA ONKOLOGIJU I RADIOLOGIJU SRBIJE", // TODO: title
+  description: "", // TODO: description
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
