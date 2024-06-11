@@ -1,45 +1,38 @@
 "use client";
 
 import React, { useState } from "react";
-import { modelResultFormatter } from "../common/Formaters";
+import { modelResultFormatter } from "../../common/Formaters";
 import { type PatientData } from "~/types";
-import { Switch } from "../ui/switch";
 import Image from "next/image";
-import { Label } from "../ui/label";
+import { api } from "~/trpc/react";
+import { Skeleton } from "../../ui/skeleton";
 
 type Props = {
   data: PatientData;
-  url: string;
+  showDetails?: boolean;
 };
 
-const ImageWithDetails = ({ data, url }: Props) => {
-  const [showDetails, setShowDetails] = useState(true);
+const ImageWithDetails = ({ data, showDetails = false }: Props) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { data: imageData } = api.minio.getMinio.useQuery(data.id + ".png");
+  console.log({ data });
+
   return (
     <div>
-      <div className="mb-2 flex items-center gap-1">
-        <Switch
-          checked={showDetails}
-          onCheckedChange={setShowDetails}
-          id="show-details"
-          disabled={!imageLoaded}
-        />
-        <Label htmlFor="show-details">{"Prikaži detalje"}</Label>
-      </div>
-      <div className="relative h-auto w-[500px] text-red-500">
-        {!imageLoaded && <div>Slika se učitava</div>}
+      <div className="relative h-auto w-[500px] text-red-600">
+        {!imageLoaded && <Skeleton className="h-[700px] w-[500px]" />}
         <Image
           width={500}
           height={0}
           objectFit="cover"
-          src={url}
+          src={imageData?.url ?? ""}
           alt="img"
           onLoadingComplete={() => setImageLoaded(true)}
         />
         {/* Image details */}
         {showDetails && imageLoaded && (
           <div>
-            <div className="absolute left-0 top-0 m-2 flex flex-col gap-1 text-sm ">
+            <div className="absolute left-0 top-0 m-4 flex flex-col gap-1 text-lg ">
               <span>
                 {data.laterality}
                 {data.view}
