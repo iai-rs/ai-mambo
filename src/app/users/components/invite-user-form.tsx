@@ -1,15 +1,28 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { register } from "~/app/lib/actions";
+import { Button } from "~/components/ui/button";
+import Spinner from "~/components/ui/Spinner";
 
-export default function RegisterForm() {
+export default function InviteUserForm() {
   const [errorMessage, formAction] = useFormState(register, null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (errorMessage === "User added") {
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+  }, [errorMessage]);
 
   return (
     <form action={formAction} className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl">Register by email.</h1>
+        <h1 className="mb-3 text-2xl">Invite by email</h1>
         <div className="w-full">
           <div>
             <label
@@ -48,7 +61,7 @@ export default function RegisterForm() {
             </div>
           </div>
         </div>
-        <RegisterButton />
+        <InviteUserButton />
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
@@ -65,12 +78,13 @@ export default function RegisterForm() {
   );
 }
 
-function RegisterButton() {
+function InviteUserButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button className="mt-4 w-full" aria-disabled={pending}>
-      Register
-    </button>
+    <Button className="mt-4 flex w-full gap-2" aria-disabled={pending}>
+      <span>Invite user</span>
+      {pending && <Spinner />}
+    </Button>
   );
 }

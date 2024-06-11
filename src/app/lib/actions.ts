@@ -7,6 +7,8 @@ import { api } from "~/trpc/server";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import { env } from "../../env";
+import { redirect } from "next/dist/server/api-utils";
+import { Role } from "@prisma/client";
 import { hash } from "bcrypt";
 
 export async function authenticate(
@@ -82,7 +84,6 @@ export async function register(prevState: string | null, formData: FormData) {
     name: formData.get("name"),
     email: formData.get("email"),
   });
-  console.log("HOJ", { validatedFields });
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
@@ -107,11 +108,24 @@ export async function register(prevState: string | null, formData: FormData) {
       env.MAIL_RECEIVER_EMAIL,
       changePasswordSecretKey,
     );
-    return "Added user" as string;
+    return "User added" as string;
   } else {
-    console.log("User with this email already exists");
-    return "Missing Fields. Failed to Create Account." as string;
+    return "User with this email already exists";
   }
+}
+
+export async function changeUserRole(userId: string, newRole: Role) {
+  const user = await api.users.getUserById({ id: userId });
+  if (!user) return null;
+  const updatedUser = await api.users.updateUserRole({
+    id: user.id,
+    role: newRole,
+  });
+}
+
+export async function deleteUser(userId: string) {
+  const deletedUser = await api.users.deleteUserById({ id: userId });
+  return deleteUser;
 }
 
 export async function setPassword(
@@ -127,7 +141,6 @@ export async function setPassword(
   if (!validatedFields.success) {
     return "Missing Fields. Failed to set password.";
   }
-   // 12345678
 
   const { password, confirmPassword } = validatedFields.data;
   const { changePasswordSecretKey, email } = urlData;

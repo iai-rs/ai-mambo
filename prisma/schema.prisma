@@ -28,7 +28,7 @@ model DicomMetadata {
   manufacturer       String?
   manufacturer_model String?
   institution        String?
-  biradsResults      BiradsResults @relation(fields: [mammography_id], references: [study_uid])
+  birads_results     BiradsResults @relation(fields: [mammography_id], references: [study_uid])
 
   @@map("dicom_metadata")
 }
@@ -38,7 +38,7 @@ model BiradsResults {
   model_1_result Decimal        @db.Decimal
   patient_name   String?        @db.VarChar(255)
   id             Int            @id @default(autoincrement())
-  dicomMetadata  DicomMetadata?
+  dicom_metadata DicomMetadata?
 
   @@map("birads_results")
 }
