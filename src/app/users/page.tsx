@@ -5,6 +5,7 @@ import InviteUserForm from "./components/invite-user-form";
 import { auth } from "~/auth";
 import { Role } from "@prisma/client";
 import Users from "./components/Users";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Users",
@@ -17,7 +18,7 @@ export default async function UsersServer() {
   const user = await api.users.getUserByEmail({ email: userEmail });
   const userRole = user?.role;
   if (!userRole || userRole !== Role.ADMIN) {
-    return <div>You are not allowed to access this page</div>;
+    notFound();
   }
 
   const users = await api.users.getUsers();
@@ -29,29 +30,36 @@ export default async function UsersServer() {
   }));
 
   return (
-    <main className="">
-      <InviteUserForm />
-      <hr />
-      <h1>List of users</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>
-              <Link href="/users?sortOrder=name">Name</Link>
-            </th>
-            <th>
-              <Link href="/users?sortOrder=email">Email</Link>
-            </th>
-            <th>
-              <Link href="/users?sortOrder=role">Role</Link>
-            </th>
-            <th>Delete user</th>
-          </tr>
-        </thead>
-        <tbody>
-          <Users users={usersWithFilteredData} />
-        </tbody>
-      </table>
+    <main className="grid grid-cols-12 gap-4">
+      <div className="col-span-4 bg-gray-200 p-4">
+        <InviteUserForm />
+      </div>
+
+      <div className="col-span-8 w-full bg-gray-200 p-4">
+        <Users users={usersWithFilteredData} />
+
+        {/*
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th>
+                <Link href="/users?sortOrder=name">Name</Link>
+              </th>
+              <th>
+                <Link href="/users?sortOrder=email">Email</Link>
+              </th>
+              <th>
+                <Link href="/users?sortOrder=role">Role</Link>
+              </th>
+              <th>Delete user</th>
+            </tr>
+          </thead>
+          <tbody>
+            <Users users={usersWithFilteredData} />
+          </tbody>
+        </table>
+  */}
+      </div>
     </main>
   );
 }
