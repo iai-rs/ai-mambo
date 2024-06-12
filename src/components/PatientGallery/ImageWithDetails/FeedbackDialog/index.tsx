@@ -18,8 +18,11 @@ import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import MSelect from "~/components/common/MSelect";
 import { api } from "~/trpc/react";
-import { birads_classification } from "@prisma/client";
+import { type BiradsFeedback, birads_classification } from "@prisma/client";
 import ImageWithLoader from "~/components/common/ImageWithLoader";
+import { cn } from "~/lib/utils";
+import { Badge } from "~/components/ui/badge";
+import { useRouter } from "next/navigation";
 
 const biradsOptions: birads_classification[] = [
   birads_classification.birads_0,
@@ -37,23 +40,32 @@ type Props = {
   studyUid: string;
   imageUrl: string | undefined;
   email: string;
+  feedback: BiradsFeedback | null | undefined;
 };
 
-const FeedbackDialog = ({ studyUid, email, imageUrl }: Props) => {
-  const [shadow, setShadow] = useState(false);
-  const [microcalcifications, setMicrocalcifications] = useState(false);
-  const [symmetry, setSymmetry] = useState(false);
-  const [suspectLesion, setSuspectLesion] = useState(false);
-  const [architectonics, setArchitectonics] = useState(false);
+const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
+  const [shadow, setShadow] = useState(feedback?.shadow ?? false);
+  const [microcalcifications, setMicrocalcifications] = useState(
+    feedback?.microcalcifications ?? false,
+  );
+  const [symmetry, setSymmetry] = useState(feedback?.symmetry ?? false);
+  const [suspectLesion, setSuspectLesion] = useState(
+    feedback?.suspect_lesion ?? false,
+  );
+  const [architectonics, setArchitectonics] = useState(
+    feedback?.architectonics ?? false,
+  );
   const [birads, setBirads] = useState<birads_classification>(
-    birads_classification.birads_0,
+    feedback?.birads_class ?? birads_classification.birads_0,
   );
 
-  const addFeedback = api.feedback.addFeedback.useMutation();
+  const router = useRouter();
+  const createFeedback = api.feedback.createFeedback.useMutation();
+  const updateFeedback = api.feedback.updateFeedback.useMutation();
 
-  const handleSave = async () => {
+  const handleCreate = async () => {
     try {
-      const res = await addFeedback.mutateAsync({
+      await createFeedback.mutateAsync({
         shadow,
         architectonics,
         birads_class: birads_classification.birads_4a,
@@ -63,7 +75,26 @@ const FeedbackDialog = ({ studyUid, email, imageUrl }: Props) => {
         symmetry,
         user_email: email,
       });
-      console.log({ res });
+      router.refresh();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!feedback) return;
+    try {
+      await updateFeedback.mutateAsync({
+        id: feedback.id,
+        shadow,
+        architectonics,
+        birads_class: birads_classification.birads_4a,
+        microcalcifications,
+        study_uid: studyUid,
+        suspect_lesion: suspectLesion,
+        symmetry,
+        user_email: email,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -72,9 +103,11 @@ const FeedbackDialog = ({ studyUid, email, imageUrl }: Props) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-fit px-2" variant="outline">
-          <FilePenLine />
-        </Button>
+        <div className="flex">
+          <Button className="w-fit px-2" variant="outline">
+            <FilePenLine className={cn({ "fill-green-500": !!feedback })} />
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className="max-h-[calc(100vh-20px)] overflow-auto sm:max-w-md">
         <DialogHeader>
@@ -133,10 +166,24 @@ const FeedbackDialog = ({ studyUid, email, imageUrl }: Props) => {
             <Label>{"BIRADS klasifikacija"}</Label>
           </div>
         </div>
-        <DialogFooter className="sm:justify-end">
+        {feedback && (
+          <div className="flex flex-wrap text-sm">
+            <i className="font-light">prethodno popunio:</i>
+            <Badge className="h-fit" variant="outline">
+              {feedback.user_email}
+            </Badge>
+          </div>
+        )}
+        <DialogFooter>
           <DialogClose asChild>
-            <Button onClick={handleSave} type="button">
-              Sačuvaj
+            <Button
+              onClick={() => {
+                !!feedback ? void handleUpdate() : void handleCreate();
+              }}
+              type="button"
+            >
+              {/* <Spinner /> */}
+              <span>{!!feedback ? "Izmeni" : "Sačuvaj"}</span>
             </Button>
           </DialogClose>
         </DialogFooter>

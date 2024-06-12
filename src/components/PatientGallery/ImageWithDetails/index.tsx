@@ -102,6 +102,7 @@ const ImageWithDetails = ({ data, email, showDetails, showHeatMap }: Props) => {
                 imageUrl={imageData?.url}
                 email={email}
                 studyUid={data.id}
+                feedback={data.feedback}
               />
             </div>
           </div>
