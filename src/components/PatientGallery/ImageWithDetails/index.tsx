@@ -8,7 +8,6 @@ import { api } from "~/trpc/react";
 import { Skeleton } from "../../ui/skeleton";
 import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import FeedbackDialog from "./FeedbackDialog";
 
 type Props = {
@@ -22,10 +21,10 @@ const ImageWithDetails = ({ data, email, showDetails = false }: Props) => {
   const { data: imageData } = api.minio.getMinio.useQuery(data.id + ".png");
   const isLateralityLeft = data.laterality === "L";
   return (
-    <div>
+    <div className="rounded-md border border-border bg-background p-2">
       <div className="relative min-h-[500px] w-[500px]">
         {(isImageLoading || !imageData?.url) && (
-          <Skeleton className="h-[700px] w-[500px]" />
+          <Skeleton className="h-[650px] w-[500px]" />
         )}
         {imageData?.url && (
           <Image
@@ -58,12 +57,16 @@ const ImageWithDetails = ({ data, email, showDetails = false }: Props) => {
             </div>
             <div
               className={cn(
-                "absolute bottom-0 left-0 flex  w-full items-baseline justify-between px-2 pb-2 text-xs",
+                "absolute bottom-0 left-0 flex w-full items-baseline justify-between px-2 pb-2 text-xs",
                 { ["flex-row-reverse"]: !isLateralityLeft },
               )}
             >
               <span className="text-red-600">{data.id}</span>
-              <FeedbackDialog email={email} studyUid={data.id} />
+              <FeedbackDialog
+                imageUrl={imageData?.url}
+                email={email}
+                studyUid={data.id}
+              />
             </div>
           </div>
         )}

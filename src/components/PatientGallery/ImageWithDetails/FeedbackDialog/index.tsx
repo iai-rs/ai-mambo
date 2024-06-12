@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, FilePenLine } from "lucide-react";
+import { FilePenLine } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -18,22 +18,36 @@ import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import MSelect from "~/components/common/MSelect";
 import { api } from "~/trpc/react";
+import { birads_classification } from "@prisma/client";
+import ImageWithLoader from "~/components/common/ImageWithLoader";
 
-type Birads = "1" | "2" | "3" | "4a" | "4b" | "4c" | "5" | "6";
-const biradsOptions: Birads[] = ["1", "2", "3", "4a", "4b", "4c", "5", "6"];
+const biradsOptions: birads_classification[] = [
+  birads_classification.birads_0,
+  birads_classification.birads_1,
+  birads_classification.birads_2,
+  birads_classification.birads_3,
+  birads_classification.birads_4a,
+  birads_classification.birads_4b,
+  birads_classification.birads_4c,
+  birads_classification.birads_5,
+  birads_classification.birads_6,
+];
 
 type Props = {
   studyUid: string;
+  imageUrl: string | undefined;
   email: string;
 };
 
-const FeedbackDialog = ({ studyUid, email }: Props) => {
+const FeedbackDialog = ({ studyUid, email, imageUrl }: Props) => {
   const [shadow, setShadow] = useState(false);
   const [microcalcifications, setMicrocalcifications] = useState(false);
   const [symmetry, setSymmetry] = useState(false);
   const [suspectLesion, setSuspectLesion] = useState(false);
   const [architectonics, setArchitectonics] = useState(false);
-  const [birads, setBirads] = useState<Birads>("1");
+  const [birads, setBirads] = useState<birads_classification>(
+    birads_classification.birads_0,
+  );
 
   const addFeedback = api.feedback.addFeedback.useMutation();
 
@@ -42,7 +56,7 @@ const FeedbackDialog = ({ studyUid, email }: Props) => {
       const res = await addFeedback.mutateAsync({
         shadow,
         architectonics,
-        birads_class: birads,
+        birads_class: birads_classification.birads_4a,
         microcalcifications,
         study_uid: studyUid,
         suspect_lesion: suspectLesion,
@@ -66,6 +80,10 @@ const FeedbackDialog = ({ studyUid, email }: Props) => {
         <DialogHeader>
           <DialogTitle>{"Povratna informacija spec. radiologa"}</DialogTitle>
         </DialogHeader>
+        <DialogDescription>
+          <span className="text-xs">{studyUid}</span>
+        </DialogDescription>
+        <ImageWithLoader url={imageUrl} width={400} height={550} />
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1">
             <Switch
@@ -109,7 +127,7 @@ const FeedbackDialog = ({ studyUid, email }: Props) => {
           <div className="mt-2 flex items-center gap-2">
             <MSelect
               selectedItem={birads}
-              onValueChange={(val) => setBirads(val as Birads)}
+              onValueChange={(val) => setBirads(val as birads_classification)}
               items={biradsOptions.map((b) => ({ key: b, label: b }))}
             />
             <Label>{"BIRADS klasifikacija"}</Label>
