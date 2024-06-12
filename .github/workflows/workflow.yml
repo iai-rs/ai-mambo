@@ -11,11 +11,15 @@ jobs:
     steps:
       - name: Executing remote ssh commands
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          MAIL_USER: "api"
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          envs: MAIL_USER,MAIL_PASSWORD
           script: |
             cd ai-mambo/
             git checkout development
@@ -23,5 +27,5 @@ jobs:
             docker build -t nextjs-app .
             docker stop nextjs-app
             docker rm nextjs-app
-            docker run -d -p 55614:3000 --name nextjs-app nextjs-app
+            docker run -d -p 55614:3000 -e MAIL_USER=${MAIL_USER} -e MAIL_PASSWORD=${MAIL_PASSWORD} --name nextjs-app nextjs-app
             docker network connect backend_test nextjs-app
