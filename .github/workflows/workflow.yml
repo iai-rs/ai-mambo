@@ -12,14 +12,14 @@ jobs:
       - name: Executing remote ssh commands
         uses: appleboy/ssh-action@v1.0.3
         env:
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           MAIL_USER: "api"
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          envs: MAIL_USER,MAIL_SENDER_EMAIL
+          envs: MAIL_USER,MAIL_PASSWORD
           script: |
             cd ai-mambo/
             git checkout development
