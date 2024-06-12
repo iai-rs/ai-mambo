@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import React, { Suspense } from "react";
+import { auth } from "~/auth";
 import PatientGallery from "~/components/PatientGallery";
 import { Button } from "~/components/ui/button";
 import {
@@ -24,10 +25,14 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
     acquisition_date,
   });
 
-  if (!data.length) {
+  const session = await auth();
+
+  if (!data.length || !session?.user) {
     return null;
   }
-
+  const name = session.user?.name ?? "";
+  const email = session.user?.email ?? "";
+  console.log("email", email);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="container h-[calc(100vh-86px)] overflow-y-auto pt-2">
@@ -54,7 +59,7 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
             </CardContent>
           </Card>
         </div>
-        <PatientGallery data={data} />
+        <PatientGallery email={email} data={data} />
       </div>
     </Suspense>
   );

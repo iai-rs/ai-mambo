@@ -1,6 +1,5 @@
 import { format, parse } from "date-fns";
 import React, { useMemo } from "react";
-import { Search } from "lucide-react";
 
 import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
@@ -22,7 +21,6 @@ const PatientTable = ({ data, isLoading }: Props) => {
   const columns: ColumnDef<MetadataResponse, never>[] = useMemo(
     () => [
       columnHelper.accessor("patientName", {
-        // enableSorting: false,
         enableColumnFilter: true,
         header: "Ime",
         meta: {
@@ -31,6 +29,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
       }),
       columnHelper.accessor("patientId", {
         enableColumnFilter: false,
+        enableSorting: false,
         header: "JMBG",
         meta: {
           name: "JMBG",
@@ -69,6 +68,17 @@ const PatientTable = ({ data, isLoading }: Props) => {
         // cell: (props) => BadgeCell(props, "info"),
         meta: {
           name: "Broj snimaka",
+        },
+      }),
+      columnHelper.accessor((row) => !!row.records.find((r) => r.feedback), {
+        enableColumnFilter: false,
+        header: "Povratna informacija",
+        cell: (props) => {
+          const value = props.getValue();
+          return value ? <Badge variant="secondary">{"DA"}</Badge> : "-";
+        },
+        meta: {
+          name: "Povratna informacija",
         },
       }),
       columnHelper.accessor("manufacturer", {

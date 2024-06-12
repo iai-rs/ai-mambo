@@ -21,10 +21,10 @@ const SideMenu = ({ children, rightContent }: Props) => {
       <div
         className={`
           relative
-          h-[calc(100vh-86px)]
+          h-[calc(100vh-96px)]
           border-r
           border-input
-          bg-white
+          bg-background
           transition-transform ${isOpen ? "visible " : "hidden "} min-w-64
         `}
       >
@@ -48,7 +48,7 @@ const SideMenu = ({ children, rightContent }: Props) => {
       {/* Toggle Button */}
       <Button
         variant="outline"
-        className={`fixed left-0 top-[90px] ml-1 transform ${
+        className={`fixed left-0 top-[96px] ml-1 transform ${
           isOpen ? "translate-x-64" : "translate-x-0"
         } p-2`}
         onClick={toggleMenu}

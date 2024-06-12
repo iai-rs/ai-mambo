@@ -22,11 +22,24 @@ const minioClient = new Client({
 
 // MinIO tRPC router
 export const minioRouter = createTRPCRouter({
-  getMinio: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+  getMinio: publicProcedure.input(z.string()).query(async ({ input }) => {
     try {
       const expiry = 24 * 60 * 60; // URL valid for 1 day
       const url = await minioClient.presignedGetObject(
         "firstbucket",
+        input,
+        expiry,
+      );
+      return { url };
+    } catch (error) {
+      throw new Error("Failed to generate signed URL");
+    }
+  }),
+  getMinioHeat: publicProcedure.input(z.string()).query(async ({ input }) => {
+    try {
+      const expiry = 24 * 60 * 60; // URL valid for 1 day
+      const url = await minioClient.presignedGetObject(
+        "heatmaps",
         input,
         expiry,
       );

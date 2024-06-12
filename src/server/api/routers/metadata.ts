@@ -4,40 +4,6 @@ import { type MetadataResponse } from "~/types";
 import { parseMetadata } from "~/utils/parseMetadata";
 
 export const metadataRouter = createTRPCRouter({
-  getMetadata: publicProcedure.query(async ({ ctx }) => {
-    const metadata = await ctx.db.dicomMetadata.findMany();
-
-    return metadata.map((item) => {
-      return {
-        name: item.patient_name?.replace("^", " "),
-        jmbg: item.patient_id,
-        id: item.mammography_id,
-      };
-    });
-  }),
-
-  getMetadataById: publicProcedure
-    .input(
-      z.object({
-        mammography_id: z.string(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const metadata = await ctx.db.dicomMetadata.findUnique({
-        where: {
-          mammography_id: input.mammography_id,
-        },
-        include: {
-          biradsResults: true, // Include related data from biradsResults if necessary
-        },
-      });
-
-      if (!metadata) {
-        throw new Error("Metadata not found");
-      }
-      return parseMetadata(metadata);
-    }),
-
   getMetadataByDateAndPatientId: publicProcedure
     .input(
       z.object({
@@ -52,7 +18,11 @@ export const metadataRouter = createTRPCRouter({
           patient_id: input.patient_id,
         },
         include: {
-          biradsResults: true, // Include related data from biradsResults if necessary
+          biradsResults: {
+            include: {
+              feedback: true,
+            },
+          }, // Include related data from biradsResults if necessary
         },
       });
 
@@ -92,18 +62,36 @@ export const metadataRouter = createTRPCRouter({
       if (input.institution) {
         whereClause.institution = {
           contains: input.institution,
+          mode: "insensitive", // Case-insensitive search
         };
       }
       if (input.patient_name) {
-        whereClause.patient_name = {
-          contains: input.patient_name.toUpperCase(),
-        };
+        // Normalize input name to match both NAME^SURNAME and SURNAME^NAME formats
+        const names = input.patient_name
+          .split(" ")
+          .map((name) => name.toUpperCase());
+        if (names.length === 2) {
+          const [name1, name2] = names;
+          whereClause.OR = [
+            { patient_name: { contains: `${name1}^${name2}` } },
+            { patient_name: { contains: `${name2}^${name1}` } },
+          ];
+        } else {
+          // Fallback for single name or other formats
+          whereClause.patient_name = {
+            contains: names.join("^"),
+          };
+        }
       }
 
       const metadata = await ctx.db.dicomMetadata.findMany({
         where: whereClause,
         include: {
-          biradsResults: true, // Include related data from biradsResults
+          biradsResults: {
+            include: {
+              feedback: true,
+            },
+          },
         },
       });
 
@@ -122,6 +110,7 @@ export const metadataRouter = createTRPCRouter({
                 ? Number(item.biradsResults.model_1_result)
                 : 0,
               records: [],
+              // feedback: item.biradsResults.feedback.
             };
           } else {
             const currentMaxResult = acc[key]?.modelResult ?? 0;

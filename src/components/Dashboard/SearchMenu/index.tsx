@@ -13,10 +13,12 @@ import { Switch } from "~/components/ui/switch";
 type Props = {
   patientId: string;
   patientName: string;
+  institution: string;
   isCustomDate: boolean;
   setIsCustomDate: Dispatch<SetStateAction<boolean>>;
   setPatientId: Dispatch<SetStateAction<string>>;
   setPatientName: Dispatch<SetStateAction<string>>;
+  setInstitution: Dispatch<SetStateAction<string>>;
   setSearch: Dispatch<SetStateAction<SearchType>>;
   search: SearchType;
   customDate: RangePickerProps["date"] | undefined;
@@ -34,6 +36,8 @@ const SearchMenu = ({
   patientName,
   setPatientName,
   setPatientId,
+  institution,
+  setInstitution,
   setSearch,
 }: Props) => {
   return (
@@ -92,6 +96,14 @@ const SearchMenu = ({
         <Input
           value={patientName}
           onChange={(e) => setPatientName(e.target.value)}
+        />
+      </div>
+      {/* INSTITUTION */}
+      <div className="mt-4">
+        <Label>{"Pretraga po instituciji"}</Label>
+        <Input
+          value={institution}
+          onChange={(e) => setInstitution(e.target.value)}
         />
       </div>
       <Button

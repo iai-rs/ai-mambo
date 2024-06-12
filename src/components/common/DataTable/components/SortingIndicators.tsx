@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 import React from "react";
 
 const svgOptions = {
@@ -17,7 +17,7 @@ type Props = { sort: "asc" | "desc" | false };
  * Displays sorting indicators based on the provided sort direction.
  */
 const SortingIndicators = ({ sort }: Props) => {
-  return sort ? lookupSort[sort] : <ArrowUpDown {...svgOptions} />;
+  return sort ? lookupSort[sort] : <ChevronsUpDown {...svgOptions} />;
 };
 
 export default SortingIndicators;

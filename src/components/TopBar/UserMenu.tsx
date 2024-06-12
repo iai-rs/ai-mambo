@@ -12,10 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import ThemeToggle from "../ThemeToggle";
 
 const iconHeight = 18;
 
-const SignedUser = async () => {
+const UserMenu = async () => {
   const session = await auth();
 
   if (!session?.user) return null;
@@ -27,7 +28,7 @@ const SignedUser = async () => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarFallback className="bg-slate-300">
+          <AvatarFallback className="bg-slate-400">
             {name?.[0]?.toUpperCase() ?? "-"}
           </AvatarFallback>
         </Avatar>
@@ -38,6 +39,10 @@ const SignedUser = async () => {
         <DropdownMenuItem className="flex gap-4">
           <Mail height={iconHeight} />
           {email}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <ThemeToggle />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
@@ -58,4 +63,4 @@ const SignedUser = async () => {
   );
 };
 
-export default SignedUser;
+export default UserMenu;

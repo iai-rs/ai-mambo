@@ -2,6 +2,7 @@ import { biradsRouter, minioRouter } from "~/server/api/routers/minio";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { metadataRouter } from "./routers/metadata";
 import { usersRouter } from "./routers/users";
+import { feedbackRouter } from "./routers/feedback";
 
 /**
  * This is the primary router for your server.
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   minio: minioRouter,
   users: usersRouter,
   metadata: metadataRouter,
+  feedback: feedbackRouter,
 });
 
 // export type definition of API
