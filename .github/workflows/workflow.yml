@@ -24,8 +24,8 @@ jobs:
             cd ai-mambo/
             git checkout development
             git pull
-            echo "MAIL_USER=${MAIL_USER}" >> .env
-            echo "MAIL_SENDER_EMAIL=${MAIL_SENDER_EMAIL}" >> .env
+            echo "MAIL_USER=\"${MAIL_USER}\"" >> .env
+            echo "MAIL_SENDER_EMAIL=\"${MAIL_SENDER_EMAIL}\"" >> .env
             docker build -t nextjs-app .
             docker stop nextjs-app
             docker rm nextjs-app
