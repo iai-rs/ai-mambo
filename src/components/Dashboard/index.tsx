@@ -14,17 +14,20 @@ const Dashboard = () => {
   const [search, setSearch] = useState<SearchType>("allData");
   const [patientId, setPatientId] = useState("");
   const [patientName, setPatientName] = useState("");
+  const [institution, setInstitution] = useState("");
   const [isCustomDate, setIsCustomDate] = useState(false);
   const [customDate, setCustomDate] = useState<DateRangePicker | undefined>();
 
   const [queryVariables, setQueryVariables] = useState<{
     patient_id: string;
     patient_name: string;
+    institution: string;
     gte: string | undefined;
     lte: string;
   }>({
     patient_id: "",
     patient_name: "",
+    institution: "",
     gte: undefined,
     lte: "",
   });
@@ -41,6 +44,7 @@ const Dashboard = () => {
     setQueryVariables({
       patient_id: patientId,
       patient_name: patientName,
+      institution,
       ...(!isCustomDate
         ? getDateRange(search)
         : getCustomDateRange(customDate)),
@@ -72,6 +76,8 @@ const Dashboard = () => {
           patientName={patientName}
           setPatientId={setPatientId}
           setPatientName={setPatientName}
+          institution={institution}
+          setInstitution={setInstitution}
         />
       </DashboardLayout>
     </div>
