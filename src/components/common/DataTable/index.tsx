@@ -30,7 +30,7 @@ import { useDataTable } from "./hooks/useDataTable";
 import { resolveRowBackground } from "./utils/common";
 import { cn } from "~/lib/utils";
 
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_SIZE = 50;
 
 export type TableProps<TData, TValue> = {
   title?: string;
@@ -125,7 +125,7 @@ const DataTable = <TData, TValue>({
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
-              className="shadow-inner-bottom bg-background p-3 hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
+              className="bg-background p-3 shadow-inner-bottom hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
               key={headerGroup.id}
             >
               {headerGroup.headers.map((header, index) => {

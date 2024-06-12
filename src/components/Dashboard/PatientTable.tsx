@@ -1,6 +1,5 @@
 import { format, parse } from "date-fns";
 import React, { useMemo } from "react";
-import { Search } from "lucide-react";
 
 import { type ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
@@ -22,7 +21,6 @@ const PatientTable = ({ data, isLoading }: Props) => {
   const columns: ColumnDef<MetadataResponse, never>[] = useMemo(
     () => [
       columnHelper.accessor("patientName", {
-        // enableSorting: false,
         enableColumnFilter: true,
         header: "Ime",
         meta: {
