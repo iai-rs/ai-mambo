@@ -25,7 +25,7 @@ jobs:
             git checkout development
             git pull
             sed -i "s/MAIL_USER_PLACEHOLDER/${MAIL_USER}/g" .env
-            sed -i "s/MAIL_SENDER_EMAIL_PLACEHOLDER/${SENDER_EMAIL}/g" .env
+            sed -i "s/MAIL_SENDER_EMAIL_PLACEHOLDER/${MAIL_SENDER_EMAIL}/g" .env
             docker build -t nextjs-app .
             docker stop nextjs-app
             docker rm nextjs-app
