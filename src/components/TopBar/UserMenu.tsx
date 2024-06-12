@@ -12,10 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
+import ThemeToggle from "../ThemeToggle";
 
 const iconHeight = 18;
 
-const SignedUser = async () => {
+const UserMenu = async () => {
   const session = await auth();
 
   if (!session?.user) return null;
@@ -41,6 +42,10 @@ const SignedUser = async () => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
+          <ThemeToggle />
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
           <LogOut height={iconHeight} />
           <form
             action={async () => {
@@ -58,4 +63,4 @@ const SignedUser = async () => {
   );
 };
 
-export default SignedUser;
+export default UserMenu;

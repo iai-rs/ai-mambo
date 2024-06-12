@@ -36,10 +36,14 @@ function ThemeToggle() {
   };
 
   return (
-    <Button variant="ghost" onClick={toggleTheme}>
+    <Button
+      className="h-fit w-full justify-start p-0"
+      variant="ghost"
+      onClick={toggleTheme}
+    >
       <div className="flex items-center gap-2">
-        <span>{isDark ? "Svetla tema" : "Tamna tema"}</span>
         {isDark ? <Sun /> : <Moon />}
+        <span>{isDark ? "Svetlo" : "Tamno"}</span>
       </div>
     </Button>
   );
