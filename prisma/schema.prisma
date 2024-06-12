@@ -17,7 +17,7 @@ model users {
 }
 
 model DicomMetadata {
-  mammography_id     String         @id @default(uuid())
+  mammography_id     String        @id @default(uuid())
   patient_name       String?
   patient_id         String
   acquisition_date   String?
@@ -28,13 +28,25 @@ model DicomMetadata {
   manufacturer       String?
   manufacturer_model String?
   institution        String?
-  biradsResults      birads_results @relation(fields: [mammography_id], references: [study_uid])
+  biradsResults      BiradsResults @relation(fields: [mammography_id], references: [study_uid])
 
   @@map("dicom_metadata")
 }
 
-model birads_feedback {
+model BiradsResults {
+  study_uid      String          @unique
+  model_1_result Decimal         @db.Decimal
+  patient_name   String?         @db.VarChar(255)
+  id             Int             @id @default(autoincrement())
+  dicomMetadata  DicomMetadata?
+  feedback       BiradsFeedback?
+
+  @@map("birads_results")
+}
+
+model BiradsFeedback {
   id                  Int                   @id @default(autoincrement())
+  study_uid           String                @unique
   suspect_lesion      Boolean
   shadow              Boolean
   microcalcifications Boolean
@@ -42,17 +54,9 @@ model birads_feedback {
   architectonics      Boolean
   birads_class        birads_classification
   user_email          String
-  study_uid           String                @unique
-  biradsResults       birads_results        @relation(fields: [study_uid], references: [study_uid])
-}
+  biradsResults       BiradsResults         @relation(fields: [study_uid], references: [study_uid], map: "birads_feedback_study_uid_fkey")
 
-model birads_results {
-  study_uid       String           @unique
-  model_1_result  Decimal          @db.Decimal
-  patient_name    String?          @db.VarChar(255)
-  id              Int              @id @default(autoincrement())
-  birads_feedback birads_feedback?
-  dicom_metadata  DicomMetadata?
+  @@map("birads_feedback")
 }
 
 enum Role {
