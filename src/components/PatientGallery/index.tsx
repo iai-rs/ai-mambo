@@ -8,10 +8,11 @@ import { Label } from "../ui/label";
 
 type Props = {
   data: PatientData[];
+  email: string;
 };
 
-const PatientGallery = ({ data }: Props) => {
-  const [showDetails, setShowDetails] = useState(false);
+const PatientGallery = ({ data, email }: Props) => {
+  const [showDetails, setShowDetails] = useState(true);
   return (
     <div className="pb-4">
       <div className="mb-2 flex items-center gap-1">
@@ -25,7 +26,12 @@ const PatientGallery = ({ data }: Props) => {
       <div className="flex flex-wrap gap-2">
         {data.map((d) => {
           return (
-            <ImageWithDetails key={d.id} data={d} showDetails={showDetails} />
+            <ImageWithDetails
+              key={d.id}
+              data={d}
+              showDetails={showDetails}
+              email={email}
+            />
           );
         })}
       </div>

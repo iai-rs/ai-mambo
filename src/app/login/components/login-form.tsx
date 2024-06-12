@@ -53,7 +53,7 @@ export default function LoginForm() {
         </div>
         <LoginButton />
         <div
-          className="flex h-8 items-end space-x-1"
+          className="space-x-1ž flex h-8 items-end"
           aria-live="polite"
           aria-atomic="true"
         >

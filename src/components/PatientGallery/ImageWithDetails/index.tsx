@@ -8,16 +8,19 @@ import { api } from "~/trpc/react";
 import { Skeleton } from "../../ui/skeleton";
 import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import FeedbackDialog from "./FeedbackDialog";
 
 type Props = {
   data: PatientData;
   showDetails?: boolean;
+  email: string;
 };
 
-const ImageWithDetails = ({ data, showDetails = false }: Props) => {
+const ImageWithDetails = ({ data, email, showDetails = false }: Props) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const { data: imageData } = api.minio.getMinio.useQuery(data.id + ".png");
-
+  const isLateralityLeft = data.laterality === "L";
   return (
     <div>
       <div className="relative min-h-[500px] w-[500px]">
@@ -28,7 +31,6 @@ const ImageWithDetails = ({ data, showDetails = false }: Props) => {
           <Image
             width={500}
             height={0}
-            // objectFit="cover"
             src={imageData.url}
             alt="img"
             onLoad={() => setIsImageLoading(false)}
@@ -54,8 +56,14 @@ const ImageWithDetails = ({ data, showDetails = false }: Props) => {
                 <span>{`implant ${data.implant}`}</span>
               </Badge>
             </div>
-            <div className="absolute bottom-0 left-0 m-2 text-xs text-red-600">
-              {data.id}
+            <div
+              className={cn(
+                "absolute bottom-0 left-0 flex  w-full items-baseline justify-between px-2 pb-2 text-xs",
+                { ["flex-row-reverse"]: !isLateralityLeft },
+              )}
+            >
+              <span className="text-red-600">{data.id}</span>
+              <FeedbackDialog email={email} studyUid={data.id} />
             </div>
           </div>
         )}
