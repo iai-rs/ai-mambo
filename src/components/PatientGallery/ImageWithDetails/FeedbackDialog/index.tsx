@@ -76,7 +76,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl }: Props) => {
           <FilePenLine />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-h-[calc(100vh-20px)] overflow-auto sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{"Povratna informacija spec. radiologa"}</DialogTitle>
         </DialogHeader>

@@ -35,4 +35,19 @@ export const minioRouter = createTRPCRouter({
       throw new Error("Failed to generate signed URL");
     }
   }),
+  getMinioHeat: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      try {
+        const expiry = 24 * 60 * 60; // URL valid for 1 day
+        const url = await minioClient.presignedGetObject(
+          "heatmaps",
+          input,
+          expiry,
+        );
+        return { url };
+      } catch (error) {
+        throw new Error("Failed to generate signed URL");
+      }
+    }),
 });
