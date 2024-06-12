@@ -29,6 +29,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
       }),
       columnHelper.accessor("patientId", {
         enableColumnFilter: false,
+        enableSorting: false,
         header: "JMBG",
         meta: {
           name: "JMBG",
@@ -67,6 +68,17 @@ const PatientTable = ({ data, isLoading }: Props) => {
         // cell: (props) => BadgeCell(props, "info"),
         meta: {
           name: "Broj snimaka",
+        },
+      }),
+      columnHelper.accessor((row) => !!row.records.find((r) => r.feedback), {
+        enableColumnFilter: false,
+        header: "Povratna informacija",
+        cell: (props) => {
+          const value = props.getValue();
+          return value ? <Badge variant="secondary">{"DA"}</Badge> : "-";
+        },
+        meta: {
+          name: "Povratna informacija",
         },
       }),
       columnHelper.accessor("manufacturer", {

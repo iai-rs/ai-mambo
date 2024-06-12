@@ -1,3 +1,5 @@
+import { type BiradsFeedback } from "@prisma/client";
+
 export interface SharedMetadataProps {
   patientName: string | undefined;
   patientId: string;
@@ -15,6 +17,7 @@ export interface PatientData extends SharedMetadataProps {
   implant: string | null;
   modelResult: number | null | undefined;
   view: string | null | undefined;
+  feedback: BiradsFeedback | null | undefined;
 }
 
 export interface MetadataResponse extends SharedMetadataProps {

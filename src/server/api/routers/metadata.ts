@@ -28,7 +28,11 @@ export const metadataRouter = createTRPCRouter({
           mammography_id: input.mammography_id,
         },
         include: {
-          biradsResults: true, // Include related data from biradsResults if necessary
+          biradsResults: {
+            include: {
+              feedback: true,
+            },
+          }, // Include related data from biradsResults if necessary
         },
       });
 
@@ -52,7 +56,11 @@ export const metadataRouter = createTRPCRouter({
           patient_id: input.patient_id,
         },
         include: {
-          biradsResults: true, // Include related data from biradsResults if necessary
+          biradsResults: {
+            include: {
+              feedback: true,
+            },
+          }, // Include related data from biradsResults if necessary
         },
       });
 
@@ -103,7 +111,11 @@ export const metadataRouter = createTRPCRouter({
       const metadata = await ctx.db.dicomMetadata.findMany({
         where: whereClause,
         include: {
-          biradsResults: true, // Include related data from biradsResults
+          biradsResults: {
+            include: {
+              feedback: true,
+            },
+          },
         },
       });
 
@@ -122,6 +134,7 @@ export const metadataRouter = createTRPCRouter({
                 ? Number(item.biradsResults.model_1_result)
                 : 0,
               records: [],
+              // feedback: item.biradsResults.feedback.
             };
           } else {
             const currentMaxResult = acc[key]?.modelResult ?? 0;

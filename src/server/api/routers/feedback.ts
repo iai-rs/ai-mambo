@@ -3,7 +3,7 @@
 
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc"; // Adjust the import based on your setup
-import { type birads_classification } from "@prisma/client";
+import { birads_classification } from "@prisma/client";
 
 export const feedbackRouter = createTRPCRouter({
   addFeedback: publicProcedure
@@ -15,7 +15,17 @@ export const feedbackRouter = createTRPCRouter({
         microcalcifications: z.boolean(),
         symmetry: z.boolean(),
         architectonics: z.boolean(),
-        birads_class: z.enum(["1", "2", "3", "4a", "4b", "4c", "5", "6"]),
+        birads_class: z.enum([
+          birads_classification.birads_0,
+          birads_classification.birads_1,
+          birads_classification.birads_2,
+          birads_classification.birads_3,
+          birads_classification.birads_4a,
+          birads_classification.birads_4b,
+          birads_classification.birads_4c,
+          birads_classification.birads_5,
+          birads_classification.birads_6,
+        ]),
         user_email: z.string().email(),
       }),
     )
