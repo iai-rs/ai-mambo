@@ -12,7 +12,7 @@ jobs:
       - name: Executing remote ssh commands
         uses: appleboy/ssh-action@v1.0.3
         env:
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_PASSWORD: "ca03f35af6d7e07a44867ba9bf536b26"
           MAIL_USER: "api"
         with:
           host: ${{ secrets.HOST }}
