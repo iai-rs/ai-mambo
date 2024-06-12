@@ -24,10 +24,8 @@ jobs:
             cd ai-mambo/
             git checkout development
             git pull
-            sed -i "s/MAIL_USER_PLACEHOLDER/${MAIL_USER}/g" .env
-            sed -i "s/MAIL_SENDER_EMAIL_PLACEHOLDER/${MAIL_SENDER_EMAIL}/g" .env
             docker build -t nextjs-app .
             docker stop nextjs-app
             docker rm nextjs-app
-            docker run -d -p 55614:3000 --name nextjs-app nextjs-app
+            docker run -d -p 55614:3000 -e MAIL_USER=${MAIL_USER} -e MAIL_SENDER_EMAIL=${MAIL_SENDER_EMAIL} --name nextjs-app nextjs-app
             docker network connect backend_test nextjs-app
