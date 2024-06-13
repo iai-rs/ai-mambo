@@ -28,4 +28,4 @@ jobs:
             docker stop nextjs-app
             docker rm nextjs-app
             docker run -d -p 55614:3000 -e MAIL_USER=${MAIL_USER} -e MAIL_PASSWORD=${MAIL_PASSWORD} --name nextjs-app nextjs-app
-            docker network connect backend_test nextjs-app
+            docker network connect mamo_network nextjs-app
