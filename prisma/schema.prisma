@@ -61,6 +61,7 @@ model BiradsFeedback {
 
 enum Role {
   USER
+  ADVANCED
   ADMIN
 }
 
