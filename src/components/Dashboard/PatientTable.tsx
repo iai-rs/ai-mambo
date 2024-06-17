@@ -107,6 +107,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
           id: "action",
           enableColumnFilter: false,
           enableSorting: false,
+          enableHiding: false,
           header: "",
           cell: (props) => {
             const id: string = props.getValue();
