@@ -1,14 +1,20 @@
 "use client";
 
-import { Role } from "@prisma/client";
+import { type Role } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { api } from "~/trpc/react";
 import User from "./User";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { sort } from "fast-sort";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-import clsx from "clsx";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "~/components/ui/table";
+import { ChevronsUpDown } from "lucide-react";
 
 interface Props {
   users: {
@@ -21,12 +27,10 @@ interface Props {
 
 export default function Users({ users }: Props) {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [usersState, setUsers] = useState(users);
-  let sortByNameAscending = true;
 
-  const onDelete = (userId: string) => {
+  const handleDelete = (userId: string) => {
     setUsers((currentUsers) => {
       const newUsers = currentUsers.filter((user) => user.id !== userId);
       return newUsers;
@@ -93,33 +97,41 @@ export default function Users({ users }: Props) {
   };
 
   return (
-    <>
-      <div className="flex justify-center">
-        <h1 className="text-2xl">List of users</h1>
-      </div>
+    <div className="overflow-auto p-4">
+      <h1 className="mb-2 text-2xl font-bold">
+        {"Lista korisnika".toUpperCase()}
+      </h1>
       <Input
         type="text"
-        placeholder="Search users by username or email"
+        placeholder="Pretraži korisnike po imenu ili emailu"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       ></Input>
       <br />
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th>
-              <Button onClick={handleClickName}>Name</Button>
-            </th>
-            <th>
-              <Button onClick={handleClickEmail}>Email</Button>
-            </th>
-            <th>
-              <Button onClick={handleClickRole}>Role</Button>
-            </th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table className="w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead>
+              <Button variant="ghost" onClick={handleClickName}>
+                <ChevronsUpDown className="h-4" />
+                {"Ime"}
+              </Button>
+            </TableHead>
+            <TableHead>
+              <Button variant="ghost" onClick={handleClickEmail}>
+                <ChevronsUpDown className="h-4" />
+                {"Email"}
+              </Button>
+            </TableHead>
+            <TableHead>
+              <Button variant="ghost" onClick={handleClickRole}>
+                <ChevronsUpDown className="h-4" />
+                {"Rola"}
+              </Button>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {usersState.map((user) => (
             <User
               key={user.id}
@@ -129,11 +141,11 @@ export default function Users({ users }: Props) {
                 email: user.email,
                 role: user.role,
               }}
-              onDelete={onDelete}
+              onDelete={handleDelete}
             />
           ))}
-        </tbody>
-      </table>
-    </>
+        </TableBody>
+      </Table>
+    </div>
   );
 }

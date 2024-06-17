@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { cn } from "~/lib/utils";
 
 export interface SelectedItem {
   key: string;
@@ -19,6 +20,7 @@ interface Props {
   selectedItem: string;
   fixedTitle?: string;
   disabled?: boolean;
+  className?: string;
   onValueChange: (item: string) => void;
 }
 
@@ -34,6 +36,7 @@ interface Props {
  * @param fixedTitle - An optional string to always display on the select trigger.
  * @param onValueChange - A function called with the key of the newly selected item.
  * @param disabled - Optional Disabled flag, defaults to `false`
+ * @param className - Optional class name
  * @returns The MSelect component.
  */
 const MSelect = ({
@@ -41,6 +44,7 @@ const MSelect = ({
   onValueChange,
   selectedItem,
   fixedTitle,
+  className,
   disabled = false,
 }: Props) => {
   // Determine the label of the selected item, if available.
@@ -52,17 +56,10 @@ const MSelect = ({
     <Select onValueChange={onValueChange} value={selectedItem}>
       <SelectTrigger
         disabled={disabled}
-        className="
-          w-auto
-          max-w-[180px]
-          gap-2
-          font-semibold
-          ring-offset-white
-          focus:outline-none
-          focus:ring-neutral-950
-          dark:border-neutral-800
-          dark:focus:ring-neutral-300
-          "
+        className={cn(
+          "w-auto max-w-[180px] gap-2 font-semibold ring-offset-white focus:outline-none focus:ring-neutral-950 dark:border-neutral-800 dark:focus:ring-neutral-300",
+          className,
+        )}
       >
         <SelectValue placeholder="choose">
           {fixedTitle ?? selectedItemLabel}

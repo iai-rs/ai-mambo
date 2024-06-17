@@ -1,7 +1,7 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEventHandler } from "react";
 import { Button } from "../ui/button";
 
 function ThemeToggle() {
@@ -23,7 +23,8 @@ function ThemeToggle() {
     }
   }, []);
 
-  const toggleTheme = () => {
+  const toggleTheme: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.stopPropagation();
     if (theme === "dark") {
       document.documentElement.classList.remove("dark");
       localStorage.theme = "light";
