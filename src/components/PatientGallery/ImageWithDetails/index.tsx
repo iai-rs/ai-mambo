@@ -22,9 +22,9 @@ const ImageWithDetails = ({ data, email, showDetails, showHeatMap }: Props) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [heatOpacity, setHeatOpacity] = useState([100]);
   const { data: imageData } = api.minio.getMinio.useQuery(data.id + ".png");
-  // const { data: heatMapData } = api.minio.getMinioHeat.useQuery(
-  //   data.id + ".png",
-  // );
+  const { data: heatMapData } = api.minio.getMinioHeat.useQuery(
+    data.id + ".png",
+  );
   const [aspectRatio, setAspectRatio] = useState(0.77); // Default aspect ratio is 1:1
 
   const handleImageLoad: ReactEventHandler<HTMLImageElement> = (event) => {
@@ -51,8 +51,7 @@ const ImageWithDetails = ({ data, email, showDetails, showHeatMap }: Props) => {
             onLoad={handleImageLoad}
           />
         )}
-        {/* TODO: this should be fixed!!! */}
-        {/* {heatMapData?.url && data.id.endsWith("11") && showHeatMap && (
+        {heatMapData?.url && showHeatMap && (
           <Image
             style={{ opacity: (heatOpacity[0] ?? 100) / 100 }}
             width={500}
@@ -61,7 +60,7 @@ const ImageWithDetails = ({ data, email, showDetails, showHeatMap }: Props) => {
             alt="heatmap"
             className="absolute left-0 top-0 h-full w-full"
           />
-        )} */}
+        )}
         {/* Image details */}
         {showDetails && !isImageLoading && (
           <div>
