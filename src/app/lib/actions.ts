@@ -40,23 +40,19 @@ const sendVerificationEmail = async (
   const MAIL_SENDER_EMAIL = env.MAIL_SENDER_EMAIL;
 
   const transporter = nodemailer.createTransport({
-    host: "live.smtp.mailtrap.io", // Use your email service
+    host: "sendmail.gov.rs", // Use your email service
     port: 587,
     secure: false, // Use `true` for port 465, `false` for all other ports
-    auth: {
-      user: MAIL_USER,
-      pass: MAIL_PASSWORD,
-    },
   });
 
-  const setPasswordUrl = `http://localhost:3000/set_password?tempkey=${changePasswordSecretKey}&email=${email}`;
+  const setPasswordUrl = `http://server.institutonline.ai:55614/set_password?tempkey=${changePasswordSecretKey}&email=${email}`;
 
   await transporter.sendMail({
-    from: MAIL_SENDER_EMAIL,
+    from: "obavestenja@ivi.ac.rs",
     to: email, // list of receivers
-    subject: "Hello", // Subject line
-    text: "Hello world?", // plain text body
-    html: `<b>Set password url: ${setPasswordUrl}</b>`, // html body
+    subject: "Pozivnica za Mamografija projekat", // Subject line
+    text: `Pozvani ste da učestvujete u projektu Mamografija. Potrebno je postavite svoju lozinku odlaskom na stranicu: ${setPasswordUrl}`, // plain text body
+    html: `<h3>Pozvani ste da učestvujete u projektu Mamografija.</h3><div>Potrebno je da postavite svoju lozinku odlaskom na stranicu:<br/>${setPasswordUrl}</div>`, // html body
   });
   console.log("EMAIL SENT");
 };
@@ -104,10 +100,8 @@ export async function register(prevState: string | null, formData: FormData) {
       change_password_secret_key: changePasswordSecretKey,
     });
     console.log(addedUser);
-    await sendVerificationEmail(
-      env.MAIL_RECEIVER_EMAIL,
-      changePasswordSecretKey,
-    );
+    console.log("Sending an email...");
+    await sendVerificationEmail(email, changePasswordSecretKey);
     return "User added" as string;
   } else {
     return "User with this email already exists";
@@ -129,11 +123,11 @@ export async function deleteUser(userId: string) {
 }
 
 export async function setPassword(
-  urlData: {changePasswordSecretKey: string | null, email: string | null},
+  urlData: { changePasswordSecretKey: string | null; email: string | null },
   prevState: string | null,
-  formData: FormData
+  formData: FormData,
 ) {
- const validatedFields = SetPassword.safeParse({
+  const validatedFields = SetPassword.safeParse({
     password: formData.get("password"),
     confirmPassword: formData.get("confirm-password"),
   });
@@ -145,7 +139,10 @@ export async function setPassword(
   const { password, confirmPassword } = validatedFields.data;
   const { changePasswordSecretKey, email } = urlData;
 
-  if ((typeof(changePasswordSecretKey) !== "string") || (typeof(email) !== "string")) {
+  if (
+    typeof changePasswordSecretKey !== "string" ||
+    typeof email !== "string"
+  ) {
     return "Something is wrong with url. Please check your email";
   }
 
@@ -166,7 +163,7 @@ export async function setPassword(
   const hashedPassword = await hash(password, 10);
   const modifiedUser = await api.users.updateUserPassword({
     email: email,
-    newPassword: hashedPassword
+    newPassword: hashedPassword,
   });
   return "Password set";
 }
