@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ImageWithDetails from "./ImageWithDetails";
 import { type PatientData } from "~/types";
 import { Switch } from "../ui/switch";
@@ -11,9 +11,26 @@ type Props = {
   email: string;
 };
 
+const viewOrder = {
+  RMLO: 0,
+  LMLO: 1,
+  RCC: 2,
+  LCC: 3,
+};
+
 const PatientGallery = ({ data, email }: Props) => {
   const [showDetails, setShowDetails] = useState(true);
   const [showHeatMap, setShowHeatMap] = useState(false);
+
+  const sortedData = useMemo(() => {
+    return [...data].sort((a, b) => {
+      const aKey = `${a.laterality}${a.view}` as keyof typeof viewOrder;
+      const bKey = `${b.laterality}${b.view}` as keyof typeof viewOrder;
+      return viewOrder[aKey] - viewOrder[bKey];
+    });
+  }, [data]);
+  console.log({ data, sortedData });
+
   return (
     <div className="pb-4">
       <div className="flex gap-4">
@@ -35,7 +52,7 @@ const PatientGallery = ({ data, email }: Props) => {
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
-        {data.map((d) => {
+        {sortedData.map((d) => {
           return (
             <ImageWithDetails
               key={d.id}

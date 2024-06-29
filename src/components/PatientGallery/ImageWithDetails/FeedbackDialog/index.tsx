@@ -111,7 +111,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
       </DialogTrigger>
       <DialogContent className="max-h-[calc(100vh-20px)] overflow-auto sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{"Povratna informacija spec. radiologa"}</DialogTitle>
+          <DialogTitle>{"Analiza radiologa"}</DialogTitle>
         </DialogHeader>
         <DialogDescription>
           <span className="text-xs">{studyUid}</span>
