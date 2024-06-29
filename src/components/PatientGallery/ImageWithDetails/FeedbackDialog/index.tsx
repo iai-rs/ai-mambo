@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
 import React, { useState } from "react";
@@ -24,6 +26,19 @@ import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
 import { useRouter } from "next/navigation";
 
+const lookupBirads: Record<birads_classification, string> = {
+  [birads_classification.birads_0]: "birads 0",
+  [birads_classification.birads_1]: "birads 1",
+  [birads_classification.birads_2]: "birads 2",
+  [birads_classification.birads_3]: "birads 3",
+  [birads_classification.birads_4a]: "birads 4a",
+  [birads_classification.birads_4b]: "birads 4b",
+  [birads_classification.birads_4c]: "birads 4c",
+  [birads_classification.birads_5]: "birads 5",
+  [birads_classification.birads_6]: "birads 6",
+  [birads_classification.na]: "nije primenjivo",
+};
+
 const biradsOptions: birads_classification[] = [
   birads_classification.birads_0,
   birads_classification.birads_1,
@@ -34,6 +49,7 @@ const biradsOptions: birads_classification[] = [
   birads_classification.birads_4c,
   birads_classification.birads_5,
   birads_classification.birads_6,
+  birads_classification.na,
 ];
 
 type Props = {
@@ -161,17 +177,25 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
             <MSelect
               selectedItem={birads}
               onValueChange={(val) => setBirads(val as birads_classification)}
-              items={biradsOptions.map((b) => ({ key: b, label: b }))}
+              items={biradsOptions.map((b) => ({
+                key: b,
+                label: lookupBirads[b],
+              }))}
             />
             <Label>{"BIRADS klasifikacija"}</Label>
           </div>
         </div>
         {feedback && (
-          <div className="flex flex-wrap text-sm">
-            <i className="font-light">prethodno popunio:</i>
-            <Badge className="h-fit" variant="outline">
-              {feedback.user_email}
-            </Badge>
+          <div className="flex flex-col">
+            <div className="flex flex-wrap items-center text-sm">
+              <i className="font-light">prethodno popunio:</i>
+              <Badge className="h-fit p-1" variant="secondary">
+                {feedback.user_email}
+              </Badge>
+            </div>
+            {feedback.createdAt && (
+              <i className="text-xs">{feedback.createdAt.toLocaleString()}</i>
+            )}
           </div>
         )}
         <DialogFooter>

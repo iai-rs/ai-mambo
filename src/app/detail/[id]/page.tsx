@@ -15,11 +15,6 @@ import { api } from "~/trpc/server";
 import { parseDateFormat } from "~/utils/parseDateFormat";
 
 const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
-  // const [data, image] = await Promise.all([
-  //   api.metadata.getMetadataById({ mammography_id: id }),
-  //   api.minio.getMinio(id + ".png"),
-  // ]);
-  // const data = await api.metadata.getMetadataById({ mammography_id: id });
   const [patient_id = "", acquisition_date = ""] = id.split("-");
   const data = await api.metadata.getMetadataByDateAndPatientId({
     patient_id,
@@ -33,7 +28,7 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   }
   const name = session.user?.name ?? "";
   const email = session.user?.email ?? "";
-  console.log("email", email);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="container h-[calc(100vh-86px)] overflow-y-auto pt-2">
