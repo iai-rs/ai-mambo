@@ -1,8 +1,9 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useState, useEffect, MouseEventHandler } from "react";
+import { useState, useEffect, type MouseEventHandler } from "react";
 import { Button } from "../ui/button";
+import { iconHeight } from "~/constants";
 
 function ThemeToggle() {
   const [theme, setTheme] = useState("light");
@@ -43,7 +44,7 @@ function ThemeToggle() {
       onClick={toggleTheme}
     >
       <div className="flex items-center gap-4">
-        {isDark ? <Sun /> : <Moon />}
+        {isDark ? <Sun height={iconHeight} /> : <Moon height={iconHeight} />}
         <span>{isDark ? "Svetlo" : "Tamno"}</span>
       </div>
     </Button>

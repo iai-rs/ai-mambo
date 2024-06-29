@@ -1,5 +1,3 @@
-"use client";
-
 import { Role } from "@prisma/client";
 import { useEffect, useState } from "react";
 import MSelect from "~/components/common/MSelect";

@@ -1,5 +1,5 @@
 import React from "react";
-import { LogOut, Mail } from "lucide-react";
+import { LogOut, Mail, Users } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { auth, signOut } from "~/auth";
@@ -13,8 +13,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import ThemeToggle from "../ThemeToggle";
-
-const iconHeight = 18;
+import { iconHeight } from "~/constants";
+import Link from "next/link";
 
 const UserMenu = async () => {
   const session = await auth();
@@ -34,17 +34,26 @@ const UserMenu = async () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        {/* Name */}
         <DropdownMenuLabel>{name}</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {/* email */}
         <DropdownMenuItem className="flex gap-4">
           <Mail height={iconHeight} />
           {email}
         </DropdownMenuItem>
+        {/* users */}
+        <DropdownMenuItem className="flex gap-4">
+          <Users height={iconHeight} />
+          <Link href="/users">Users</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
+        {/* theme */}
         <DropdownMenuItem>
           <ThemeToggle />
         </DropdownMenuItem>
         <DropdownMenuSeparator />
+        {/* Logout */}
         <DropdownMenuItem>
           <LogOut height={iconHeight} />
           <form
