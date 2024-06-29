@@ -33,14 +33,5 @@ export default async function UsersServer() {
       <InviteUserForm />
       <Users users={usersWithFilteredData} />
     </main>
-    // <main className="grid grid-cols-12 gap-4">
-    //   <div className="col-span-4 bg-gray-200 p-4">
-    //     <InviteUserForm />
-    //   </div>
-
-    //   <div className="bg-bacground col-span-8 w-full p-4">
-    //     <Users users={usersWithFilteredData} />
-    //   </div>
-    // </main>
   );
 }

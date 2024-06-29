@@ -108,44 +108,46 @@ export default function Users({ users }: Props) {
         onChange={(e) => setSearchTerm(e.target.value)}
       ></Input>
       <br />
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Button variant="ghost" onClick={handleClickName}>
-                <ChevronsUpDown className="h-4" />
-                {"Ime"}
-              </Button>
-            </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={handleClickEmail}>
-                <ChevronsUpDown className="h-4" />
-                {"Email"}
-              </Button>
-            </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={handleClickRole}>
-                <ChevronsUpDown className="h-4" />
-                {"Rola"}
-              </Button>
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {usersState.map((user) => (
-            <User
-              key={user.id}
-              user={{
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-              }}
-              onDelete={handleDelete}
-            />
-          ))}
-        </TableBody>
-      </Table>
+      <div className="h-[calc(100vh-300px)] overflow-auto">
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                <Button variant="ghost" onClick={handleClickName}>
+                  <ChevronsUpDown className="h-4" />
+                  {"Ime"}
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button variant="ghost" onClick={handleClickEmail}>
+                  <ChevronsUpDown className="h-4" />
+                  {"Email"}
+                </Button>
+              </TableHead>
+              <TableHead>
+                <Button variant="ghost" onClick={handleClickRole}>
+                  <ChevronsUpDown className="h-4" />
+                  {"Rola"}
+                </Button>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {usersState.map((user) => (
+              <User
+                key={user.id}
+                user={{
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  role: user.role,
+                }}
+                onDelete={handleDelete}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

@@ -26,8 +26,8 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   if (!data.length || !session?.user) {
     return null;
   }
-  const name = session.user?.name ?? "";
   const email = session.user?.email ?? "";
+  const role = session.user?.role ?? "";
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -57,7 +57,7 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
             </CardContent>
           </Card>
         </div>
-        <PatientGallery email={email} data={data} />
+        <PatientGallery email={email} data={data} role={role} />
       </div>
     </Suspense>
   );

@@ -9,6 +9,7 @@ import { Label } from "../ui/label";
 type Props = {
   data: PatientData[];
   email: string;
+  role: string;
 };
 
 const viewOrder = {
@@ -18,7 +19,7 @@ const viewOrder = {
   LCC: 3,
 };
 
-const PatientGallery = ({ data, email }: Props) => {
+const PatientGallery = ({ data, email, role }: Props) => {
   const [showDetails, setShowDetails] = useState(true);
   const [showHeatMap, setShowHeatMap] = useState(false);
 
@@ -29,7 +30,6 @@ const PatientGallery = ({ data, email }: Props) => {
       return viewOrder[aKey] - viewOrder[bKey];
     });
   }, [data]);
-  console.log({ data, sortedData });
 
   return (
     <div className="pb-4">
@@ -60,6 +60,7 @@ const PatientGallery = ({ data, email }: Props) => {
               showDetails={showDetails}
               showHeatMap={showHeatMap}
               email={email}
+              role={role}
             />
           );
         })}

@@ -15,6 +15,7 @@ import { Button } from "../ui/button";
 import ThemeToggle from "../ThemeToggle";
 import { iconHeight } from "~/constants";
 import Link from "next/link";
+import { Role } from "@prisma/client";
 
 const UserMenu = async () => {
   const session = await auth();
@@ -23,6 +24,9 @@ const UserMenu = async () => {
 
   const name = session?.user?.name ?? "";
   const email = session?.user?.email ?? "";
+  const role = session?.user?.role ?? "";
+
+  const isAdmin = role === Role.ADMIN;
 
   return (
     <DropdownMenu>
@@ -43,10 +47,12 @@ const UserMenu = async () => {
           {email}
         </DropdownMenuItem>
         {/* users */}
-        <DropdownMenuItem className="flex gap-4">
-          <Users height={iconHeight} />
-          <Link href="/users">Users</Link>
-        </DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem className="flex gap-4">
+            <Users height={iconHeight} />
+            <Link href="/users">Users</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         {/* theme */}
         <DropdownMenuItem>

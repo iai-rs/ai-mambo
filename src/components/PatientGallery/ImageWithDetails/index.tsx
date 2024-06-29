@@ -10,15 +10,23 @@ import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
 import FeedbackDialog from "./FeedbackDialog";
 import { Slider } from "~/components/ui/slider";
+import { Role } from "@prisma/client";
 
 type Props = {
   data: PatientData;
   showDetails: boolean;
   showHeatMap: boolean;
   email: string;
+  role: string;
 };
 
-const ImageWithDetails = ({ data, email, showDetails, showHeatMap }: Props) => {
+const ImageWithDetails = ({
+  data,
+  email,
+  showDetails,
+  showHeatMap,
+  role,
+}: Props) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [heatOpacity, setHeatOpacity] = useState([100]);
   const { data: imageData } = api.minio.getMinio.useQuery(data.id + ".png");
@@ -35,6 +43,7 @@ const ImageWithDetails = ({ data, email, showDetails, showHeatMap }: Props) => {
   };
 
   const isLateralityLeft = data.laterality === "L";
+  const isRegularUser = role === Role.USER;
   return (
     <div className="rounded-md border border-border bg-background p-2">
       <div className="relative w-[500px]" style={{ aspectRatio }}>
@@ -97,12 +106,14 @@ const ImageWithDetails = ({ data, email, showDetails, showHeatMap }: Props) => {
               )}
             >
               <span className="text-red-600">{data.id}</span>
-              <FeedbackDialog
-                imageUrl={imageData?.url}
-                email={email}
-                studyUid={data.id}
-                feedback={data.feedback}
-              />
+              {!isRegularUser && (
+                <FeedbackDialog
+                  imageUrl={imageData?.url}
+                  email={email}
+                  studyUid={data.id}
+                  feedback={data.feedback}
+                />
+              )}
             </div>
           </div>
         )}
