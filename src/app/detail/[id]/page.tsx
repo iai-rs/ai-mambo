@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { api } from "~/trpc/server";
+import { parseDateFormat } from "~/utils/parseDateFormat";
 
 const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   // const [data, image] = await Promise.all([
@@ -45,7 +46,9 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
           <Card>
             <CardHeader>
               <CardTitle>{data[0]?.patientName}</CardTitle>
-              <CardDescription>{data[0]?.acquisitionDate}</CardDescription>
+              <CardDescription>
+                {parseDateFormat(data[0]?.acquisitionDate ?? "")}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex">JMBG: {data[0]?.patientId}</div>

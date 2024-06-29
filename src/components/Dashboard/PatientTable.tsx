@@ -9,6 +9,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { modelResultFormatter } from "../common/Formaters";
 import { Badge } from "../ui/badge";
+import { parseDateFormat } from "~/utils/parseDateFormat";
 
 const columnHelper = createColumnHelper<MetadataResponse>();
 
@@ -50,14 +51,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
       columnHelper.accessor("acquisitionDate", {
         enableColumnFilter: false,
         header: "Datum pregleda",
-        cell: (props) => {
-          const parsedDate = parse(props.getValue(), "yyyyMMdd", new Date());
-          if (isNaN(parsedDate.getTime())) return "-";
-          // Format the Date object to a human-readable string
-
-          const formattedDate = format(parsedDate, "dd/MM/yyyy");
-          return formattedDate;
-        },
+        cell: (props) => parseDateFormat(props.getValue()),
         meta: {
           name: "Datum pregleda",
         },
