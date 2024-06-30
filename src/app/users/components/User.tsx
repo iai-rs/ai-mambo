@@ -1,9 +1,17 @@
-"use client";
-
 import { Role } from "@prisma/client";
 import { useEffect, useState } from "react";
-import { changeUserRole, deleteUser } from "~/app/lib/actions";
+import MSelect from "~/components/common/MSelect";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
+import { TableCell, TableRow } from "~/components/ui/table";
 import { api } from "~/trpc/react";
 
 interface Props {
@@ -13,13 +21,14 @@ interface Props {
     email: string;
     role: Role;
   };
-  onDelete: Function;
+  onDelete: (a: string) => void;
 }
 
 export default function User({ user, onDelete }: Props) {
   const deleteUserMutation = api.users.deleteUserById.useMutation();
   const changeUserRoleMutation = api.users.updateUserRole.useMutation();
   const [userState, setUser] = useState(user);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleRoleChange = (userId: string, newRole: Role) => {
     changeUserRoleMutation.mutate({ id: userId, role: newRole });
@@ -36,32 +45,49 @@ export default function User({ user, onDelete }: Props) {
   }, [changeUserRoleMutation.isSuccess]);
 
   useEffect(() => {
-    onDelete(deleteUserMutation.data?.id);
+    onDelete(deleteUserMutation.data?.id ?? "");
   }, [deleteUserMutation.isSuccess]);
 
   return (
-    <tr key={userState.id}>
-      <td>{userState.name}</td>
-      <td>{userState.email}</td>
-      <td>
-        <select
-          value={userState.role}
-          onChange={(e) =>
-            handleRoleChange(userState.id, e.target.value as Role)
-          }
-        >
-          {Object.values(Role).map((role) => (
-            <option key={role} value={role}>
-              {role}
-            </option>
-          ))}
-        </select>
-      </td>
-      <td>
-        <Button onClick={() => handleDeleteUser(userState.id)}>
-          Delete user
-        </Button>
-      </td>
-    </tr>
+    <>
+      <TableRow key={userState.id}>
+        <TableCell>{userState.name}</TableCell>
+        <TableCell>{userState.email}</TableCell>
+        <TableCell>
+          <MSelect
+            className="min-w-[130px]"
+            selectedItem={userState.role}
+            onValueChange={(value) =>
+              handleRoleChange(userState.id, value as Role)
+            }
+            items={Object.values(Role).map((r) => ({ key: r, label: r }))}
+          />
+        </TableCell>
+        <TableCell>
+          <Button onClick={() => setOpenDialog(true)}>Obriši korisnika</Button>
+        </TableCell>
+      </TableRow>
+      <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{"Da li ste sigurni?"}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {
+                "Ova radnja ne može biti poništena. Ovo će trajno obrisati nalog i ukloniti podatke sa naših servera."
+              }
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{"Obustavi"}</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              onClick={() => handleDeleteUser(userState.id)}
+            >
+              {"Nastavi"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

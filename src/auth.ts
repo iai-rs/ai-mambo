@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { authConfig } from "./auth.config";
@@ -53,6 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // `user` here is the user returned from the `authorize` function
       session.user.email = token.email ?? ""; // Now all user details returned from `authorize` are attached to the session
       session.user.name = token.name; // Now all user details returned from `authorize` are attached to the session
+      session.user.role = token.role;
 
       return session;
     },
@@ -61,6 +63,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       if (user) {
         token.id = user.id; // You can add more user properties here
+        token.role = (user as { role: string }).role;
       }
       return token;
     },

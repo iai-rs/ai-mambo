@@ -12,13 +12,9 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { api } from "~/trpc/server";
+import { parseDateFormat } from "~/utils/parseDateFormat";
 
 const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
-  // const [data, image] = await Promise.all([
-  //   api.metadata.getMetadataById({ mammography_id: id }),
-  //   api.minio.getMinio(id + ".png"),
-  // ]);
-  // const data = await api.metadata.getMetadataById({ mammography_id: id });
   const [patient_id = "", acquisition_date = ""] = id.split("-");
   const data = await api.metadata.getMetadataByDateAndPatientId({
     patient_id,
@@ -30,9 +26,9 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   if (!data.length || !session?.user) {
     return null;
   }
-  const name = session.user?.name ?? "";
   const email = session.user?.email ?? "";
-  console.log("email", email);
+  const role = session.user?.role ?? "";
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="container h-[calc(100vh-86px)] overflow-y-auto pt-2">
@@ -45,7 +41,9 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
           <Card>
             <CardHeader>
               <CardTitle>{data[0]?.patientName}</CardTitle>
-              <CardDescription>{data[0]?.acquisitionDate}</CardDescription>
+              <CardDescription>
+                {parseDateFormat(data[0]?.acquisitionDate ?? "")}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex">JMBG: {data[0]?.patientId}</div>
@@ -59,7 +57,7 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
             </CardContent>
           </Card>
         </div>
-        <PatientGallery email={email} data={data} />
+        <PatientGallery email={email} data={data} role={role} />
       </div>
     </Suspense>
   );

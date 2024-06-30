@@ -9,7 +9,6 @@ export interface SharedMetadataProps {
   manufacturer: string | null;
   manufacturerModel: string | null;
 }
-// records: PatientData[];
 
 export interface PatientData extends SharedMetadataProps {
   id: string;

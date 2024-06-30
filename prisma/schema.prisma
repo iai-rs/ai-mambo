@@ -55,6 +55,7 @@ model BiradsFeedback {
   birads_class        birads_classification
   user_email          String
   biradsResults       BiradsResults         @relation(fields: [study_uid], references: [study_uid], map: "birads_feedback_study_uid_fkey")
+  createdAt           DateTime              @default(now())
 
   @@map("birads_feedback")
 }
@@ -75,4 +76,5 @@ enum birads_classification {
   birads_4c @map("4c")
   birads_5  @map("5")
   birads_6  @map("6")
+  na        @map("nije primenjivo")
 }

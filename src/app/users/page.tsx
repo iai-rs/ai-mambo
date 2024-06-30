@@ -1,5 +1,4 @@
 import { type Metadata } from "next";
-import Link from "next/link";
 import { api } from "~/trpc/server";
 import InviteUserForm from "./components/invite-user-form";
 import { auth } from "~/auth";
@@ -30,14 +29,9 @@ export default async function UsersServer() {
   }));
 
   return (
-    <main className="grid grid-cols-12 gap-4">
-      <div className="col-span-4 bg-gray-200 p-4">
-        <InviteUserForm />
-      </div>
-
-      <div className="col-span-8 w-full bg-gray-200 p-4">
-        <Users users={usersWithFilteredData} />
-      </div>
+    <main className="mt-4 flex flex-wrap justify-center gap-4">
+      <InviteUserForm />
+      <Users users={usersWithFilteredData} />
     </main>
   );
 }
