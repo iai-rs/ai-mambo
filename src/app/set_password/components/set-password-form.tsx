@@ -14,9 +14,9 @@ export default function SetPasswordForm() {
   const [errorMessage, formAction] = useFormState(setPasswordWithUrlData, null);
 
   return (
-    <form action={formAction} className="space-y-3">
-      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl">Set password:</h1>
+    <form action={formAction} className="space-y-3 rounded-md border">
+      <div className="flex-1 rounded-lg bg-background px-6 pb-4 pt-8">
+        <h1 className="mb-3 text-2xl text-foreground">Set password:</h1>
         <div className="w-full">
           <div className="mt-4">
             <label
