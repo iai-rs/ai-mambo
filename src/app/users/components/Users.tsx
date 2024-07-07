@@ -97,7 +97,7 @@ export default function Users({ users }: Props) {
   };
 
   return (
-    <div className="overflow-auto p-4">
+    <div className="overflow-auto px-4">
       <h1 className="mb-2 text-2xl font-bold">
         {"Lista korisnika".toUpperCase()}
       </h1>

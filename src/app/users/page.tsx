@@ -5,9 +5,14 @@ import { auth } from "~/auth";
 import { Role } from "@prisma/client";
 import Users from "./components/Users";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import { Button } from "~/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "~/components/ui/breadcrumb";
 
 export const metadata: Metadata = {
   title: "Users",
@@ -32,16 +37,22 @@ export default async function UsersServer() {
   }));
 
   return (
-    <main className="mt-4 flex flex-wrap justify-center gap-4">
-      <div className="flex flex-col gap-3">
-        <Link href="/">
-          <Button variant="outline">
-            <ArrowLeft />
-          </Button>
-        </Link>
+    <main className="container mt-4 flex flex-col gap-4">
+      <Breadcrumb className="mt-2 font-bold">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Početna</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Lista korisnika</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="flex flex-wrap">
         <InviteUserForm />
+        <Users users={usersWithFilteredData} />
       </div>
-      <Users users={usersWithFilteredData} />
     </main>
   );
 }

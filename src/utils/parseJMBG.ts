@@ -12,7 +12,6 @@ function parsePatientDate(dateString: string) {
 
     // Create the birthdate
     const birthdate = new Date(year, month, day);
-    console.log({ birthdate, day, month, year, yearPart });
 
     // Check if the date is valid
     if (isNaN(birthdate.getTime())) {

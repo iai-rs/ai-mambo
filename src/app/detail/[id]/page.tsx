@@ -1,16 +1,15 @@
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import React, { ReactNode, Suspense } from "react";
+import React, { type ReactNode, Suspense } from "react";
 import { auth } from "~/auth";
 import PatientGallery from "~/components/PatientGallery";
-import { Button } from "~/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "~/components/ui/breadcrumb";
+import { Card, CardContent } from "~/components/ui/card";
 import { api } from "~/trpc/server";
 import { parseDateFormat } from "~/utils/parseDateFormat";
 import { getPatientAge } from "~/utils/parseJMBG";
@@ -37,11 +36,18 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="container h-[calc(100vh-86px)] overflow-y-auto pt-2">
-        <Link href="/">
-          <Button variant="outline">
-            <ArrowLeft />
-          </Button>
-        </Link>
+        <Breadcrumb className="mt-2 font-bold">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Početna</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Pregled detalja</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <div className="mb-4 mt-2 flex h-fit max-w-[1042px] gap-2">
           <div className="flex flex-col">
             <h2 className="my-4 text-2xl font-bold">{data[0]?.patientName}</h2>
