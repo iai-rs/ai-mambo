@@ -92,6 +92,13 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
           </div>
         </div>
         <PatientGallery email={email} data={data} role={role} />
+        <div className="mb-4 max-w-[700px]">
+          <p className="text-sm italic">
+            {
+              "Ovaj softver je osmišljen kao pomoćni alat i ni na koji način nije zamena za stručnu procenu lekara opšte prakse ili specijaliste. Informacije prikazane putem ove platforme služe isključivo kao dodatni resurs i ne treba ih smatrati zamenom za medicinsku dijagnozu, utvrđivanje ili propisivanje terapije."
+            }
+          </p>
+        </div>
       </div>
     </Suspense>
   );
