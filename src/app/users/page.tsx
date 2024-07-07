@@ -5,6 +5,9 @@ import { auth } from "~/auth";
 import { Role } from "@prisma/client";
 import Users from "./components/Users";
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Users",
@@ -30,7 +33,14 @@ export default async function UsersServer() {
 
   return (
     <main className="mt-4 flex flex-wrap justify-center gap-4">
-      <InviteUserForm />
+      <div className="flex flex-col gap-3">
+        <Link href="/">
+          <Button variant="outline">
+            <ArrowLeft />
+          </Button>
+        </Link>
+        <InviteUserForm />
+      </div>
       <Users users={usersWithFilteredData} />
     </main>
   );
