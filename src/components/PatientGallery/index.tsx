@@ -48,7 +48,7 @@ const PatientGallery = ({ data, email, role }: Props) => {
             onCheckedChange={setShowHeatMap}
             id="show-heatmap"
           />
-          <Label htmlFor="show-details">{"Prikaži hit mapu"}</Label>
+          <Label htmlFor="show-heatmap">{"Prikaži hit mapu"}</Label>
         </div>
       </div>
       <div className="flex flex-wrap gap-2">

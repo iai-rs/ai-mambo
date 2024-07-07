@@ -56,20 +56,20 @@ const SearchMenu = ({
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="7" id="r2" />
-          <Label htmlFor="r2">{"7 dana"}</Label>
+          <Label htmlFor="r2">{"Poslednjih 7 dana"}</Label>
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="30" id="r3" />
-          <Label htmlFor="r3">{"30 dana"}</Label>
+          <Label htmlFor="r3">{"Poslednjih 30 dana"}</Label>
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="startOfYear" id="r4" />
           <Label htmlFor="r4">{"Od početka godine"}</Label>
         </div>
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <RadioGroupItem value="allData" id="r5" />
           <Label htmlFor="r5">{"Sve"}</Label>
-        </div>
+        </div> */}
       </RadioGroup>
       <div className="my-4 flex items-center gap-1">
         <Switch
