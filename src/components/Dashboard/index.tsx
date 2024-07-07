@@ -11,7 +11,7 @@ import { getDateRange, getCustomDateRange } from "~/utils/getDateRange";
 import { type DateRangePicker } from "./SearchMenu/RangePicker";
 
 const Dashboard = () => {
-  const [search, setSearch] = useState<SearchType>("allData");
+  const [search, setSearch] = useState<SearchType>("7");
   const [patientId, setPatientId] = useState("");
   const [patientName, setPatientName] = useState("");
   const [institution, setInstitution] = useState("");
@@ -53,7 +53,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     handleSearch();
-  }, []);
+  }, [search]);
 
   return (
     <div className="flex">
@@ -65,6 +65,7 @@ const Dashboard = () => {
         }
       >
         <SearchMenu
+          value={search}
           customDate={customDate}
           setCustomDate={setCustomDate}
           isCustomDate={isCustomDate}

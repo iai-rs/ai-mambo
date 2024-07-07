@@ -86,9 +86,11 @@ const ImageWithDetails = ({
               <Badge className="w-fit" variant="destructive">
                 {modelResultFormatter(data.modelResult as unknown as number)}
               </Badge>
-              <Badge variant="destructive">
-                <span>{`implant ${data.implant}`}</span>
-              </Badge>
+              {data.implant && (
+                <Badge variant="destructive">
+                  <span>{`implant ${data.implant}`}</span>
+                </Badge>
+              )}
               {showHeatMap && (
                 <Slider
                   max={100}
