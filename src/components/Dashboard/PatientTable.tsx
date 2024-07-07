@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { format, parse } from "date-fns";
 import React, { useMemo } from "react";
 
@@ -19,10 +20,11 @@ type Props = {
 };
 
 const PatientTable = ({ data, isLoading }: Props) => {
-  const columns: ColumnDef<MetadataResponse, never>[] = useMemo(
+  const columns = useMemo(
     () => [
       columnHelper.accessor("patientName", {
         enableColumnFilter: true,
+        enableHiding: false,
         header: "Ime",
         meta: {
           name: "Ime",
@@ -51,7 +53,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
       columnHelper.accessor("acquisitionDate", {
         enableColumnFilter: false,
         header: "Datum pregleda",
-        cell: (props) => parseDateFormat(props.getValue()),
+        cell: (props) => parseDateFormat(props.getValue() ?? ""),
         meta: {
           name: "Datum pregleda",
         },
@@ -125,13 +127,14 @@ const PatientTable = ({ data, isLoading }: Props) => {
   );
   return (
     <div className="min-w-[700px] overflow-y-scroll px-5 py-3">
-      <DataTable
+      <DataTable<MetadataResponse, any>
         defaultSorting={[{ id: "modelResult", desc: true }]}
         columns={columns}
         data={data ?? []}
         enableSorting
         isLoading={isLoading}
         enableColumnsHiding
+        enableCSVExport
         leftColumnsPin={["patientName"]}
         rightColumnsPin={["action"]}
       />

@@ -29,6 +29,7 @@ import SortingIndicators from "./components/SortingIndicators";
 import { useDataTable } from "./hooks/useDataTable";
 import { resolveRowBackground } from "./utils/common";
 import { cn } from "~/lib/utils";
+import ExportToCSV from "./components/ExportToCSV";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -41,6 +42,7 @@ export type TableProps<TData, TValue> = {
   enableColumnsHiding?: boolean;
   enableSorting?: boolean;
   enableFiltering?: boolean;
+  enableCSVExport?: boolean;
   isLoading?: boolean;
   pageSize?: number;
   leftColumnsPin?: string[];
@@ -81,6 +83,7 @@ const DataTable = <TData, TValue>({
   enableColumnsHiding = false,
   enableSorting = true,
   enableFiltering = true,
+  enableCSVExport = false,
   isLoading = false,
   pageSize = DEFAULT_PAGE_SIZE,
   leftColumnsPin = [],
@@ -98,6 +101,9 @@ const DataTable = <TData, TValue>({
     pageSize,
   });
   const tableRows = table.getRowModel().rows;
+  const prepaginationRows = table
+    .getPrePaginationRowModel()
+    .rows.map((r) => r.original);
   const leafColumnsNum = table.getAllLeafColumns().length;
 
   const isDataAvailable = tableRows.length > 0;
@@ -107,7 +113,11 @@ const DataTable = <TData, TValue>({
       <div className="flex items-center justify-between">
         {/* Table title */}
         <span className="text-sm font-semibold">{title}</span>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          {/* CSV export */}
+          {enableCSVExport && (
+            <ExportToCSV data={prepaginationRows} fileName={"Eksportovano"} />
+          )}
           {/* Hiding columns */}
           {enableColumnsHiding && (
             <HidingColumns<TData> table={table} isTableLoading={isLoading} />
