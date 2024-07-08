@@ -15,6 +15,7 @@ type Props = {
   patientName: string;
   institution: string;
   isCustomDate: boolean;
+  value: SearchType;
   setIsCustomDate: Dispatch<SetStateAction<boolean>>;
   setPatientId: Dispatch<SetStateAction<string>>;
   setPatientName: Dispatch<SetStateAction<string>>;
@@ -32,6 +33,7 @@ const SearchMenu = ({
   handleSearch,
   patientId,
   isCustomDate,
+  value,
   setIsCustomDate,
   patientName,
   setPatientName,
@@ -45,7 +47,8 @@ const SearchMenu = ({
       <h2 className="mb-4 text-lg">{"PRETRAGA PREGLEDA"}</h2>
       <RadioGroup
         disabled={isCustomDate}
-        defaultValue="allData"
+        value={value}
+        defaultValue="today"
         onValueChange={(val) => {
           setSearch(val as SearchType);
         }}
@@ -56,19 +59,15 @@ const SearchMenu = ({
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="7" id="r2" />
-          <Label htmlFor="r2">{"7 dana"}</Label>
+          <Label htmlFor="r2">{"Poslednjih 7 dana"}</Label>
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="30" id="r3" />
-          <Label htmlFor="r3">{"30 dana"}</Label>
+          <Label htmlFor="r3">{"Poslednjih 30 dana"}</Label>
         </div>
         <div className="flex items-center space-x-2">
           <RadioGroupItem value="startOfYear" id="r4" />
           <Label htmlFor="r4">{"Od početka godine"}</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="allData" id="r5" />
-          <Label htmlFor="r5">{"Sve"}</Label>
         </div>
       </RadioGroup>
       <div className="my-4 flex items-center gap-1">

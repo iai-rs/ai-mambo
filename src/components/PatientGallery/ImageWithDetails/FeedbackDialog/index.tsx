@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FilePenLine } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -79,6 +79,13 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
   const createFeedback = api.feedback.createFeedback.useMutation();
   const updateFeedback = api.feedback.updateFeedback.useMutation();
 
+  const handleResetState = () => {
+    setShadow(feedback?.shadow ?? false);
+    setMicrocalcifications(feedback?.microcalcifications ?? false);
+    setSymmetry(feedback?.symmetry ?? false);
+    setArchitectonics(feedback?.architectonics ?? false);
+  };
+
   const handleCreate = async () => {
     try {
       await createFeedback.mutateAsync({
@@ -104,20 +111,35 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
         id: feedback.id,
         shadow,
         architectonics,
-        birads_class: birads_classification.birads_4a,
+        birads_class: birads,
         microcalcifications,
         study_uid: studyUid,
         suspect_lesion: suspectLesion,
         symmetry,
         user_email: email,
       });
+      router.refresh();
     } catch (err) {
       console.log(err);
     }
   };
 
+  useEffect(() => {
+    if (shadow || microcalcifications || architectonics || symmetry) {
+      setSuspectLesion(true);
+    } else {
+      setSuspectLesion(false);
+    }
+  }, [architectonics, microcalcifications, shadow, symmetry]);
+
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) {
+          handleResetState();
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <div className="flex">
           <Button className="w-fit px-2" variant="outline">
@@ -135,11 +157,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
         <ImageWithLoader url={imageUrl} width={400} height={550} />
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-1">
-            <Switch
-              checked={suspectLesion}
-              onCheckedChange={setSuspectLesion}
-              id="lesion"
-            />
+            <Switch aria-readonly checked={suspectLesion} id="lesion" />
             <Label htmlFor="lesion">{"Suspektna lezija je prisutna"}</Label>
           </div>
           <DialogDescription>
@@ -186,8 +204,8 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
           </div>
         </div>
         {feedback && (
-          <div className="flex flex-col">
-            <div className="flex flex-wrap items-center text-sm">
+          <div className="flex flex-col rounded-sm border border-red-500 bg-red-100/50 p-2">
+            <div className=" flex flex-wrap items-center text-sm">
               <i className="font-light">prethodno popunio:</i>
               <Badge className="h-fit p-1" variant="secondary">
                 {feedback.user_email}
@@ -200,13 +218,18 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
         )}
         <DialogFooter>
           <DialogClose asChild>
+            <Button variant="outline">Zatvori</Button>
+          </DialogClose>
+          <DialogClose asChild>
             <Button
+              disabled={
+                !suspectLesion && birads === birads_classification.birads_0
+              }
               onClick={() => {
                 !!feedback ? void handleUpdate() : void handleCreate();
               }}
               type="button"
             >
-              {/* <Spinner /> */}
               <span>{!!feedback ? "Izmeni" : "Sačuvaj"}</span>
             </Button>
           </DialogClose>

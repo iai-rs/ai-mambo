@@ -7,7 +7,7 @@ import type {
   SortingState,
 } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
-import React, { type CSSProperties } from "react";
+import React, { useState, type CSSProperties } from "react";
 
 import {
   Table,
@@ -29,6 +29,8 @@ import SortingIndicators from "./components/SortingIndicators";
 import { useDataTable } from "./hooks/useDataTable";
 import { resolveRowBackground } from "./utils/common";
 import { cn } from "~/lib/utils";
+import ExportToCSV from "./components/ExportToCSV";
+import { useTheme } from "~/contexts/ThemeContext";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -41,6 +43,7 @@ export type TableProps<TData, TValue> = {
   enableColumnsHiding?: boolean;
   enableSorting?: boolean;
   enableFiltering?: boolean;
+  enableCSVExport?: boolean;
   isLoading?: boolean;
   pageSize?: number;
   leftColumnsPin?: string[];
@@ -49,20 +52,30 @@ export type TableProps<TData, TValue> = {
   defaultSorting?: SortingState;
 };
 
-const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
+const getCommonPinningStyles = (
+  column: Column<any>,
+  isDarkTheme: boolean,
+): CSSProperties => {
   const isPinned = column.getIsPinned();
-  const slateColor = "#94a3b8";
+  const slateColor = isDarkTheme
+    ? "rgba(11, 11, 16, 0.36)"
+    : "rgba(46, 47, 54, 0.13)";
   const isLastLeftPinnedColumn =
     isPinned === "left" && column.getIsLastColumn("left");
   const isFirstRightPinnedColumn =
     isPinned === "right" && column.getIsFirstColumn("right");
 
+  const borderColor = isDarkTheme ? "#63656862" : "#a9a9aa61";
+
   return {
     boxShadow: isLastLeftPinnedColumn
-      ? `-4px 0 4px -4px ${slateColor} inset`
+      ? `4px 4px 10px 0px ${slateColor}`
       : isFirstRightPinnedColumn
-        ? `4px 0 4px -4px ${slateColor} inset`
+        ? `-4px 4px 10px 0px ${slateColor}`
         : undefined,
+
+    borderRight: isLastLeftPinnedColumn ? `1px solid ${borderColor}` : "",
+    borderLeft: isFirstRightPinnedColumn ? `1px solid ${borderColor}` : "",
     left: isPinned === "left" ? `${column.getStart("left")}px` : undefined,
     right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
     opacity: isPinned ? 1 : 1,
@@ -81,6 +94,7 @@ const DataTable = <TData, TValue>({
   enableColumnsHiding = false,
   enableSorting = true,
   enableFiltering = true,
+  enableCSVExport = false,
   isLoading = false,
   pageSize = DEFAULT_PAGE_SIZE,
   leftColumnsPin = [],
@@ -97,17 +111,32 @@ const DataTable = <TData, TValue>({
     rightColumnsPin,
     pageSize,
   });
+
+  const [hoverIndexRow, setHoverIndexRow] = useState<null | number>(null);
+  const { theme } = useTheme();
   const tableRows = table.getRowModel().rows;
+  const prepaginationRows = table
+    .getPrePaginationRowModel()
+    .rows.map((r) => r.original);
   const leafColumnsNum = table.getAllLeafColumns().length;
 
   const isDataAvailable = tableRows.length > 0;
+  const isDarkTheme = theme === "dark";
 
   return (
     <div className="mb-3 flex h-[calc(100vh-200px)] flex-col gap-3 overflow-y-auto rounded-md border border-slate-400/15 p-2 shadow-lg">
       <div className="flex items-center justify-between">
         {/* Table title */}
         <span className="text-sm font-semibold">{title}</span>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          {/* CSV export */}
+          {enableCSVExport && (
+            <ExportToCSV
+              isTableLoading={isLoading}
+              data={prepaginationRows}
+              fileName={"Lista rezultata"}
+            />
+          )}
           {/* Hiding columns */}
           {enableColumnsHiding && (
             <HidingColumns<TData> table={table} isTableLoading={isLoading} />
@@ -116,18 +145,9 @@ const DataTable = <TData, TValue>({
       </div>
       <Table>
         {/* HEADER */}
-        <TableHeader
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 3,
-          }}
-        >
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow
-              className="bg-background p-3 shadow-inner-bottom hover:bg-white  [&_th:first-child]:rounded-tl-md [&_th:last-child]:rounded-tr-md"
-              key={headerGroup.id}
-            >
+            <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header, index) => {
                 const isLastItem = headerGroup.headers.length - 1 === index;
                 const isSortable = header.column.getCanSort() && enableSorting;
@@ -141,8 +161,9 @@ const DataTable = <TData, TValue>({
                     colSpan={header.colSpan}
                     style={{
                       ...headerCustomStyle,
-                      boxShadow: "inset 0 -3px 0 #cbd5e1",
-                      ...getCommonPinningStyles(header.column),
+                      ...(!isLoading
+                        ? getCommonPinningStyles(header.column, isDarkTheme)
+                        : {}),
                     }}
                     className={cn("bg-secondary", {
                       "relative whitespace-nowrap text-right hover:bg-secondary/80":
@@ -152,6 +173,7 @@ const DataTable = <TData, TValue>({
                   >
                     {/* Header content */}
                     <HeaderContentWrapper
+                      isFirstItem={index === 0}
                       isLastItem={isLastItem}
                       isLoading={isLoading}
                       isSortable={isSortable}
@@ -214,15 +236,21 @@ const DataTable = <TData, TValue>({
                     { ["[&_td:last-child]:rounded-br-md"]: isLastRow },
                   )}
                   key={row.id}
+                  onMouseEnter={() => setHoverIndexRow(index)}
+                  onMouseLeave={() => setHoverIndexRow(null)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
                       style={{
                         width: cell.column.getSize(),
-                        ...getCommonPinningStyles(cell.column),
+                        ...getCommonPinningStyles(cell.column, isDarkTheme),
                       }}
-                      className={resolveRowBackground(index)}
+                      className={
+                        hoverIndexRow === index
+                          ? "bg-secondary"
+                          : resolveRowBackground(index)
+                      }
                       align={cell.column.columnDef.meta?.align}
                     >
                       {flexRender(

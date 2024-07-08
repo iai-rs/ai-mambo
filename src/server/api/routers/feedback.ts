@@ -63,6 +63,7 @@ export const feedbackRouter = createTRPCRouter({
           birads_classification.birads_4c,
           birads_classification.birads_5,
           birads_classification.birads_6,
+          birads_classification.na,
         ]),
         user_email: z.string().email(),
       }),
@@ -81,6 +82,7 @@ export const feedbackRouter = createTRPCRouter({
           architectonics: input.architectonics,
           birads_class: input.birads_class as birads_classification,
           user_email: input.user_email,
+          createdAt: new Date(),
         },
       });
     }),

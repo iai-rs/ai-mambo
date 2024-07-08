@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { TableCell, TableRow } from "~/components/ui/table";
+import { ADMINS } from "~/constants";
 import { api } from "~/trpc/react";
 
 interface Props {
@@ -55,6 +56,7 @@ export default function User({ user, onDelete }: Props) {
         <TableCell>{userState.email}</TableCell>
         <TableCell>
           <MSelect
+            disabled={ADMINS.includes(user.email)}
             className="min-w-[130px]"
             selectedItem={userState.role}
             onValueChange={(value) =>
@@ -64,7 +66,12 @@ export default function User({ user, onDelete }: Props) {
           />
         </TableCell>
         <TableCell>
-          <Button onClick={() => setOpenDialog(true)}>Obriši korisnika</Button>
+          <Button
+            disabled={ADMINS.includes(user.email)}
+            onClick={() => setOpenDialog(true)}
+          >
+            Obriši korisnika
+          </Button>
         </TableCell>
       </TableRow>
       <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>

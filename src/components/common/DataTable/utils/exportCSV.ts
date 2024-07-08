@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { download, generateCsv, mkConfig } from "export-to-csv";
 
 import { flattenArrayOfObjects } from "./flattenArrayOfObjects";
@@ -12,7 +13,7 @@ const csvConfig = mkConfig({ useKeysAsHeaders: true });
  * @param {Record<string, any>[]} data - An array of objects with nested structure to be exported.
  * @param {string} fileName - The name of the file to be downloaded.
  */
-const exportCSV = (data: Record<string, any>[], fileName: string): void => {
+const exportCSV = (data: Record<string, unknown>[], fileName: string): void => {
   // If there's no data, exit the function
   if (!data.length) return;
 

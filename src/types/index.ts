@@ -23,4 +23,4 @@ export interface MetadataResponse extends SharedMetadataProps {
   records: PatientData[];
 }
 
-export type SearchType = "allData" | "startOfYear" | "today" | number;
+export type SearchType = "allData" | "startOfYear" | "today" | "7" | "30";

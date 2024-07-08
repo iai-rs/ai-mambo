@@ -1,10 +1,16 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+
 import ImageWithDetails from "./ImageWithDetails";
 import { type PatientData } from "~/types";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
+import dynamic from "next/dynamic";
+
+const PDFCreator = dynamic(() => import("../common/PDFCreator"), {
+  ssr: false,
+});
 
 type Props = {
   data: PatientData[];
@@ -33,8 +39,8 @@ const PatientGallery = ({ data, email, role }: Props) => {
 
   return (
     <div className="pb-4">
-      <div className="flex gap-4">
-        <div className="mb-2 flex items-center gap-1">
+      <div className="flex items-center gap-4 py-2">
+        <div className="flex items-center gap-1">
           <Switch
             checked={showDetails}
             onCheckedChange={setShowDetails}
@@ -42,14 +48,15 @@ const PatientGallery = ({ data, email, role }: Props) => {
           />
           <Label htmlFor="show-details">{"Prikaži anotacije"}</Label>
         </div>
-        <div className="mb-2 flex items-center gap-1">
+        <div className="flex items-center gap-1">
           <Switch
             checked={showHeatMap}
             onCheckedChange={setShowHeatMap}
             id="show-heatmap"
           />
-          <Label htmlFor="show-details">{"Prikaži hit mapu"}</Label>
+          <Label htmlFor="show-heatmap">{"Prikaži hit mapu"}</Label>
         </div>
+        <PDFCreator data={data} />
       </div>
       <div className="flex flex-wrap gap-2">
         {sortedData.map((d) => {

@@ -42,27 +42,27 @@ const Pagination = ({ table, enable }: Props) => {
   if (!enable) return null;
 
   return (
-    <div className="mt-2 flex flex-row-reverse  pt-2">
+    <div className="mt-2 flex  justify-between p-2">
+      {/* Rows per page */}
+      <div className="flex items-center gap-1 font-normal">
+        <MSelect
+          onValueChange={(item) => {
+            table.setPageSize(Number(item));
+          }}
+          selectedItem={table.getState().pagination.pageSize.toString()}
+          items={[
+            { key: "5", label: "5" },
+            { key: "10", label: "10" },
+            { key: "20", label: "20" },
+            { key: "50", label: "50" },
+            { key: "100", label: "100" },
+          ]}
+        />
+        <span className="text-muted-foreground">Redova po strani</span>
+      </div>
       <div className="flex flex-wrap items-center gap-6">
-        {/* Rows per page */}
-        <div className="flex items-center gap-1 font-normal">
-          <span>Redova po strani</span>
-          <MSelect
-            onValueChange={(item) => {
-              table.setPageSize(Number(item));
-            }}
-            selectedItem={table.getState().pagination.pageSize.toString()}
-            items={[
-              { key: "5", label: "5" },
-              { key: "10", label: "10" },
-              { key: "20", label: "20" },
-              { key: "50", label: "50" },
-              { key: "100", label: "100" },
-            ]}
-          />
-        </div>
         {/* Page count */}
-        <div>{`Strana ${table.getState().pagination.pageIndex + 1} od ${table.getPageCount()}`}</div>
+        <div className="text-muted-foreground">{`Strana ${table.getState().pagination.pageIndex + 1} od ${table.getPageCount()}`}</div>
         {/* Buttons */}
         <div className="flex gap-2">
           <Button
