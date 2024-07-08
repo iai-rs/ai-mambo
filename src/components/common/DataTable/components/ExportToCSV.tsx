@@ -8,6 +8,7 @@ import { type MetadataResponse } from "~/types";
 import { modelResultFormatter } from "../../Formaters";
 type Props = {
   data: any[];
+  isTableLoading: boolean;
   fileName?: string;
 };
 
@@ -27,10 +28,15 @@ const parseCSVdata = (data: MetadataResponse[]) => {
   });
 };
 
-const ExportToCSV = ({ data, fileName = "Lista pacijenata" }: Props) => {
+const ExportToCSV = ({
+  data,
+  fileName = "Lista pacijenata",
+  isTableLoading,
+}: Props) => {
   return (
     <div className="p-2">
       <Button
+        disabled={isTableLoading}
         variant="outline"
         onClick={() => exportCSV(parseCSVdata(data), fileName)}
       >

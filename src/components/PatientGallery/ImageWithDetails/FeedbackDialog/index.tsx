@@ -146,11 +146,17 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
             {"Na snimku su prisutne promene"}
           </DialogDescription>
           <div className="flex items-center gap-1">
-            <Switch checked={shadow} onCheckedChange={setShadow} id="shadow" />
+            <Switch
+              disabled={!suspectLesion}
+              checked={shadow}
+              onCheckedChange={setShadow}
+              id="shadow"
+            />
             <Label htmlFor="shadow">{"Senka"}</Label>
           </div>
           <div className=" flex items-center gap-1">
             <Switch
+              disabled={!suspectLesion}
               checked={microcalcifications}
               onCheckedChange={setMicrocalcifications}
               id="microcalcifications"
@@ -159,6 +165,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
           </div>
           <div className=" flex items-center gap-1">
             <Switch
+              disabled={!suspectLesion}
               checked={symmetry}
               onCheckedChange={setSymmetry}
               id="symmetry"
@@ -167,6 +174,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
           </div>
           <div className="flex items-center gap-1">
             <Switch
+              disabled={!suspectLesion}
               checked={architectonics}
               onCheckedChange={setArchitectonics}
               id="architectonics"
@@ -175,6 +183,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
           </div>
           <div className="mt-2 flex items-center gap-2">
             <MSelect
+              disabled={!suspectLesion}
               selectedItem={birads}
               onValueChange={(val) => setBirads(val as birads_classification)}
               items={biradsOptions.map((b) => ({
@@ -200,16 +209,18 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
         )}
         <DialogFooter>
           <DialogClose asChild>
-            <Button
-              onClick={() => {
-                !!feedback ? void handleUpdate() : void handleCreate();
-              }}
-              type="button"
-            >
-              {/* <Spinner /> */}
-              <span>{!!feedback ? "Izmeni" : "Sačuvaj"}</span>
-            </Button>
+            <Button variant="outline">Zatvori</Button>
           </DialogClose>
+          <Button
+            disabled={!suspectLesion}
+            onClick={() => {
+              !!feedback ? void handleUpdate() : void handleCreate();
+            }}
+            type="button"
+          >
+            {/* <Spinner /> */}
+            <span>{!!feedback ? "Izmeni" : "Sačuvaj"}</span>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

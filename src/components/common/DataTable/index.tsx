@@ -132,6 +132,7 @@ const DataTable = <TData, TValue>({
           {/* CSV export */}
           {enableCSVExport && (
             <ExportToCSV
+              isTableLoading={isLoading}
               data={prepaginationRows}
               fileName={"Lista rezultata"}
             />
