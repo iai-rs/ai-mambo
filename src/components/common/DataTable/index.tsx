@@ -131,7 +131,10 @@ const DataTable = <TData, TValue>({
         <div className="flex items-center gap-2">
           {/* CSV export */}
           {enableCSVExport && (
-            <ExportToCSV data={prepaginationRows} fileName={"Eksportovano"} />
+            <ExportToCSV
+              data={prepaginationRows}
+              fileName={"Lista rezultata"}
+            />
           )}
           {/* Hiding columns */}
           {enableColumnsHiding && (
