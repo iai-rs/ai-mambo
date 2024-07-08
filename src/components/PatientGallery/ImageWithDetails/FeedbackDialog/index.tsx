@@ -195,8 +195,8 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
           </div>
         </div>
         {feedback && (
-          <div className="flex flex-col">
-            <div className="flex flex-wrap items-center text-sm">
+          <div className="flex flex-col rounded-sm border border-red-500 bg-red-100/50 p-2">
+            <div className=" flex flex-wrap items-center text-sm">
               <i className="font-light">prethodno popunio:</i>
               <Badge className="h-fit p-1" variant="secondary">
                 {feedback.user_email}
@@ -218,7 +218,6 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
             }}
             type="button"
           >
-            {/* <Spinner /> */}
             <span>{!!feedback ? "Izmeni" : "Sačuvaj"}</span>
           </Button>
         </DialogFooter>
