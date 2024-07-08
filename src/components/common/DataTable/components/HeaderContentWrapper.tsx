@@ -8,17 +8,6 @@ import { cn } from "~/lib/utils";
  */
 type AlignProps = "left" | "center" | "right";
 
-type Props = {
-  features: ReactNode;
-  header: ReactNode;
-  isLastItem: boolean;
-  isSortable: boolean;
-  isPlaceholder: boolean;
-  isLoading?: boolean;
-  align?: AlignProps;
-  onClick: ((event: unknown) => void) | undefined;
-};
-
 /**
  * A lookup table to map alignment props to their respective flexbox justify-content values.
  */
@@ -28,25 +17,23 @@ const lookupAlignment: Record<AlignProps, string> = {
   right: "end",
 };
 
-/**
- * A functional component that wraps header content with additional functionality and styling.
- * It supports conditional rendering based on its props, such as being a placeholder or the last item,
- *
- * @param props - An object containing properties to configure the component.
- * @param features - ReactNode elements to be displayed alongside the header content.
- * @param header - The main content or title to be displayed in the header, typically a React node.
- * @param isLastItem - Determines if the current header is the last item, affecting border rendering.
- * @param isSortable - Indicates whether the header is sortable, enabling click interactions.
- * @param isPlaceholder - Specifies if the current header is a placeholder, in which case no content will be rendered.
- * @param isLoading - (Optional) Indicates if the header is in a loading state, which disables sorting interactions. Defaults to `false`.
- * @param align - (Optional) Specifies the horizontal alignment of the header content. Defaults to `"left"`.
- * @param onClick - A function to handle click events, which is only active when `isSortable` is true and `isLoading` is false. Can be undefined.
- * @returns A JSX element representing the header content wrapper.
- */
+type Props = {
+  features: ReactNode;
+  header: ReactNode;
+  isLastItem: boolean;
+  isFirstItem: boolean;
+  isSortable: boolean;
+  isPlaceholder: boolean;
+  isLoading?: boolean;
+  align?: AlignProps;
+  onClick: ((event: unknown) => void) | undefined;
+};
+
 const HeaderContentWrapper = ({
   features,
   header,
   isLastItem,
+  isFirstItem,
   isSortable,
   isPlaceholder,
   onClick,
@@ -55,8 +42,8 @@ const HeaderContentWrapper = ({
 }: Props) => {
   return (
     <div
-      className={cn("w-auto border-r-slate-500/30 px-3", {
-        "border-r": !isLastItem,
+      className={cn("w-auto  whitespace-nowrap px-3", {
+        "border-r": !isLastItem && !isFirstItem,
       })}
     >
       {isPlaceholder ? null : (
