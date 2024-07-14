@@ -8,7 +8,7 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import dynamic from "next/dynamic";
 
-const PDFCreator = dynamic(() => import("../common/PDFCreator"), {
+const PDFCreatorDetail = dynamic(() => import("../common/PDFCreator/Detail"), {
   ssr: false,
 });
 
@@ -56,7 +56,7 @@ const PatientGallery = ({ data, email, role }: Props) => {
           />
           <Label htmlFor="show-heatmap">{"Prikaži hit mapu"}</Label>
         </div>
-        <PDFCreator data={data} />
+        <PDFCreatorDetail data={data} />
       </div>
       <div className="flex flex-wrap gap-2">
         {sortedData.map((d) => {

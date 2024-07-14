@@ -16,14 +16,14 @@ export default function SetPasswordForm() {
   return (
     <form action={formAction} className="space-y-3 rounded-md border">
       <div className="flex-1 rounded-lg bg-background px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl text-foreground">Set password:</h1>
+        <h1 className="mb-3 text-2xl text-foreground">{"Namesti lozinku:"}</h1>
         <div className="w-full">
           <div className="mt-4">
             <label
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              Password
+              {"Lozinka"}
             </label>
             <div className="relative">
               <input
@@ -42,7 +42,7 @@ export default function SetPasswordForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="confirm-password"
             >
-              Confirm Password
+              {"Potvrdi lozinku"}
             </label>
             <div className="relative">
               <input
@@ -79,7 +79,7 @@ function SetPasswordButton() {
 
   return (
     <Button className="mt-4 w-full" aria-disabled={pending}>
-      Set password
+      {"Namesti lozinku"}
     </Button>
   );
 }
