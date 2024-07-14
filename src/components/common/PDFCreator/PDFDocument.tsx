@@ -9,13 +9,11 @@ import {
   Font,
   Document,
   StyleSheet,
-  PDFDownloadLink,
 } from "@react-pdf/renderer";
 import { type PatientData } from "~/types";
 import { getPatientAge } from "~/utils/parseJMBG";
-import { modelResultFormatter } from "./Formaters";
+import { modelResultFormatter } from "../Formaters";
 import { booleanToTextResolver } from "~/utils/booleanToTextResolver";
-import { Button } from "../ui/button";
 import { disclaimerText } from "~/constants/copy";
 
 // Register Font
@@ -98,7 +96,7 @@ const styles = StyleSheet.create({
 type Props = {
   data: PatientData[];
 };
-const MyDocument = ({ data }: Props) => {
+export const MyDocument = ({ data }: Props) => {
   const patient = data[0];
   if (!patient) return null;
 
@@ -304,13 +302,3 @@ const MyDocument = ({ data }: Props) => {
     </Document>
   );
 };
-
-const PDFCreator = ({ data }: Props) => {
-  return (
-    <PDFDownloadLink fileName="Izveštaj" document={<MyDocument data={data} />}>
-      <Button variant="outline">{"Preuzmi .PDF"}</Button>
-    </PDFDownloadLink>
-  );
-};
-
-export default PDFCreator;

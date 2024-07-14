@@ -1,5 +1,5 @@
+import React, { type ReactNode } from "react";
 import type { Table } from "@tanstack/react-table";
-import React from "react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -44,7 +44,7 @@ const HidingColumns = <TData,>({ table, isTableLoading }: Props<TData>) => {
                   column.toggleVisibility(!!value)
                 }
               >
-                {column.columnDef.meta?.name ?? column.id}
+                {(column.columnDef.header as ReactNode) ?? column.id}
               </DropdownMenuCheckboxItem>
             );
           })}
