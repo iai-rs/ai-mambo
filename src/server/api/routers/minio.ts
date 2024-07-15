@@ -32,7 +32,7 @@ export const minioRouter = createTRPCRouter({
       );
       return { url };
     } catch (error) {
-      throw new Error("Failed to generate signed URL");
+      throw new Error("Failed to generate signed URL: " + String(error));
     }
   }),
   getMinioHeat: publicProcedure.input(z.string()).query(async ({ input }) => {
@@ -45,7 +45,7 @@ export const minioRouter = createTRPCRouter({
       );
       return { url };
     } catch (error) {
-      throw new Error("Failed to generate signed URL");
+      throw new Error("Failed to generate signed URL: " + String(error));
     }
   }),
 });
