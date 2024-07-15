@@ -14,12 +14,15 @@ jobs:
         env:
           MAIL_USER: "api"
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          envs: MAIL_USER,MAIL_PASSWORD
+          envs: MAIL_USER,MAIL_PASSWORD,MINIO_ENDPOINT,MINIO_ACCESS_KEY,MINIO_SECRET_KEY
           script: |
             cd ai-mambo/
             git checkout development
@@ -27,5 +30,5 @@ jobs:
             docker build -t nextjs-app .
             docker stop nextjs-app
             docker rm nextjs-app
-            docker run -d -p 55614:3000 -e MAIL_USER=${MAIL_USER} -e MAIL_PASSWORD=${MAIL_PASSWORD} --name nextjs-app nextjs-app
+            docker run -d -p 55614:3000 -e MAIL_USER=${MAIL_USER} -e MAIL_PASSWORD=${MAIL_PASSWORD}-e MINIO_ENDPOINT=${MINIO_ENDPOINT} -e MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY} -e MINIO_SECRET_KEY=${MINIO_SECRET_KEY} --name nextjs-app nextjs-app
             docker network connect mamo_network nextjs-app
