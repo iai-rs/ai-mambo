@@ -12,6 +12,7 @@ import {
 import { Card, CardContent } from "~/components/ui/card";
 import { disclaimerText } from "~/constants/copy";
 import { api } from "~/trpc/server";
+import { extractJMBG } from "~/utils/extractJMBG";
 import { parseDateFormat } from "~/utils/parseDateFormat";
 import { getPatientAge } from "~/utils/parseJMBG";
 
@@ -21,8 +22,9 @@ const LeftText = ({ children }: { children: ReactNode }) => (
 
 const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   const [patient_id = "", acquisition_date = ""] = id.split("-");
+
   const data = await api.metadata.getMetadataByDateAndPatientId({
-    patient_id,
+    patient_id: extractJMBG(patient_id),
     acquisition_date,
   });
 

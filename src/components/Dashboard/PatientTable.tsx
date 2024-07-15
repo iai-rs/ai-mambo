@@ -84,9 +84,6 @@ const PatientTable = ({ data, isLoading }: Props) => {
           cell: (props) => {
             const id: string = props.getValue();
             const url = `detail/${id}`;
-            // const patientId = props.row.original.patientId;
-            // const acquistionDate = props.row.original.acquisitionDate;
-            // console.log({ allCells });
 
             return (
               <div className="flex">
