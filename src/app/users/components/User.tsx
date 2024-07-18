@@ -1,5 +1,5 @@
 import { Role } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MSelect from "~/components/common/MSelect";
 import {
   AlertDialog,
@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { TableCell, TableRow } from "~/components/ui/table";
+import { useToast } from "~/components/ui/use-toast";
 import { ADMINS } from "~/constants";
 import { api } from "~/trpc/react";
 
@@ -26,28 +27,41 @@ interface Props {
 }
 
 export default function User({ user, onDelete }: Props) {
+  const { toast } = useToast();
   const deleteUserMutation = api.users.deleteUserById.useMutation();
   const changeUserRoleMutation = api.users.updateUserRole.useMutation();
   const [userState, setUser] = useState(user);
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleRoleChange = (userId: string, newRole: Role) => {
-    changeUserRoleMutation.mutate({ id: userId, role: newRole });
+    changeUserRoleMutation.mutate(
+      { id: userId, role: newRole },
+      {
+        onSuccess({ role, email }) {
+          setUser({ ...user, role });
+          toast({
+            title: "USPEH",
+            description: `Promenili ste rolu za ${email} na ${role}`,
+          });
+        },
+      },
+    );
   };
 
   const handleDeleteUser = (userId: string) => {
-    deleteUserMutation.mutate({ id: userId });
+    deleteUserMutation.mutate(
+      { id: userId },
+      {
+        onSuccess: ({ id, email }) => {
+          onDelete(id);
+          toast({
+            title: "USPEH",
+            description: `Obrisali ste korisnika ${email}.`,
+          });
+        },
+      },
+    );
   };
-
-  useEffect(() => {
-    if (changeUserRoleMutation.data) {
-      setUser({ ...user, role: changeUserRoleMutation.data?.role });
-    }
-  }, [changeUserRoleMutation.isSuccess]);
-
-  useEffect(() => {
-    onDelete(deleteUserMutation.data?.id ?? "");
-  }, [deleteUserMutation.isSuccess]);
 
   return (
     <>

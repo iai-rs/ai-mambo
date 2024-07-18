@@ -1,22 +1,55 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { setPassword } from "~/app/lib/actions";
 import { useFormState, useFormStatus } from "react-dom";
 import { Button } from "~/components/ui/button";
+import { useEffect } from "react";
+import { useToast } from "~/components/ui/use-toast";
 
 export default function SetPasswordForm() {
+  const { toast } = useToast();
   const searchParams = useSearchParams();
-  const setPasswordWithUrlData = setPassword.bind(null, {
-    changePasswordSecretKey: searchParams.get("tempkey"),
-    email: searchParams.get("email"),
-  });
-  const [errorMessage, formAction] = useFormState(setPasswordWithUrlData, null);
+  const router = useRouter();
+  const setPasswordWithUrlData = async (
+    prevState: { type: "success" | "error"; text: string } | null,
+    formData: FormData,
+  ) => {
+    return setPassword(
+      {
+        changePasswordSecretKey: searchParams.get("tempkey"),
+        email: searchParams.get("email"),
+      },
+      prevState,
+      formData,
+    );
+  };
+  const [formMessage, formAction] = useFormState(setPasswordWithUrlData, null);
+
+  useEffect(() => {
+    if (formMessage?.type === "error") {
+      toast({
+        variant: "destructive",
+        title: "GREŠKA",
+        description: formMessage.text,
+      });
+    }
+
+    if (formMessage?.type === "success") {
+      toast({
+        title: "USPEH",
+        description: formMessage.text,
+      });
+      router.push("/");
+    }
+  }, [formMessage, router, toast]);
 
   return (
     <form action={formAction} className="space-y-3 rounded-md border">
       <div className="flex-1 rounded-lg bg-background px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl text-foreground">{"Namesti lozinku:"}</h1>
+        <h1 className="mb-3 text-2xl text-foreground">{"Postavi lozinku"}</h1>
         <div className="w-full">
           <div className="mt-4">
             <label
@@ -62,13 +95,7 @@ export default function SetPasswordForm() {
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
           aria-atomic="true"
-        >
-          {errorMessage && (
-            <>
-              <p className="text-sm text-red-500">{errorMessage}</p>
-            </>
-          )}
-        </div>
+        ></div>
       </div>
     </form>
   );
@@ -79,7 +106,7 @@ function SetPasswordButton() {
 
   return (
     <Button className="mt-4 w-full" aria-disabled={pending}>
-      {"Namesti lozinku"}
+      {"Postavi lozinku"}
     </Button>
   );
 }
