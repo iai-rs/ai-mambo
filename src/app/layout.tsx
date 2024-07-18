@@ -7,6 +7,7 @@ import TopBar from "../components/TopBar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/auth";
 import { ThemeProvider } from "~/contexts/ThemeContext";
+import { Toaster } from "~/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default async function RootLayout({
         <div>
           <SessionProvider session={session}>
             <ThemeProvider>
+              <Toaster />
               <TopBar />
               <TRPCReactProvider>{children}</TRPCReactProvider>
             </ThemeProvider>
