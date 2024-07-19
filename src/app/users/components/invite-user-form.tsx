@@ -7,17 +7,39 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import Spinner from "~/components/ui/Spinner";
+import { useToast } from "~/components/ui/use-toast";
+
+// Wrapper function to match the expected signature of useFormState
+const registerWrapper = async (
+  state: { type: "success" | "error"; text: string } | null,
+  formData: FormData,
+) => {
+  return await register(null, formData);
+};
 
 export default function InviteUserForm() {
-  const [errorMessage, formAction] = useFormState(register, null);
+  const { toast } = useToast();
+  const [formMessage, formAction] = useFormState(registerWrapper, null);
 
   useEffect(() => {
-    if (errorMessage === "User added") {
+    if (formMessage?.type === "success") {
+      toast({
+        title: "USPEH",
+        description: formMessage.text,
+      });
       setTimeout(() => {
         location.reload();
       }, 1000);
     }
-  }, [errorMessage]);
+
+    if (formMessage?.type === "error") {
+      toast({
+        variant: "destructive",
+        title: "GREŠKA",
+        description: formMessage.text,
+      });
+    }
+  }, [formMessage, toast]);
 
   return (
     <form action={formAction} className="w-[400px] space-y-3">
@@ -51,11 +73,11 @@ export default function InviteUserForm() {
           aria-live="polite"
           aria-atomic="true"
         >
-          {errorMessage && (
+          {/* {formMessage && (
             <>
-              <p className="text-sm text-red-500">{errorMessage}</p>
+              <p className="text-sm text-red-500">{formMessage.text}</p>
             </>
-          )}
+          )} */}
         </div>
       </div>
     </form>

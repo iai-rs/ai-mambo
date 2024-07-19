@@ -25,6 +25,7 @@ import ImageWithLoader from "~/components/common/ImageWithLoader";
 import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
 import { useRouter } from "next/navigation";
+import { useToast } from "~/components/ui/use-toast";
 
 const lookupBirads: Record<birads_classification, string> = {
   [birads_classification.birads_0]: "birads 0",
@@ -60,6 +61,7 @@ type Props = {
 };
 
 const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
+  const { toast } = useToast();
   const [shadow, setShadow] = useState(feedback?.shadow ?? false);
   const [microcalcifications, setMicrocalcifications] = useState(
     feedback?.microcalcifications ?? false,
@@ -87,8 +89,8 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
   };
 
   const handleCreate = async () => {
-    try {
-      await createFeedback.mutateAsync({
+    await createFeedback.mutateAsync(
+      {
         shadow,
         architectonics,
         birads_class: birads_classification.birads_4a,
@@ -97,17 +99,30 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
         suspect_lesion: suspectLesion,
         symmetry,
         user_email: email,
-      });
-      router.refresh();
-    } catch (err) {
-      console.log(err);
-    }
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: "USPEH",
+            description: "Uspešno ste snimili promenu.",
+          });
+          router.refresh();
+        },
+        onError: () => {
+          toast({
+            variant: "destructive",
+            title: "Došlo je do greške!",
+            description: "Pokušajte ponovo kasnije",
+          });
+        },
+      },
+    );
   };
 
   const handleUpdate = async () => {
     if (!feedback) return;
-    try {
-      await updateFeedback.mutateAsync({
+    await updateFeedback.mutateAsync(
+      {
         id: feedback.id,
         shadow,
         architectonics,
@@ -117,11 +132,24 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
         suspect_lesion: suspectLesion,
         symmetry,
         user_email: email,
-      });
-      router.refresh();
-    } catch (err) {
-      console.log(err);
-    }
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: "USPEH",
+            description: "Uspešno ste snimili promenu.",
+          });
+          router.refresh();
+        },
+        onError: () => {
+          toast({
+            variant: "destructive",
+            title: "Došlo je do greške!",
+            description: "Pokušajte ponovo kasnije",
+          });
+        },
+      },
+    );
   };
 
   useEffect(() => {

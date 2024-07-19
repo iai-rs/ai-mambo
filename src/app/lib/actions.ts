@@ -7,9 +7,13 @@ import { api } from "~/trpc/server";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import { env } from "../../env";
-import { redirect } from "next/dist/server/api-utils";
-import { Role } from "@prisma/client";
+import { type Role } from "@prisma/client";
 import { hash } from "bcrypt";
+import { NextResponse } from "next/server";
+
+const createResponse = (type: "success" | "error", text: string) => {
+  return { type, text };
+};
 
 export async function authenticate(
   prevState: string | undefined,
@@ -83,7 +87,10 @@ export async function register(prevState: string | null, formData: FormData) {
 
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
-    return "Missing Fields. Failed to Create Account." as string;
+    return createResponse(
+      "error",
+      "Nedostaju polja. Neuspešno kreiranje naloga.",
+    );
   }
 
   const { name, email } = validatedFields.data;
@@ -102,9 +109,12 @@ export async function register(prevState: string | null, formData: FormData) {
     console.log(addedUser);
     console.log("Sending an email...");
     await sendVerificationEmail(email, changePasswordSecretKey);
-    return "User added" as string;
+    return createResponse("success", "Korisnik je dodat.");
   } else {
-    return "User with this email already exists";
+    return createResponse(
+      "error",
+      "Korisnik sa ovom email adresom već postoji.",
+    );
   }
 }
 
@@ -115,16 +125,17 @@ export async function changeUserRole(userId: string, newRole: Role) {
     id: user.id,
     role: newRole,
   });
+  return updatedUser;
 }
 
 export async function deleteUser(userId: string) {
   const deletedUser = await api.users.deleteUserById({ id: userId });
-  return deleteUser;
+  return deletedUser;
 }
 
 export async function setPassword(
   urlData: { changePasswordSecretKey: string | null; email: string | null },
-  prevState: string | null,
+  prevState: { type: "success" | "error"; text: string } | null,
   formData: FormData,
 ) {
   const validatedFields = SetPassword.safeParse({
@@ -133,7 +144,10 @@ export async function setPassword(
   });
 
   if (!validatedFields.success) {
-    return "Missing Fields. Failed to set password.";
+    return createResponse(
+      "error",
+      "Nedostaju polja. Neuspešno postavljanje lozinke.",
+    );
   }
 
   const { password, confirmPassword } = validatedFields.data;
@@ -143,21 +157,27 @@ export async function setPassword(
     typeof changePasswordSecretKey !== "string" ||
     typeof email !== "string"
   ) {
-    return "Something is wrong with url. Please check your email";
+    return createResponse(
+      "error",
+      "Nešto nije u redu sa URL-om. Proverite vaš email.",
+    );
   }
 
   if (password !== confirmPassword) {
-    return "Password and confirm password fields doesn't match";
+    return createResponse(
+      "error",
+      "Lozinka i potvrda lozinke se ne podudaraju.",
+    );
   }
 
   const user = await api.users.getUserByEmail({ email: email });
   if (!user) {
-    console.log("User with this email doesn't exists");
-    return "Something went wrong";
+    console.log("Korisnik sa ovom email adresom ne postoji.");
+    return createResponse("error", "Nešto je pošlo po zlu.");
   }
   if (user.change_password_secret_key !== changePasswordSecretKey) {
-    console.log("Change password secret key is wrong");
-    return "Something went wrong";
+    console.log("Tajni ključ za promenu lozinke je pogrešan.");
+    return createResponse("error", "Nešto je pošlo po zlu.");
   }
 
   const hashedPassword = await hash(password, 10);
@@ -165,5 +185,6 @@ export async function setPassword(
     email: email,
     newPassword: hashedPassword,
   });
-  return "Password set";
+
+  return createResponse("success", "Lozinka uspešno postavljena");
 }
