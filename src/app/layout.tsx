@@ -1,12 +1,13 @@
-import "~/styles/globals.css";
-
 import { Inter } from "next/font/google";
-
-import { TRPCReactProvider } from "~/trpc/react";
-import TopBar from "../components/TopBar";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/auth";
+import { type Metadata } from "next";
+
+import { TRPCReactProvider } from "~/trpc/react";
 import { ThemeProvider } from "~/contexts/ThemeContext";
+import "~/styles/globals.css";
+
+import TopBar from "../components/TopBar";
 import { Toaster } from "~/components/ui/toaster";
 
 const inter = Inter({
@@ -14,10 +15,14 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "INSTITUT ZA ONKOLOGIJU I RADIOLOGIJU SRBIJE", // TODO: title
   description: "INSTITUT ZA ONKOLOGIJU I RADIOLOGIJU SRBIJE", // TODO: description
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  robots: {
+    follow: false,
+    index: false,
+  },
 };
 
 export default async function RootLayout({
