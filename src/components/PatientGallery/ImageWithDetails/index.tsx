@@ -29,10 +29,9 @@ const ImageWithDetails = ({
 }: Props) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [heatOpacity, setHeatOpacity] = useState([100]);
-  const { data: imageData } = api.minio.getMinio.useQuery(data.id + ".png");
-  const { data: heatMapData } = api.minio.getMinioHeat.useQuery(
-    data.id + ".png",
-  );
+  const { data: imageData } = api.oracle.getImage.useQuery(data.id + ".png");
+  const { data: heatMapData } = api.oracle.getHeatmap.useQuery( data.id + ".png");
+
   const [aspectRatio, setAspectRatio] = useState(0.77); // Default aspect ratio is 1:1
 
   const handleImageLoad: ReactEventHandler<HTMLImageElement> = (event) => {
