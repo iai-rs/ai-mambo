@@ -15,6 +15,11 @@ export const env = createEnv({
     MAIL_PASSWORD: z.string(),
     MAIL_SENDER_EMAIL: z.string(),
     MAIL_RECEIVER_EMAIL: z.string(),
+    ORACLE_S3_KEY_FILE_ENCODED: z.string(),
+    ORACLE_S3_USER: z.string(),
+    ORACLE_S3_TENANCY: z.string(),
+    ORACLE_S3_FINGERPRINT: z.string(),
+    ORACLE_NAMESPACE_NAME: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -43,6 +48,11 @@ export const env = createEnv({
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
     MAIL_SENDER_EMAIL: process.env.MAIL_SENDER_EMAIL,
     MAIL_RECEIVER_EMAIL: process.env.MAIL_RECEIVER_EMAIL,
+    ORACLE_S3_KEY_FILE_ENCODED: process.env.ORACLE_S3_KEY_FILE_ENCODED,
+    ORACLE_S3_USER: process.env.ORACLE_S3_USER,
+    ORACLE_S3_TENANCY: process.env.ORACLE_S3_TENANCY,
+    ORACLE_S3_FINGERPRINT: process.env.ORACLE_S3_FINGERPRINT,
+    ORACLE_NAMESPACE_NAME: process.env.ORACLE_NAMESPACE_NAME,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
