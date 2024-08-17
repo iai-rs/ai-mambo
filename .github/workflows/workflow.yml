@@ -12,17 +12,19 @@ jobs:
       - name: Executing remote ssh commands
         uses: appleboy/ssh-action@v1.0.3
         env:
-          MAIL_USER: "api"
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
-          MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
-          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          ORACLE_S3_KEY_FILE_ENCODED: ${{ secrets.ORACLE_S3_KEY_FILE_ENCODED }}
+          ORACLE_S3_USER: ${{ secrets.ORACLE_S3_USER }}
+          ORACLE_S3_TENANCY: ${{ secrets.ORACLE_S3_TENANCY }}
+          ORACLE_S3_FINGERPRINT: ${{ secrets.ORACLE_S3_FINGERPRINT }}
+          ORACLE_NAMESPACE_NAME: ${{ secrets.ORACLE_NAMESPACE_NAME }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          envs: MAIL_USER,MAIL_PASSWORD,MINIO_ENDPOINT,MINIO_ACCESS_KEY,MINIO_SECRET_KEY
+          envs: DATABASE_URL,AUTH_SECRET,ORACLE_S3_KEY_FILE_ENCODED,ORACLE_S3_USER,ORACLE_S3_TENANCY,ORACLE_S3_FINGERPRINT,ORACLE_NAMESPACE_NAME
           script: |
             cd ai-mambo/
             git checkout development
@@ -30,5 +32,5 @@ jobs:
             docker build -t nextjs-app .
             docker stop nextjs-app
             docker rm nextjs-app
-            docker run -d -p 55614:3000 -e MAIL_USER=${MAIL_USER} -e MAIL_PASSWORD=${MAIL_PASSWORD} -e MINIO_ENDPOINT=${MINIO_ENDPOINT} -e MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY} -e MINIO_SECRET_KEY=${MINIO_SECRET_KEY} --name nextjs-app nextjs-app
+            docker run -d -p 55614:3000 -e DATABASE_URL=${DATABASE_URL} -e AUTH_SECRET=${AUTH_SECRET} -e ORACLE_S3_KEY_FILE_ENCODED=${ORACLE_S3_KEY_FILE_ENCODED} -e ORACLE_S3_USER=${ORACLE_S3_USER} -e ORACLE_S3_TENANCY=${ORACLE_S3_TENANCY} -e ORACLE_S3_FINGERPRINT=${ORACLE_S3_FINGERPRINT} -e ORACLE_NAMESPACE_NAME=${ORACLE_NAMESPACE_NAME} --name nextjs-app nextjs-app
             docker network connect mamo_network nextjs-app

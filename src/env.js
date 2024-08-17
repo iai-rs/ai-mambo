@@ -8,13 +8,6 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
-    MINI_SECRET_KEY: z.string(),
-    MINI_ACCESS_KEY: z.string(),
-    MINI_ENDPOINT: z.string(),
-    MAIL_USER: z.string(),
-    MAIL_PASSWORD: z.string(),
-    MAIL_SENDER_EMAIL: z.string(),
-    MAIL_RECEIVER_EMAIL: z.string(),
     ORACLE_S3_KEY_FILE_ENCODED: z.string(),
     ORACLE_S3_USER: z.string(),
     ORACLE_S3_TENANCY: z.string(),
@@ -41,13 +34,6 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    MINI_SECRET_KEY: process.env.MINIO_SECRET_KEY,
-    MINI_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
-    MINI_ENDPOINT: process.env.MINIO_ENDPOINT,
-    MAIL_USER: process.env.MAIL_USER,
-    MAIL_PASSWORD: process.env.MAIL_PASSWORD,
-    MAIL_SENDER_EMAIL: process.env.MAIL_SENDER_EMAIL,
-    MAIL_RECEIVER_EMAIL: process.env.MAIL_RECEIVER_EMAIL,
     ORACLE_S3_KEY_FILE_ENCODED: process.env.ORACLE_S3_KEY_FILE_ENCODED,
     ORACLE_S3_USER: process.env.ORACLE_S3_USER,
     ORACLE_S3_TENANCY: process.env.ORACLE_S3_TENANCY,
