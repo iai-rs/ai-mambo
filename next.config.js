@@ -39,6 +39,12 @@ const config = {
         port: "9000",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "objectstorage.eu-jovanovac-1.oraclecloud20.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
