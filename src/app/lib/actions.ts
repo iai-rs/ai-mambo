@@ -39,9 +39,6 @@ const sendVerificationEmail = async (
   changePasswordSecretKey: string,
 ) => {
   // Configure your SMTP server credentials
-  const MAIL_USER = env.MAIL_USER;
-  const MAIL_PASSWORD = env.MAIL_PASSWORD;
-  const MAIL_SENDER_EMAIL = env.MAIL_SENDER_EMAIL;
 
   const transporter = nodemailer.createTransport({
     host: "sendmail.gov.rs", // Use your email service
