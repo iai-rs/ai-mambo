@@ -10,7 +10,9 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 import { Card, CardContent } from "~/components/ui/card";
+import { disclaimerText } from "~/constants/copy";
 import { api } from "~/trpc/server";
+import { extractJMBG } from "~/utils/extractJMBG";
 import { parseDateFormat } from "~/utils/parseDateFormat";
 import { getPatientAge } from "~/utils/parseJMBG";
 
@@ -20,8 +22,9 @@ const LeftText = ({ children }: { children: ReactNode }) => (
 
 const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
   const [patient_id = "", acquisition_date = ""] = id.split("-");
+
   const data = await api.metadata.getMetadataByDateAndPatientId({
-    patient_id,
+    patient_id: extractJMBG(patient_id),
     acquisition_date,
   });
 
@@ -94,9 +97,7 @@ const DetailPage = async ({ params: { id } }: { params: { id: string } }) => {
         <PatientGallery email={email} data={data} role={role} />
         <div className="mb-4 max-w-[1000px]">
           <p className="text-sm italic text-muted-foreground">
-            {
-              "Ovaj softver je osmišljen kao pomoćni alat i ni na koji način nije zamena za stručnu procenu lekara opšte prakse ili specijaliste. Informacije prikazane putem ove platforme služe isključivo kao dodatni resurs i ne treba ih smatrati zamenom za medicinsku dijagnozu, utvrđivanje ili propisivanje terapije."
-            }
+            {disclaimerText}
           </p>
         </div>
       </div>

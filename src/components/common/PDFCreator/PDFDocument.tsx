@@ -6,18 +6,42 @@ import {
   Page,
   Text,
   View,
+  Font,
   Document,
   StyleSheet,
-  PDFDownloadLink,
 } from "@react-pdf/renderer";
 import { type PatientData } from "~/types";
 import { getPatientAge } from "~/utils/parseJMBG";
-import { modelResultFormatter } from "./Formaters";
+import { modelResultFormatter } from "../Formaters";
 import { booleanToTextResolver } from "~/utils/booleanToTextResolver";
-import { Button } from "../ui/button";
+import { disclaimerText } from "~/constants/copy";
+
+// Register Font
+Font.register({
+  family: "Roboto",
+  fonts: [
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf",
+      fontWeight: 300,
+    },
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
+      fontWeight: 400,
+    },
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf",
+      fontWeight: 500,
+    },
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf",
+      fontWeight: 600,
+    },
+  ],
+});
 
 const styles = StyleSheet.create({
   page: {
+    // fontFamily: "Roboto",
     flexDirection: "column",
     backgroundColor: "#E4E4E4",
     padding: 20,
@@ -27,8 +51,8 @@ const styles = StyleSheet.create({
   },
   regularSection: {
     marginTop: 4,
-    fontSize: 12,
-    color: "#131313",
+    fontSize: 10,
+    color: "#000",
   },
   title: {
     fontSize: 20,
@@ -49,7 +73,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   leftTitle: {
-    color: "#848484",
+    color: "#737373",
   },
   separator: {
     marginTop: 10,
@@ -72,7 +96,7 @@ const styles = StyleSheet.create({
 type Props = {
   data: PatientData[];
 };
-const MyDocument = ({ data }: Props) => {
+export const MyDocument = ({ data }: Props) => {
   const patient = data[0];
   if (!patient) return null;
 
@@ -141,6 +165,7 @@ const MyDocument = ({ data }: Props) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
+                  fontSize: 8,
                   gap: 1,
                   justifyContent: "space-between",
                 }}
@@ -161,7 +186,9 @@ const MyDocument = ({ data }: Props) => {
                     <Text style={{ fontSize: 10 }}>{item.id}</Text>
                   </View>
                   <View style={styles.row}>
-                    <Text style={styles.leftTitle}>{"Rezultat analize:"}</Text>
+                    <Text style={styles.leftTitle}>
+                      {"Rezultat AI analize:"}
+                    </Text>
                     <Text style={{ fontWeight: "bold" }}>
                       {modelResultFormatter(item.modelResult)}
                     </Text>
@@ -183,9 +210,9 @@ const MyDocument = ({ data }: Props) => {
                       gap: 2,
                     }}
                   >
-                    <Text style={{ marginBottom: 4 }}>
+                    {/* <Text style={{ marginBottom: 4 }}>
                       {"Analiza radiologa"}
-                    </Text>
+                    </Text> */}
                     {/* suspektna lezija */}
                     <View style={styles.justifiedRow}>
                       <Text style={styles.leftTitle}>
@@ -259,17 +286,19 @@ const MyDocument = ({ data }: Props) => {
             );
           })}
         </View>
+        <View style={{ marginTop: 12 }}>
+          <Text
+            style={{
+              ...styles.leftTitle,
+              fontFamily: "Roboto",
+              marginTop: 20,
+              fontSize: 9,
+            }}
+          >
+            {disclaimerText}
+          </Text>
+        </View>
       </Page>
     </Document>
   );
 };
-
-const PDFCreator = ({ data }: Props) => {
-  return (
-    <PDFDownloadLink fileName="Izveštaj" document={<MyDocument data={data} />}>
-      <Button variant="outline">{"Preuzmi .PDF"}</Button>
-    </PDFDownloadLink>
-  );
-};
-
-export default PDFCreator;
