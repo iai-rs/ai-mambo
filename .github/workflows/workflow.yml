@@ -37,6 +37,9 @@ jobs:
               --build-arg ORACLE_S3_TENANCY=${ORACLE_S3_TENANCY} \
               --build-arg ORACLE_S3_FINGERPRINT=${ORACLE_S3_FINGERPRINT} \
               --build-arg ORACLE_NAMESPACE_NAME=${ORACLE_NAMESPACE_NAME} \
+              --build-arg MINIO_SECRET_KEY="test" \
+              --build-arg MINIO_ACCESS_KEY="test" \
+              --build-arg MINIO_ENDPOINT="test" \
               .
             docker stop nextjs-app
             docker rm nextjs-app
