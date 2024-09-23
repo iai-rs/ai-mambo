@@ -52,7 +52,7 @@ export default function InviteUserForm() {
               id="name"
               type="text"
               name="name"
-              placeholder="Enter your full name"
+              placeholder="Unesite vaše puno ime"
               required
             />
           </div>
@@ -62,7 +62,7 @@ export default function InviteUserForm() {
               id="email"
               type="email"
               name="email"
-              placeholder="Enter your email address"
+              placeholder="Unesite vašu email adresu"
               required
             />
           </div>

@@ -27,7 +27,7 @@ export default function LoginForm() {
                 id="email"
                 type="email"
                 name="email"
-                placeholder="Enter your email address"
+                placeholder="Unesite vašu email adresu"
                 required
               />
             </div>
@@ -44,7 +44,7 @@ export default function LoginForm() {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="Enter password"
+                placeholder="Unesite lozinku"
                 required
                 minLength={6}
               />
