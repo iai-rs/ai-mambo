@@ -58,19 +58,19 @@ const sendVerificationEmail = async (
 
 const RegisterUser = z.object({
   name: z.string({
-    invalid_type_error: "Please enter your name.",
+    invalid_type_error: "Unesite vaše ime.",
   }),
   email: z.string({
-    invalid_type_error: "Please enter an email address.",
+    invalid_type_error: "Unesite adresu elektronske pošte.",
   }),
 });
 
 const SetPassword = z.object({
   password: z.string({
-    invalid_type_error: "Please enter password.",
+    invalid_type_error: "Unesite lozinku.",
   }),
   confirmPassword: z.string({
-    invalid_type_error: "Please enter confirm passwor.",
+    invalid_type_error: "Unesite potvrdu lozinke.",
   }),
 });
 
