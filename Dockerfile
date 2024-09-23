@@ -21,11 +21,12 @@ RUN pnpm prisma generate
 COPY . .
 
 # Build the Next.js app
-# RUN pnpm build
+RUN pnpm build
 
 # Next.js collects completely on the server side and serves static assets.
 # If you are using Next.js 9 or newer it might be necessary to use next start
-CMD [ "pnpm", "build-and-start"]
+# CMD [ "pnpm", "build-and-start"]
+CMD [ "pnpm", "start"]
 
 # Your app binds to port 3000 so you'll use the EXPOSE instruction to have it mapped by the docker daemon
 EXPOSE 3000
