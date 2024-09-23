@@ -29,7 +29,6 @@ jobs:
             cd ai-mambo/
             git checkout development
             git pull
-            docker build -t nextjs-app .
             docker build -t nextjs-app \
               --build-arg DATABASE_URL=${DATABASE_URL} \
               --build-arg AUTH_SECRET=${AUTH_SECRET} \
@@ -37,7 +36,8 @@ jobs:
               --build-arg ORACLE_S3_USER=${ORACLE_S3_USER} \
               --build-arg ORACLE_S3_TENANCY=${ORACLE_S3_TENANCY} \
               --build-arg ORACLE_S3_FINGERPRINT=${ORACLE_S3_FINGERPRINT} \
-              --build-arg ORACLE_NAMESPACE_NAME=${ORACLE_NAMESPACE_NAME}
+              --build-arg ORACLE_NAMESPACE_NAME=${ORACLE_NAMESPACE_NAME} \
+              .
             docker stop nextjs-app
             docker rm nextjs-app
             docker run -d -p 55614:3000 \
