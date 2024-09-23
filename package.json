@@ -11,7 +11,8 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "start": "next start"
+    "start": "next start",
+    "build-and-start": "next build && next start"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
