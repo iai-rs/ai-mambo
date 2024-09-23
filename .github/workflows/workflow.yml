@@ -32,5 +32,5 @@ jobs:
             docker build -t nextjs-app .
             docker stop nextjs-app
             docker rm nextjs-app
-            docker run -d -p 55614:3000 -e DATABASE_URL=${DATABASE_URL} -e AUTH_SECRET=${AUTH_SECRET} -e ORACLE_S3_KEY_FILE_ENCODED=${ORACLE_S3_KEY_FILE_ENCODED} -e ORACLE_S3_USER=${ORACLE_S3_USER} -e ORACLE_S3_TENANCY=${ORACLE_S3_TENANCY} -e ORACLE_S3_FINGERPRINT=${ORACLE_S3_FINGERPRINT} -e ORACLE_NAMESPACE_NAME=${ORACLE_NAMESPACE_NAME} --name nextjs-app nextjs-app
+            docker run -d -p 55614:3000 -e DATABASE_URL=${DATABASE_URL} -e AUTH_SECRET=${AUTH_SECRET} -e ORACLE_S3_KEY_FILE_ENCODED=${ORACLE_S3_KEY_FILE_ENCODED} -e ORACLE_S3_USER=${ORACLE_S3_USER} -e ORACLE_S3_TENANCY=${ORACLE_S3_TENANCY} -e ORACLE_S3_FINGERPRINT=${ORACLE_S3_FINGERPRINT} -e ORACLE_NAMESPACE_NAME=${ORACLE_NAMESPACE_NAME} -e MINIO_SECRET_KEY="test" -e MINIO_ACCESS_KEY="test" -e MINIO_ENDPOINT="test" --name nextjs-app nextjs-app
             docker network connect mamo_network nextjs-app
