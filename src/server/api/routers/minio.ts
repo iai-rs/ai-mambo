@@ -13,12 +13,12 @@ export const biradsRouter = createTRPCRouter({
 // Initialize MinIO Client
 const minioClient = new Client({
   endPoint:
-    env.MINI_ENDPOINT ||
+    env.MINIO_ENDPOINT ||
     "Set endpoint, accessKey and secretKey in order to use minio client",
   port: 9000,
   useSSL: false,
-  accessKey: env.MINI_ACCESS_KEY || "",
-  secretKey: env.MINI_SECRET_KEY || "",
+  accessKey: env.MINIO_ACCESS_KEY || "",
+  secretKey: env.MINIO_SECRET_KEY || "",
 });
 
 // MinIO tRPC router

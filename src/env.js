@@ -13,6 +13,9 @@ export const env = createEnv({
     ORACLE_S3_TENANCY: z.string(),
     ORACLE_S3_FINGERPRINT: z.string(),
     ORACLE_NAMESPACE_NAME: z.string(),
+    MINIO_SECRET_KEY: z.string(),
+    MINIO_ACCESS_KEY: z.string(),
+    MINIO_ENDPOINT: z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -39,6 +42,9 @@ export const env = createEnv({
     ORACLE_S3_TENANCY: process.env.ORACLE_S3_TENANCY,
     ORACLE_S3_FINGERPRINT: process.env.ORACLE_S3_FINGERPRINT,
     ORACLE_NAMESPACE_NAME: process.env.ORACLE_NAMESPACE_NAME,
+    MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+    MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
+    MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

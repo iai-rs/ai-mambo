@@ -56,7 +56,7 @@ function RangePicker({ date, setDate }: RangePickerProps) {
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={setDate as any}
             numberOfMonths={2}
           />
         </PopoverContent>

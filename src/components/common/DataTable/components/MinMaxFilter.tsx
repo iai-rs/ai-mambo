@@ -28,7 +28,7 @@ const MinMaxFilter = ({ column }: Props) => {
   return (
     <Popover>
       <PopoverTrigger
-        onClick={(e: MouseEvent) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         className="table__filter-icon"
       >
         <Filter
@@ -60,7 +60,7 @@ const MinMaxFilter = ({ column }: Props) => {
           <FilterInput
             placeholder={"MAX"}
             value={(columnFilterValue as [number, number])?.[1] ?? ""}
-            onClear={(e: Event) => {
+            onClear={(e) => {
               e.stopPropagation();
               column.setFilterValue((prev: [number, number]) => [
                 prev?.[0],
