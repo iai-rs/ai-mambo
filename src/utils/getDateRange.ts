@@ -26,8 +26,8 @@ function getDateRange(search: SearchType): DateRange {
       gte = today;
       break;
     default:
-      if (typeof Number(search) === "number" && !isNaN(search)) {
-        gte = subDays(today, search);
+      if (typeof Number(search) === "number" && !isNaN(Number(search))) {
+        gte = subDays(today, Number(search));
       } else {
         throw new Error("Invalid search type");
       }

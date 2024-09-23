@@ -6,10 +6,8 @@ import { z } from "zod";
 import { api } from "~/trpc/server";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
-import { env } from "../../env";
 import { type Role } from "@prisma/client";
-import { hash } from "bcrypt";
-import { NextResponse } from "next/server";
+// import { hash } from "bcrypt";
 
 const createResponse = (type: "success" | "error", text: string) => {
   return { type, text };
@@ -177,11 +175,11 @@ export async function setPassword(
     return createResponse("error", "Nešto je pošlo po zlu.");
   }
 
-  const hashedPassword = await hash(password, 10);
-  const modifiedUser = await api.users.updateUserPassword({
-    email: email,
-    newPassword: hashedPassword,
-  });
+  // const hashedPassword = await hash(password, 10);
+  // const modifiedUser = await api.users.updateUserPassword({
+  //   email: email,
+  //   newPassword: hashedPassword,
+  // });
 
   return createResponse("success", "Lozinka uspešno postavljena");
 }
