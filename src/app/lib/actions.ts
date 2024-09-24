@@ -7,7 +7,7 @@ import { api } from "~/trpc/server";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import { type Role } from "@prisma/client";
-// import { hash } from "bcrypt";
+import { hash } from "bcrypt";
 
 const createResponse = (type: "success" | "error", text: string) => {
   return { type, text };
@@ -168,18 +168,18 @@ export async function setPassword(
   const user = await api.users.getUserByEmail({ email: email });
   if (!user) {
     console.log("Korisnik sa ovom email adresom ne postoji.");
-    return createResponse("error", "Nešto je pošlo po zlu.");
+    return createResponse("error", "Došlo je do greške.");
   }
   if (user.change_password_secret_key !== changePasswordSecretKey) {
     console.log("Tajni ključ za promenu lozinke je pogrešan.");
-    return createResponse("error", "Nešto je pošlo po zlu.");
+    return createResponse("error", "Došlo je do greške.");
   }
 
-  // const hashedPassword = await hash(password, 10);
-  // const modifiedUser = await api.users.updateUserPassword({
-  //   email: email,
-  //   newPassword: hashedPassword,
-  // });
+  const hashedPassword = await hash(password, 10);
+  const modifiedUser = await api.users.updateUserPassword({
+    email: email,
+    newPassword: hashedPassword,
+  });
 
   return createResponse("success", "Lozinka uspešno postavljena");
 }
