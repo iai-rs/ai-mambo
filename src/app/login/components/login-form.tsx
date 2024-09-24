@@ -37,7 +37,7 @@ export default function LoginForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              Password
+              Lozinka
             </Label>
             <div className="relative">
               <Input
@@ -73,7 +73,7 @@ function LoginButton() {
 
   return (
     <Button className="mt-4 flex w-full gap-4" aria-disabled={pending}>
-      {"Log in"}
+      {"Logovanje"}
       {pending && <Spinner />}
     </Button>
   );
