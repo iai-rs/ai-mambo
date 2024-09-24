@@ -50,7 +50,7 @@ const UserMenu = async () => {
         {isAdmin && (
           <DropdownMenuItem className="flex gap-4">
             <Users height={iconHeight} />
-            <Link href="/users">Users</Link>
+            <Link href="/users">Korisnici</Link>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
@@ -69,7 +69,7 @@ const UserMenu = async () => {
             }}
           >
             <Button className="h-5" variant="ghost">
-              Sign Out
+              Odjavi se
             </Button>
           </form>
         </DropdownMenuItem>
