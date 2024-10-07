@@ -32,7 +32,7 @@ function getPatientAge(dateString: string) {
   const birthdate = parsePatientDate(dateString);
 
   if (!birthdate) {
-    return birthdate;
+    return "";
   }
 
   return calculateAge(birthdate);

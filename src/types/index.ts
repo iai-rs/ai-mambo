@@ -11,9 +11,9 @@ export interface SharedMetadataProps {
 }
 
 export interface PatientData extends SharedMetadataProps {
-  id: string;
-  laterality: string | null;
-  implant: string | null;
+  id?: string;
+  laterality?: string | null;
+  implant?: string | null;
   modelResult: number | null | undefined;
   view: string | null | undefined;
   feedback: BiradsFeedback | null | undefined;
