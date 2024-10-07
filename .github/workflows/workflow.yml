@@ -55,5 +55,7 @@ jobs:
               -e MINIO_SECRET_KEY="test" \
               -e MINIO_ACCESS_KEY="test" \
               -e MINIO_ENDPOINT="test" \
+              -e NEXTAUTH_URL="http://localhost:3000" \
+              -e AUTH_TRUST_HOST="http://localhost:3000" \
               --name nextjs-app nextjs-app
             docker network connect mamo_network nextjs-app
