@@ -35,7 +35,7 @@ const PDFCreatorRow = ({ patientId, acquisitionDate, patientName }: Props) => {
     const { data } = await refetch();
 
     if (data) {
-      void generatePdfDocument(data);
+      void generatePdfDocument(data as unknown as PatientData[]);
     }
   };
 

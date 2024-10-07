@@ -6,7 +6,7 @@ import DashboardLayout from "./layout";
 import { api } from "~/trpc/react";
 import PatientTable from "./PatientTable";
 import SearchMenu from "./SearchMenu";
-import { type SearchType } from "~/types";
+import { MetadataResponse, PatientData, type SearchType } from "~/types";
 import { getDateRange, getCustomDateRange } from "~/utils/getDateRange";
 import { type DateRangePicker } from "./SearchMenu/RangePicker";
 
@@ -60,7 +60,10 @@ const Dashboard = () => {
       <DashboardLayout
         rightContent={
           <div className="overflow-y-auto p-3">
-            <PatientTable data={data} isLoading={isLoading} />
+            <PatientTable
+              data={data as unknown as MetadataResponse[]}
+              isLoading={isLoading}
+            />
           </div>
         }
       >
