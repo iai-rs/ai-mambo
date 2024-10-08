@@ -12,7 +12,7 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "start": "next start",
-    "build-and-start": "next build && next start"
+    "build-and-start": "NODE_OPTIONS=\"--max-old-space-size=4096\" next build && next start"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
