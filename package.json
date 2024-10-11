@@ -11,7 +11,7 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "start": "next start",
+    "start": "NODE_OPTIONS=\"--max-old-space-size=4096\" next start",
     "build-and-start": "NODE_OPTIONS=\"--max-old-space-size=4096\" next build && next start"
   },
   "dependencies": {
