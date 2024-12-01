@@ -23,9 +23,9 @@ export async function authenticate(
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return "Invalid credentials.";
+          return "Pogrešni kredencijali.";
         default:
-          return "Something went wrong.";
+          return "Došlo je do greške.";
       }
     }
     throw error;

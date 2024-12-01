@@ -9,14 +9,22 @@ import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import { type SearchType } from "~/types";
 import RangePicker, { type RangePickerProps } from "./RangePicker";
 import { Switch } from "~/components/ui/switch";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/components/ui/accordion";
 
 type Props = {
   patientId: string;
   patientName: string;
   institution: string;
-  isCustomDate: boolean;
   value: SearchType;
+  isCustomDate: boolean;
   setIsCustomDate: Dispatch<SetStateAction<boolean>>;
+  withoutAnalysis: boolean;
+  setWithoutAnalysis: Dispatch<SetStateAction<boolean>>;
   setPatientId: Dispatch<SetStateAction<string>>;
   setPatientName: Dispatch<SetStateAction<string>>;
   setInstitution: Dispatch<SetStateAction<string>>;
@@ -25,6 +33,7 @@ type Props = {
   customDate: RangePickerProps["date"] | undefined;
   setCustomDate: RangePickerProps["setDate"];
   handleSearch: () => void;
+  onAdvancedRangeFilterClick: (param: boolean) => void;
 };
 
 const SearchMenu = ({
@@ -34,6 +43,8 @@ const SearchMenu = ({
   patientId,
   isCustomDate,
   value,
+  withoutAnalysis,
+  setWithoutAnalysis,
   setIsCustomDate,
   patientName,
   setPatientName,
@@ -41,46 +52,72 @@ const SearchMenu = ({
   institution,
   setInstitution,
   setSearch,
+  onAdvancedRangeFilterClick,
 }: Props) => {
   return (
     <div className="flex flex-col gap-2 p-2">
+      {/* Range pick */}
       <h2 className="mb-4 text-lg">{"PRETRAGA PREGLEDA"}</h2>
-      <RadioGroup
-        disabled={isCustomDate}
-        value={value}
-        defaultValue="today"
-        onValueChange={(val) => {
-          setSearch(val as SearchType);
-        }}
-      >
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="today" id="r1" />
-          <Label htmlFor="r1">{"Danas"}</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="7" id="r2" />
-          <Label htmlFor="r2">{"Poslednjih 7 dana"}</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="30" id="r3" />
-          <Label htmlFor="r3">{"Poslednjih 30 dana"}</Label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <RadioGroupItem value="startOfYear" id="r4" />
-          <Label htmlFor="r4">{"Od početka godine"}</Label>
-        </div>
-      </RadioGroup>
       <div className="my-4 flex items-center gap-1">
         <Switch
-          checked={isCustomDate}
-          onCheckedChange={setIsCustomDate}
-          id="custom-date"
+          checked={withoutAnalysis}
+          onCheckedChange={setWithoutAnalysis}
+          id="without-analysis"
         />
-        <Label htmlFor="show-details">{"Izaberi datume"}</Label>
+        <Label htmlFor="show-details">{"Bez analize"}</Label>
       </div>
-      {isCustomDate && (
-        <RangePicker date={customDate} setDate={setCustomDate} />
-      )}
+
+      <Accordion
+        onValueChange={(val) => onAdvancedRangeFilterClick(!!val)}
+        type="single"
+        collapsible
+      >
+        <AccordionItem value="item-1">
+          <AccordionTrigger className="hover:no-underline">
+            {"Napredna pretraga"}
+          </AccordionTrigger>
+          <AccordionContent>
+            <RadioGroup
+              disabled={isCustomDate}
+              value={value}
+              defaultValue="today"
+              onValueChange={(val) => {
+                setSearch(val as SearchType);
+              }}
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="today" id="r1" />
+                <Label htmlFor="r1">{"Danas"}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="7" id="r2" />
+                <Label htmlFor="r2">{"Poslednjih 7 dana"}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="30" id="r3" />
+                <Label htmlFor="r3">{"Poslednjih 30 dana"}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="startOfYear" id="r4" />
+                <Label htmlFor="r4">{"Od početka godine"}</Label>
+              </div>
+            </RadioGroup>
+            {/* custom date switch */}
+            <div className="my-4 flex items-center gap-1">
+              <Switch
+                checked={isCustomDate}
+                onCheckedChange={setIsCustomDate}
+                id="custom-date"
+              />
+              <Label htmlFor="show-details">{"Izaberi datume"}</Label>
+            </div>
+            {isCustomDate && (
+              <RangePicker date={customDate} setDate={setCustomDate} />
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
       {/* JMBG */}
       <div className="mt-4">
         <Label>{"Pretraga po JMBG"}</Label>
@@ -106,10 +143,11 @@ const SearchMenu = ({
         />
       </div>
       <Button
+        className="mt-2"
         disabled={isCustomDate && !customDate}
         onClick={() => handleSearch()}
       >
-        PRETRAGA
+        {"PRETRAGA"}
       </Button>
     </div>
   );

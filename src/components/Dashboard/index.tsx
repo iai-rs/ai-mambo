@@ -16,6 +16,8 @@ const Dashboard = () => {
   const [patientName, setPatientName] = useState("");
   const [institution, setInstitution] = useState("");
   const [isCustomDate, setIsCustomDate] = useState(false);
+  const [withoutAnalysis, setWithoutAnalysis] = useState(false);
+  const [enableAdvancedRange, setEnableAdvancedRange] = useState(false);
   const [customDate, setCustomDate] = useState<DateRangePicker | undefined>();
 
   const [queryVariables, setQueryVariables] = useState<{
@@ -41,13 +43,20 @@ const Dashboard = () => {
     );
 
   const handleSearch = () => {
+    let dateRange = getDateRange("allData");
+
+    if (enableAdvancedRange) {
+      dateRange = isCustomDate
+        ? getCustomDateRange(customDate)
+        : getDateRange(search);
+    }
+
+    console.log({ dateRange, enableAdvancedRange });
     setQueryVariables({
       patient_id: patientId,
       patient_name: patientName,
       institution,
-      ...(!isCustomDate
-        ? getDateRange(search)
-        : getCustomDateRange(customDate)),
+      ...dateRange,
     });
   };
 
@@ -73,6 +82,9 @@ const Dashboard = () => {
           setCustomDate={setCustomDate}
           isCustomDate={isCustomDate}
           setIsCustomDate={setIsCustomDate}
+          withoutAnalysis={withoutAnalysis}
+          setWithoutAnalysis={setWithoutAnalysis}
+          onAdvancedRangeFilterClick={setEnableAdvancedRange}
           search={search}
           setSearch={setSearch}
           handleSearch={handleSearch}
