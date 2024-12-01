@@ -240,7 +240,7 @@ export const MyDocument = ({ data }: Props) => {
                     </View>
                     {/* Symetry */}
                     <View style={styles.justifiedRow}>
-                      <Text style={styles.leftTitle}>{"Simetrija:"}</Text>
+                      <Text style={styles.leftTitle}>{"Asimetrija:"}</Text>
                       <Text>
                         {booleanToTextResolver(item.feedback.symmetry)}
                       </Text>
