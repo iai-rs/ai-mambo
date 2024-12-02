@@ -15,6 +15,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion";
+import MSelect from "~/components/common/MSelect";
+import { type LimitOption, limitOptions } from "~/constants";
+import { Separator } from "~/components/ui/separator";
+import { SelectSeparator } from "~/components/ui/select";
 
 type Props = {
   patientId: string;
@@ -32,6 +36,8 @@ type Props = {
   search: SearchType;
   customDate: RangePickerProps["date"] | undefined;
   setCustomDate: RangePickerProps["setDate"];
+  selectedLimitOption: string;
+  onSelectLimitOption: (val: LimitOption) => void;
   handleSearch: () => void;
   onAdvancedRangeFilterClick: (param: boolean) => void;
 };
@@ -52,10 +58,12 @@ const SearchMenu = ({
   institution,
   setInstitution,
   setSearch,
+  onSelectLimitOption,
+  selectedLimitOption,
   onAdvancedRangeFilterClick,
 }: Props) => {
   return (
-    <div className="flex flex-col gap-2 p-2">
+    <div className="flex flex-col gap-2 p-3">
       {/* Range pick */}
       <h2 className="mb-4 text-lg">{"PRETRAGA PREGLEDA"}</h2>
       <div className="my-4 flex items-center gap-1">
@@ -77,6 +85,19 @@ const SearchMenu = ({
             {"Napredna pretraga"}
           </AccordionTrigger>
           <AccordionContent>
+            <div className="my-4 flex items-center gap-2">
+              <Label>{"Limit"}</Label>
+              <MSelect
+                className="min-w-[100px]"
+                selectedItem={selectedLimitOption}
+                onValueChange={onSelectLimitOption}
+                items={limitOptions.map((l) => ({
+                  key: l,
+                  label: l,
+                }))}
+              />
+            </div>
+            <Separator className="mb-4 mt-2" />
             <RadioGroup
               disabled={isCustomDate}
               value={value}

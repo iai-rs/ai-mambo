@@ -6,9 +6,10 @@ import DashboardLayout from "./layout";
 import { api } from "~/trpc/react";
 import PatientTable from "./PatientTable";
 import SearchMenu from "./SearchMenu";
-import { MetadataResponse, PatientData, type SearchType } from "~/types";
+import type { MetadataResponse, SearchType } from "~/types";
 import { getDateRange, getCustomDateRange } from "~/utils/getDateRange";
 import { type DateRangePicker } from "./SearchMenu/RangePicker";
+import { type LimitOption } from "~/constants";
 
 const Dashboard = () => {
   const [search, setSearch] = useState<SearchType>("7");
@@ -19,11 +20,14 @@ const Dashboard = () => {
   const [withoutAnalysis, setWithoutAnalysis] = useState(false);
   const [enableAdvancedRange, setEnableAdvancedRange] = useState(false);
   const [customDate, setCustomDate] = useState<DateRangePicker | undefined>();
+  const [selectedLimitOption, setSelectedLimitOption] =
+    useState<LimitOption>("1000");
 
   const [queryVariables, setQueryVariables] = useState<{
     patient_id: string;
     patient_name: string;
     institution: string;
+    limit?: number | null;
     feedbackFilter: "withFeedback" | "withoutFeedback" | "all";
     gte: string | undefined;
     lte: string;
@@ -31,6 +35,7 @@ const Dashboard = () => {
     patient_id: "",
     patient_name: "",
     institution: "",
+    limit: 1000,
     feedbackFilter: "withoutFeedback",
     gte: undefined,
     lte: "",
@@ -58,13 +63,14 @@ const Dashboard = () => {
       patient_name: patientName,
       feedbackFilter: withoutAnalysis ? "withoutFeedback" : "all",
       institution,
+      limit: +selectedLimitOption,
       ...dateRange,
     });
   };
 
   useEffect(() => {
     handleSearch();
-  }, [search, withoutAnalysis]);
+  }, [search, withoutAnalysis, selectedLimitOption]);
 
   return (
     <div className="flex">
@@ -96,6 +102,8 @@ const Dashboard = () => {
           setPatientName={setPatientName}
           institution={institution}
           setInstitution={setInstitution}
+          selectedLimitOption={selectedLimitOption}
+          onSelectLimitOption={setSelectedLimitOption}
         />
       </DashboardLayout>
     </div>
