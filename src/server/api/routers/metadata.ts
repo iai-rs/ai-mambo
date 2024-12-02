@@ -44,6 +44,10 @@ export const metadataRouter = createTRPCRouter({
         institution: z.string().optional(),
         limit: z.number().optional(), // Number of items to fetch
         sort: z.enum(["asc", "desc"]).optional().default("desc"), // Sorting order
+        feedbackFilter: z
+          .enum(["withFeedback", "withoutFeedback", "all"])
+          .optional()
+          .default("all"), // Feedback filter
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -95,6 +99,19 @@ export const metadataRouter = createTRPCRouter({
         }
       }
 
+      // Apply feedback filter
+      if (input.feedbackFilter === "withFeedback") {
+        whereClause.biradsResults = {
+          feedback: {
+            isNot: null, // Only include data with feedback
+          },
+        };
+      } else if (input.feedbackFilter === "withoutFeedback") {
+        whereClause.biradsResults = {
+          feedback: null, // Only include data without feedback
+        };
+      }
+
       // Fetch metadata with the specified filters, sort order, and limit
       const metadata = await ctx.db.dicomMetadata.findMany({
         where: Object.keys(whereClause).length > 0 ? whereClause : undefined, // Ignore filters if none are provided
@@ -110,7 +127,6 @@ export const metadataRouter = createTRPCRouter({
         },
         take: input.limit ?? 1000, // Default to 1000 items if no limit is provided
       });
-      console.log("metadata", metadata);
 
       // Group metadata by patient ID and acquisition date
       const groupedMetadata = metadata.reduce<Record<string, MetadataResponse>>(

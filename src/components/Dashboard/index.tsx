@@ -24,12 +24,14 @@ const Dashboard = () => {
     patient_id: string;
     patient_name: string;
     institution: string;
+    feedbackFilter: "withFeedback" | "withoutFeedback" | "all";
     gte: string | undefined;
     lte: string;
   }>({
     patient_id: "",
     patient_name: "",
     institution: "",
+    feedbackFilter: "withoutFeedback",
     gte: undefined,
     lte: "",
   });
@@ -51,10 +53,10 @@ const Dashboard = () => {
         : getDateRange(search);
     }
 
-    console.log({ dateRange, enableAdvancedRange });
     setQueryVariables({
       patient_id: patientId,
       patient_name: patientName,
+      feedbackFilter: withoutAnalysis ? "withoutFeedback" : "all",
       institution,
       ...dateRange,
     });
@@ -62,7 +64,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     handleSearch();
-  }, [search]);
+  }, [search, withoutAnalysis]);
 
   return (
     <div className="flex">
