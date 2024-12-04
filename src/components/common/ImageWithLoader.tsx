@@ -15,8 +15,8 @@ const ImageWithLoader = ({ url, width = 500, height = 650 }: Props) => {
       {(isImageLoading || !url) && <Skeleton style={{ width, height }} />}
       {url && (
         <Image
-          width={500}
-          height={0}
+          width={width}
+          height={height}
           src={url}
           alt="img"
           onLoad={() => setIsImageLoading(false)}

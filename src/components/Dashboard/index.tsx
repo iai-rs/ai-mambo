@@ -41,13 +41,12 @@ const Dashboard = () => {
     lte: "",
   });
 
-  const { data, isLoading, error, refetch } =
-    api.metadata.getMetadataByRange.useQuery(
-      queryVariables,
-      {
-        staleTime: 0,
-      }, // Disable automatic query execution
-    );
+  const { data, isLoading } = api.metadata.getMetadataByRange.useQuery(
+    queryVariables,
+    {
+      staleTime: 0,
+    }, // Disable automatic query execution
+  );
 
   const handleSearch = () => {
     let dateRange = getDateRange("allData");
@@ -70,6 +69,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, withoutAnalysis, selectedLimitOption]);
 
   return (

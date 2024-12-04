@@ -18,7 +18,6 @@ import {
 import MSelect from "~/components/common/MSelect";
 import { type LimitOption, limitOptions } from "~/constants";
 import { Separator } from "~/components/ui/separator";
-import { SelectSeparator } from "~/components/ui/select";
 
 type Props = {
   patientId: string;
