@@ -12,7 +12,7 @@ function ThemeToggle() {
 
   return (
     <Button
-      className="h-fit w-full justify-start p-0"
+      className="h-fit w-full justify-start p-0 font-normal"
       variant="ghost"
       onClick={toggleTheme}
     >

@@ -1,5 +1,11 @@
 import React from "react";
-import { LogOut, Mail, Users } from "lucide-react";
+import {
+  LogOut,
+  Mail,
+  Users,
+  FileSpreadsheet,
+  MessageCircleQuestionIcon,
+} from "lucide-react";
 
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { auth, signOut } from "~/auth";
@@ -46,6 +52,7 @@ const UserMenu = async () => {
           <Mail height={iconHeight} />
           {email}
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
         {/* users */}
         {isAdmin && (
           <DropdownMenuItem className="flex gap-4">
@@ -53,6 +60,16 @@ const UserMenu = async () => {
             <Link href="/users">Korisnici</Link>
           </DropdownMenuItem>
         )}
+        {/* reports */}
+        <DropdownMenuItem className="flex gap-4">
+          <FileSpreadsheet height={iconHeight} />
+          <Link href="/reports">{"Izveštaji"}</Link>
+        </DropdownMenuItem>
+        {/* help */}
+        <DropdownMenuItem className="flex gap-4">
+          <MessageCircleQuestionIcon height={iconHeight} />
+          <Link href="/reports">{"Pomoć"}</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         {/* theme */}
         <DropdownMenuItem>
@@ -69,7 +86,7 @@ const UserMenu = async () => {
             }}
           >
             <Button className="h-5" variant="ghost">
-              Odjavi se
+              {"Odjavi se"}
             </Button>
           </form>
         </DropdownMenuItem>
