@@ -44,8 +44,7 @@ const sendVerificationEmail = async (
     secure: false, // Use `true` for port 465, `false` for all other ports
   });
 
-  // const setPasswordUrl = `https://mamo-ai-asistent.gov.rs/set_password?tempkey=${changePasswordSecretKey}&email=${email}`;
-  const setPasswordUrl = `http://server.institutonline.ai:55614/set_password?tempkey=${changePasswordSecretKey}&email=${email}`;
+  const setPasswordUrl = `https://mamo-ai-asistent.gov.rs/set_password?tempkey=${changePasswordSecretKey}&email=${email}`;
 
   await transporter.sendMail({
     from: "obavestenja@ivi.ac.rs",
