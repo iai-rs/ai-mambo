@@ -11,6 +11,7 @@ import { Badge } from "~/components/ui/badge";
 import FeedbackDialog from "./FeedbackDialog";
 import { Slider } from "~/components/ui/slider";
 import { Role } from "@prisma/client";
+import FullImgDialog from "./FullImgDialog";
 
 type Props = {
   data: PatientData;
@@ -30,7 +31,9 @@ const ImageWithDetails = ({
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [heatOpacity, setHeatOpacity] = useState([100]);
   const { data: imageData } = api.oracle.getImage.useQuery(data.id + ".png");
-  const { data: heatMapData } = api.oracle.getHeatmap.useQuery( data.id + ".png");
+  const { data: heatMapData } = api.oracle.getHeatmap.useQuery(
+    data.id + ".png",
+  );
 
   const [aspectRatio, setAspectRatio] = useState(0.77); // Default aspect ratio is 1:1
 
@@ -107,14 +110,17 @@ const ImageWithDetails = ({
               )}
             >
               <span className="text-red-600">{data.id}</span>
-              {!isRegularUser && (
-                <FeedbackDialog
-                  imageUrl={imageData?.url}
-                  email={email}
-                  studyUid={data.id}
-                  feedback={data.feedback}
-                />
-              )}
+              <div className="flex items-center gap-1">
+                {!isRegularUser && (
+                  <FeedbackDialog
+                    imageUrl={imageData?.url}
+                    email={email}
+                    studyUid={data.id}
+                    feedback={data.feedback}
+                  />
+                )}
+                <FullImgDialog imageUrl={imageData?.url} />
+              </div>
             </div>
           </div>
         )}

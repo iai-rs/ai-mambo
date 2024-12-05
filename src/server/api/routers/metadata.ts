@@ -36,37 +36,52 @@ export const metadataRouter = createTRPCRouter({
   getMetadataByRange: publicProcedure
     .input(
       z.object({
-        gte: z.string().optional(), // start date
-        lte: z.string(), // end date
+        gte: z.string().optional(), // start date (optional, can be ignored)
+        lte: z.string().optional(), // end date (optional, can be ignored)
         patient_id: z.string().optional(), // JMBG
         patient_name: z.string().optional(),
         laterality: z.enum(["L", "R"]).optional(),
         institution: z.string().optional(),
+        limit: z.number().optional(), // Number of items to fetch
+        sort: z.enum(["asc", "desc"]).optional().default("desc"), // Sorting order
+        feedbackFilter: z
+          .enum(["withFeedback", "withoutFeedback", "all"])
+          .optional()
+          .default("all"), // Feedback filter
       }),
     )
     .query(async ({ ctx, input }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const whereClause: Record<string, any> = {};
 
-      whereClause.acquisition_date = {
-        gte: input.gte,
-        lte: input.lte,
-      };
+      // If time range filters (gte/lte) are provided, add them to the where clause
+      if (input.gte || input.lte) {
+        whereClause.acquisition_date = {
+          ...(input.gte && { gte: input.gte }),
+          ...(input.lte && { lte: input.lte }),
+        };
+      }
 
+      // Filter by patient ID if provided
       if (input.patient_id) {
         whereClause.patient_id = input.patient_id;
       }
+
+      // Filter by laterality if provided
       if (input.laterality) {
         whereClause.laterality = input.laterality;
       }
+
+      // Filter by institution with case-insensitive search
       if (input.institution) {
         whereClause.institution = {
           contains: input.institution,
           mode: "insensitive", // Case-insensitive search
         };
       }
+
+      // Filter by patient name with normalization for NAME^SURNAME and SURNAME^NAME formats
       if (input.patient_name) {
-        // Normalize input name to match both NAME^SURNAME and SURNAME^NAME formats
         const names = input.patient_name
           .split(" ")
           .map((name) => name.toUpperCase());
@@ -84,8 +99,22 @@ export const metadataRouter = createTRPCRouter({
         }
       }
 
+      // Apply feedback filter
+      if (input.feedbackFilter === "withFeedback") {
+        whereClause.biradsResults = {
+          feedback: {
+            isNot: null, // Only include data with feedback
+          },
+        };
+      } else if (input.feedbackFilter === "withoutFeedback") {
+        whereClause.biradsResults = {
+          feedback: null, // Only include data without feedback
+        };
+      }
+
+      // Fetch metadata with the specified filters, sort order, and limit
       const metadata = await ctx.db.dicomMetadata.findMany({
-        where: whereClause,
+        where: Object.keys(whereClause).length > 0 ? whereClause : undefined, // Ignore filters if none are provided
         include: {
           biradsResults: {
             include: {
@@ -93,8 +122,13 @@ export const metadataRouter = createTRPCRouter({
             },
           },
         },
+        orderBy: {
+          acquisition_date: input.sort, // Sort by acquisition_date
+        },
+        take: input.limit ?? 1000, // Default to 1000 items if no limit is provided
       });
 
+      // Group metadata by patient ID and acquisition date
       const groupedMetadata = metadata.reduce<Record<string, MetadataResponse>>(
         (acc, item) => {
           const key = `${item.patient_id}-${item.acquisition_date}`;
@@ -110,7 +144,6 @@ export const metadataRouter = createTRPCRouter({
                 ? Number(item.biradsResults.model_1_result)
                 : 0,
               records: [],
-              // feedback: item.biradsResults.feedback.
             };
           } else {
             const currentMaxResult = acc[key]?.modelResult ?? 0;
@@ -130,6 +163,7 @@ export const metadataRouter = createTRPCRouter({
         {},
       );
 
+      // Convert the grouped metadata object into an array
       const result = Object.values(groupedMetadata);
 
       return result;

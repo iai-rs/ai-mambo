@@ -42,6 +42,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
         {
           id: "modelResult",
           enableColumnFilter: false,
+          enableSorting: false,
           header: "Verovatnoća suspektnosti",
           cell: (props) => <Badge variant="outline">{props.getValue()}</Badge>,
         },
@@ -110,7 +111,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
   return (
     <div className="min-w-[700px] overflow-y-scroll px-5 py-3">
       <DataTable<MetadataResponse, any>
-        defaultSorting={[{ id: "modelResult", desc: true }]}
+        defaultSorting={[{ id: "acquisitionDate", desc: true }]}
         columns={columns}
         data={data ?? []}
         enableSorting

@@ -209,7 +209,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
               onCheckedChange={setSymmetry}
               id="symmetry"
             />
-            <Label htmlFor="symmetry">{"Simetrija"}</Label>
+            <Label htmlFor="symmetry">{"Asimetrija"}</Label>
           </div>
           <div className="flex items-center gap-1">
             <Switch

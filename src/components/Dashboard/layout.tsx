@@ -10,7 +10,7 @@ type Props = {
 };
 
 const SideMenu = ({ children, rightContent }: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
