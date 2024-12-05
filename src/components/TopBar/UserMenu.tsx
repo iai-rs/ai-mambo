@@ -45,7 +45,12 @@ const UserMenu = async () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {/* Name */}
-        <DropdownMenuLabel>{name}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          <div className="flex justify-between">
+            {name}
+            <span className="text-red-400">0</span>
+          </div>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {/* email */}
         <DropdownMenuItem className="flex gap-4">

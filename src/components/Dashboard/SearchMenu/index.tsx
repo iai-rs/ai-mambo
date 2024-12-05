@@ -73,6 +73,19 @@ const SearchMenu = ({
         />
         <Label htmlFor="show-details">{"Bez analize"}</Label>
       </div>
+      <div className="mb-4 flex items-center gap-2">
+        <Label>{"Limit"}</Label>
+        <MSelect
+          className="min-w-[100px]"
+          selectedItem={selectedLimitOption}
+          onValueChange={onSelectLimitOption}
+          items={limitOptions.map((l) => ({
+            key: l,
+            label: l,
+          }))}
+        />
+      </div>
+      {/* <Separator className="mb-4 mt-2" /> */}
 
       <Accordion
         onValueChange={(val) => onAdvancedRangeFilterClick(!!val)}
@@ -84,19 +97,6 @@ const SearchMenu = ({
             {"Napredna pretraga"}
           </AccordionTrigger>
           <AccordionContent>
-            <div className="my-4 flex items-center gap-2">
-              <Label>{"Limit"}</Label>
-              <MSelect
-                className="min-w-[100px]"
-                selectedItem={selectedLimitOption}
-                onValueChange={onSelectLimitOption}
-                items={limitOptions.map((l) => ({
-                  key: l,
-                  label: l,
-                }))}
-              />
-            </div>
-            <Separator className="mb-4 mt-2" />
             <RadioGroup
               disabled={isCustomDate}
               value={value}
@@ -134,34 +134,34 @@ const SearchMenu = ({
             {isCustomDate && (
               <RangePicker date={customDate} setDate={setCustomDate} />
             )}
+            {/* JMBG */}
+            <div className="mt-4">
+              <Label>{"Pretraga po JMBG"}</Label>
+              <Input
+                value={patientId}
+                onChange={(e) => setPatientId(e.target.value)}
+              />
+            </div>
+            {/* NAME */}
+            <div className="mt-4">
+              <Label>{"Pretraga po imenu"}</Label>
+              <Input
+                value={patientName}
+                onChange={(e) => setPatientName(e.target.value)}
+              />
+            </div>
+            {/* INSTITUTION */}
+            <div className="mt-4">
+              <Label>{"Pretraga po instituciji"}</Label>
+              <Input
+                value={institution}
+                onChange={(e) => setInstitution(e.target.value)}
+              />
+            </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
 
-      {/* JMBG */}
-      <div className="mt-4">
-        <Label>{"Pretraga po JMBG"}</Label>
-        <Input
-          value={patientId}
-          onChange={(e) => setPatientId(e.target.value)}
-        />
-      </div>
-      {/* NAME */}
-      <div className="mt-4">
-        <Label>{"Pretraga po imenu"}</Label>
-        <Input
-          value={patientName}
-          onChange={(e) => setPatientName(e.target.value)}
-        />
-      </div>
-      {/* INSTITUTION */}
-      <div className="mt-4">
-        <Label>{"Pretraga po instituciji"}</Label>
-        <Input
-          value={institution}
-          onChange={(e) => setInstitution(e.target.value)}
-        />
-      </div>
       <Button
         className="mt-2"
         disabled={isCustomDate && !customDate}
