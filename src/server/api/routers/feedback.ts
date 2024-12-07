@@ -6,6 +6,32 @@ import { createTRPCRouter, publicProcedure } from "../trpc"; // Adjust the impor
 import { birads_classification } from "@prisma/client";
 
 export const feedbackRouter = createTRPCRouter({
+  getFeedbackByUser: publicProcedure
+    .input(
+      z.object({
+        userEmail: z.string().email(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const feedback = await ctx.db.biradsFeedback.findMany({
+        where: {
+          user_email: input.userEmail,
+        },
+        include: {
+          biradsResults: {
+            include: {
+              dicomMetadata: true,
+            },
+          },
+        },
+      });
+
+      if (!feedback) {
+        throw new Error("No feedback found for this user");
+      }
+
+      return feedback;
+    }),
   createFeedback: publicProcedure
     .input(
       z.object({
