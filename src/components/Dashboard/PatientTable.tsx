@@ -117,6 +117,7 @@ const PatientTable = ({ data, isLoading }: Props) => {
         isLoading={isLoading}
         enableColumnsHiding
         enableCSVExport
+        className="max-h-[calc(100vh-200px)]"
         leftColumnsPin={["patientName"]}
         rightColumnsPin={["action"]}
       />

@@ -6,6 +6,7 @@ import { api } from "~/trpc/react";
 import DataTable from "../common/DataTable";
 import type { UsersWithResults } from "~/server/api/root";
 import { Badge } from "../ui/badge";
+import LatestTable from "./LatestTable";
 
 const columnHelper = createColumnHelper<UsersWithResults[0]>();
 
@@ -55,8 +56,8 @@ const Reports = () => {
   );
 
   return (
-    <div className="min-w-[700px] overflow-y-scroll px-5 py-3">
-      <h1 className="mb-4 text-2xl font-bold">
+    <div className=" overflow-y-scroll px-5 py-3">
+      <h1 className="mb-2  mt-4 text-2xl font-bold">
         {"Broj urađenih analiza pacijenata po korisniku"}
       </h1>
       <DataTable<UsersWithResults[0], any>
@@ -67,6 +68,10 @@ const Reports = () => {
         defaultSorting={[{ id: "feedback", desc: true }]}
         enableCSVExport
       />
+      <h1 className="mb-2 mt-4 text-2xl font-bold">
+        {"Lista prioriteta za biopsiju"}
+      </h1>
+      <LatestTable />
     </div>
   );
 };

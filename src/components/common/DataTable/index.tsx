@@ -50,6 +50,7 @@ export type TableProps<TData, TValue> = {
   rightColumnsPin?: string[];
   defaultFilters?: ColumnFilter[];
   defaultSorting?: SortingState;
+  className?: string;
 };
 
 const getCommonPinningStyles = (
@@ -101,6 +102,7 @@ const DataTable = <TData, TValue>({
   rightColumnsPin = [],
   defaultFilters,
   defaultSorting,
+  className,
 }: TableProps<TData, TValue>) => {
   const { table } = useDataTable({
     columns,
@@ -124,7 +126,15 @@ const DataTable = <TData, TValue>({
   const isDarkTheme = theme === "dark";
 
   return (
-    <div className="mb-3 flex h-[calc(100vh-200px)] flex-col gap-3 overflow-y-auto rounded-md border border-slate-400/15 p-2 shadow-lg">
+    <div
+      className={cn(
+        `
+        mb-3 flex flex-col gap-3 overflow-y-auto rounded-md
+        border border-slate-400/15 p-2 shadow-lg
+        `,
+        className,
+      )}
+    >
       <div className="flex items-center justify-between">
         {/* Table title */}
         <span className="text-sm font-semibold">{title}</span>

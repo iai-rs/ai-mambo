@@ -76,7 +76,7 @@ const Dashboard = () => {
     <div className="flex">
       <DashboardLayout
         rightContent={
-          <div className="overflow-y-auto p-3">
+          <div className="overflow-y-auto p-4">
             <PatientTable
               data={data as unknown as MetadataResponse[]}
               isLoading={isLoading}

@@ -10,7 +10,7 @@ import ReportsContainer from "~/components/Reports";
 
 export default async function Reports() {
   return (
-    <main className="container mt-4 flex flex-col gap-4">
+    <main className="container mt-4 flex max-h-[calc(100vh-100px)] flex-col gap-4">
       <Breadcrumb className="mt-2 font-bold">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -22,7 +22,7 @@ export default async function Reports() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="mt-2 flex justify-center">
+      <div className="mt-2 flex justify-center overflow-y-auto">
         <ReportsContainer />
       </div>
     </main>

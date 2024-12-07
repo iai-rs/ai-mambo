@@ -69,7 +69,7 @@ const UserMenu = async () => {
                   </TooltipTrigger>
                   <TooltipContent>
                     <span className="font-normal">
-                      {`Ukupan broj analiziranih pacij za `}
+                      {`Ukupan broj analiziranih pacijenata za `}
                       <span className="font-bold">{email}</span>
                     </span>
                   </TooltipContent>
