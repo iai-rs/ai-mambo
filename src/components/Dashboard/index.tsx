@@ -17,7 +17,7 @@ const Dashboard = () => {
   const [patientName, setPatientName] = useState("");
   const [institution, setInstitution] = useState("");
   const [isCustomDate, setIsCustomDate] = useState(false);
-  const [withoutAnalysis, setWithoutAnalysis] = useState(false);
+  const [withoutAnalysis, setWithoutAnalysis] = useState(true);
   const [enableAdvancedRange, setEnableAdvancedRange] = useState(false);
   const [customDate, setCustomDate] = useState<DateRangePicker | undefined>();
   const [selectedLimitOption, setSelectedLimitOption] =
