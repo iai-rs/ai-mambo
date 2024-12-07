@@ -66,7 +66,7 @@ const Reports = () => {
         enableSorting
         isLoading={isLoading}
         defaultSorting={[{ id: "feedback", desc: true }]}
-        enableCSVExport
+        pageSize={5}
       />
       <h1 className="mb-2 mt-4 text-2xl font-bold">
         {"Lista prioriteta za biopsiju"}

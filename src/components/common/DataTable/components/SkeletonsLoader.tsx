@@ -31,7 +31,7 @@ const SkeletonsLoader = ({ rowsLength, columnsLength }: Props) => (
       >
         {generateSequentialNumbers(columnsLength).map((item) => (
           <TableCell key={item}>
-            <Skeleton className="h-4 w-[80%]" />
+            <Skeleton className="h-4 w-[80%] min-w-[200px]" />
           </TableCell>
         ))}
       </TableRow>

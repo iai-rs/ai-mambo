@@ -6,20 +6,10 @@ import DataTable from "~/components/common/DataTable";
 import { modelResultFormatter } from "~/components/common/Formaters";
 import { Badge } from "~/components/ui/badge";
 import { api } from "~/trpc/react";
-import { MetadataResponse } from "~/types";
+import type { MetadataResponse } from "~/types";
 import { parseDateFormat } from "~/utils/parseDateFormat";
 
 const columnHelper = createColumnHelper<MetadataResponse>();
-
-const queryVariables = {
-  patient_id: "",
-  patient_name: "",
-  institution: "",
-  limit: 1000,
-  feedbackFilter: "withoutFeedback",
-  gte: undefined,
-  lte: "",
-};
 
 const LatestTable = () => {
   const { data, isLoading } = api.metadata.getMetadataByRange.useQuery(
@@ -66,8 +56,6 @@ const LatestTable = () => {
       data={(data as any) ?? []}
       enableSorting
       isLoading={isLoading}
-      enableColumnsHiding
-      enableCSVExport
       pageSize={10}
     />
   );
