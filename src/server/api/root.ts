@@ -4,6 +4,7 @@ import { metadataRouter } from "./routers/metadata";
 import { usersRouter } from "./routers/users";
 import { feedbackRouter } from "./routers/feedback";
 import { oracleRouter } from "./routers/oracle";
+import { type inferProcedureOutput } from "@trpc/server";
 
 /**
  * This is the primary router for your server.
@@ -30,3 +31,7 @@ export type AppRouter = typeof appRouter;
  *       ^? Post[]
  */
 export const createCaller = createCallerFactory(appRouter);
+
+export type UsersWithResults = inferProcedureOutput<
+  typeof feedbackRouter.getAllUsersWithResults
+>;

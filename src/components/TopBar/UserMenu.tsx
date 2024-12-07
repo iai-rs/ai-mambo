@@ -69,7 +69,7 @@ const UserMenu = async () => {
                   </TooltipTrigger>
                   <TooltipContent>
                     <span className="font-normal">
-                      {`Ukupan broj analiziranih dokumenata za `}
+                      {`Ukupan broj analiziranih pacij za `}
                       <span className="font-bold">{email}</span>
                     </span>
                   </TooltipContent>
@@ -100,7 +100,7 @@ const UserMenu = async () => {
         {/* help */}
         <DropdownMenuItem className="flex gap-4">
           <MessageCircleQuestionIcon height={iconHeight} />
-          <Link href="/reports">{"Pomoć"}</Link>
+          <Link href="/help">{"Pomoć"}</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {/* theme */}
