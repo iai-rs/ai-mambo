@@ -1,14 +1,9 @@
-import { ConstructionIcon } from "lucide-react";
+import HelpContainer from "~/components/Help";
 
-export default async function Reports() {
+export default async function Help() {
   return (
-    <main>
-      <div className="mt-10 flex justify-center">
-        <div className="flex gap-3">
-          <ConstructionIcon className="text-red-400" />
-          {"STRANICA U IZRADI"}
-        </div>
-      </div>
+    <main className="h-[calc(100vh - 100px)] container overflow-auto bg-gray-500">
+      <HelpContainer />
     </main>
   );
 }
