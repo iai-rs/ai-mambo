@@ -17,7 +17,6 @@ import {
 } from "~/components/ui/accordion";
 import MSelect from "~/components/common/MSelect";
 import { type LimitOption, limitOptions } from "~/constants";
-import { Separator } from "~/components/ui/separator";
 
 type Props = {
   patientId: string;
@@ -96,7 +95,7 @@ const SearchMenu = ({
           <AccordionTrigger className="hover:no-underline">
             {"Napredna pretraga"}
           </AccordionTrigger>
-          <AccordionContent>
+          <AccordionContent className="px-2">
             <RadioGroup
               disabled={isCustomDate}
               value={value}
@@ -120,6 +119,10 @@ const SearchMenu = ({
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="startOfYear" id="r4" />
                 <Label htmlFor="r4">{"Od početka godine"}</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="allData" id="r5" />
+                <Label htmlFor="r5">{"Sve"}</Label>
               </div>
             </RadioGroup>
             {/* custom date switch */}

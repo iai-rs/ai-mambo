@@ -10,10 +10,13 @@ type Props = {
 };
 
 const SideMenu = ({ children, rightContent }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(
+    localStorage.getItem("searchMenu") === "open" ? true : false,
+  );
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    localStorage.setItem("searchMenu", isOpen ? "close" : "open");
   };
 
   return (

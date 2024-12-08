@@ -12,7 +12,7 @@ import { type DateRangePicker } from "./SearchMenu/RangePicker";
 import { type LimitOption } from "~/constants";
 
 const Dashboard = () => {
-  const [search, setSearch] = useState<SearchType>("7");
+  const [search, setSearch] = useState<SearchType>("30");
   const [patientId, setPatientId] = useState("");
   const [patientName, setPatientName] = useState("");
   const [institution, setInstitution] = useState("");

@@ -38,4 +38,11 @@ function getPatientAge(dateString: string) {
   return calculateAge(birthdate);
 }
 
-export { getPatientAge };
+function sanitazeIdData(id: string) {
+  const x = id.split("$$$")[0];
+  console.log({ x });
+
+  return x;
+}
+
+export { getPatientAge, sanitazeIdData };
