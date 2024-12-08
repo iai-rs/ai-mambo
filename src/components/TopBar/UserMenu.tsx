@@ -22,6 +22,13 @@ import ThemeToggle from "../ThemeToggle";
 import { iconHeight } from "~/constants";
 import Link from "next/link";
 import { Role } from "@prisma/client";
+import { api } from "~/trpc/server";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 const UserMenu = async () => {
   const session = await auth();
@@ -33,6 +40,10 @@ const UserMenu = async () => {
   const role = session?.user?.role ?? "";
 
   const isAdmin = role === Role.ADMIN;
+
+  const results = await api.feedback.getFeedbackByUser({ userEmail: email });
+
+  if (!results.length) return null;
 
   return (
     <DropdownMenu>
@@ -46,9 +57,25 @@ const UserMenu = async () => {
       <DropdownMenuContent>
         {/* Name */}
         <DropdownMenuLabel>
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between leading-none">
             {name}
-            <span className="text-red-400">0</span>
+            {results.length && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div className="rounded-sm bg-red-50 p-1 text-red-400">
+                      {results.length}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span className="font-normal">
+                      {`Ukupan broj analiziranih pacijenata za `}
+                      <span className="font-bold">{email}</span>
+                    </span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -73,7 +100,7 @@ const UserMenu = async () => {
         {/* help */}
         <DropdownMenuItem className="flex gap-4">
           <MessageCircleQuestionIcon height={iconHeight} />
-          <Link href="/reports">{"Pomoć"}</Link>
+          <Link href="/help">{"Pomoć"}</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         {/* theme */}

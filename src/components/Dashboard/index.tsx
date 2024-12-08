@@ -12,12 +12,12 @@ import { type DateRangePicker } from "./SearchMenu/RangePicker";
 import { type LimitOption } from "~/constants";
 
 const Dashboard = () => {
-  const [search, setSearch] = useState<SearchType>("7");
+  const [search, setSearch] = useState<SearchType>("30");
   const [patientId, setPatientId] = useState("");
   const [patientName, setPatientName] = useState("");
   const [institution, setInstitution] = useState("");
   const [isCustomDate, setIsCustomDate] = useState(false);
-  const [withoutAnalysis, setWithoutAnalysis] = useState(false);
+  const [withoutAnalysis, setWithoutAnalysis] = useState(true);
   const [enableAdvancedRange, setEnableAdvancedRange] = useState(false);
   const [customDate, setCustomDate] = useState<DateRangePicker | undefined>();
   const [selectedLimitOption, setSelectedLimitOption] =
@@ -76,7 +76,7 @@ const Dashboard = () => {
     <div className="flex">
       <DashboardLayout
         rightContent={
-          <div className="overflow-y-auto p-3">
+          <div className="overflow-y-auto p-4">
             <PatientTable
               data={data as unknown as MetadataResponse[]}
               isLoading={isLoading}

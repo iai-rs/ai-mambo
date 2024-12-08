@@ -6,6 +6,68 @@ import { createTRPCRouter, publicProcedure } from "../trpc"; // Adjust the impor
 import { birads_classification } from "@prisma/client";
 
 export const feedbackRouter = createTRPCRouter({
+  getFeedbackByUser: publicProcedure
+    .input(
+      z.object({
+        userEmail: z.string().email(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const feedback = await ctx.db.biradsFeedback.findMany({
+        where: {
+          user_email: input.userEmail,
+        },
+        include: {
+          biradsResults: {
+            include: {
+              dicomMetadata: true,
+            },
+          },
+        },
+      });
+
+      if (!feedback) {
+        throw new Error("No feedback found for this user");
+      }
+
+      return feedback;
+    }),
+  getAllUsersWithResults: publicProcedure.query(async ({ ctx }) => {
+    const users = await ctx.db.users.findMany({});
+
+    const feedback = await ctx.db.biradsFeedback.findMany({
+      include: {
+        biradsResults: true,
+      },
+    });
+
+    const userResults = users.map((user) => ({
+      id: user.id || "",
+      name: user.name || "",
+      email: user.email || "",
+      role: user.role || "USER", // Default to 'USER' if role is undefined
+      feedback: feedback
+        .filter((entry) => entry.user_email === user.email)
+        .map((entry) => ({
+          study_uid: entry.study_uid || "",
+          suspect_lesion: entry.suspect_lesion ?? false,
+          shadow: entry.shadow ?? false,
+          microcalcifications: entry.microcalcifications ?? false,
+          symmetry: entry.symmetry ?? false,
+          architectonics: entry.architectonics ?? false,
+          birads_class: entry.birads_class || "na", // Default to 'na' if undefined
+          createdAt: new Date(entry.createdAt || new Date()),
+          biradsResults: entry.biradsResults
+            ? {
+                study_uid: entry.biradsResults.study_uid || "",
+                model_1_result: entry.biradsResults.model_1_result || "0",
+              }
+            : { study_uid: "", model_1_result: "0" },
+        })),
+    }));
+
+    return userResults;
+  }),
   createFeedback: publicProcedure
     .input(
       z.object({

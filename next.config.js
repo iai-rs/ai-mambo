@@ -15,6 +15,8 @@ const config = {
     if (!isServer) {
       config.output.publicPath = "/_next/";
     }
+    // PDF
+    config.resolve.alias.canvas = false;
     // Add wasm extension
     config.module.rules.push({
       test: /\.wasm$/,
