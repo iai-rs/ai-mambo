@@ -11,6 +11,7 @@ import { modelResultFormatter } from "../common/Formaters";
 import { Badge } from "../ui/badge";
 import { parseDateFormat } from "~/utils/parseDateFormat";
 import dynamic from "next/dynamic";
+import { sanitazeIdData } from "~/utils/parseJMBG";
 
 const PDFCreatorRow = dynamic(() => import("../common/PDFCreator/Row"), {
   ssr: false,
@@ -31,7 +32,8 @@ const PatientTable = ({ data, isLoading }: Props) => {
         enableHiding: false,
         header: "Ime",
       }),
-      columnHelper.accessor("patientId", {
+      columnHelper.accessor((row) => row.patientId, {
+        id: "patientId",
         enableColumnFilter: false,
         enableSorting: false,
         header: "JMBG",

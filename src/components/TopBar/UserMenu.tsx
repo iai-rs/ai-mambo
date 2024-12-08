@@ -42,7 +42,7 @@ const UserMenu = async () => {
   const isAdmin = role === Role.ADMIN;
 
   const results = await api.feedback.getFeedbackByUser({ userEmail: email });
-  console.log("OVDE", results);
+
   if (!results.length) return null;
 
   return (
