@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default async function UsersServer() {
   const session = await auth();
   const userEmail = session?.user?.email;
-  if (!userEmail) return <div>No user</div>;
+  if (!userEmail) return <div>{"Ne postoji korisnik"}</div>;
   const user = await api.users.getUserByEmail({ email: userEmail });
   const userRole = user?.role;
   if (!userRole || userRole !== Role.ADMIN) {
@@ -29,7 +29,7 @@ export default async function UsersServer() {
   }
 
   const users = await api.users.getUsers();
-  const usersWithFilteredData = users.map((user) => ({
+  const usersWithFilteredData = users?.map((user) => ({
     id: user.id,
     name: user.name,
     email: user.email,
@@ -51,7 +51,7 @@ export default async function UsersServer() {
       </Breadcrumb>
       <div className="flex flex-wrap">
         <InviteUserForm />
-        <Users users={usersWithFilteredData} />
+        <Users users={usersWithFilteredData ?? []} />
       </div>
     </main>
   );

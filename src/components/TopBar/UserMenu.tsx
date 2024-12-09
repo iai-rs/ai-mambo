@@ -57,7 +57,7 @@ const UserMenu = async () => {
         <DropdownMenuLabel>
           <div className="flex items-center justify-between leading-none">
             {name}
-            {results?.length && (
+            {!!results?.length && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>

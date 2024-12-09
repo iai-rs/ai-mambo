@@ -95,6 +95,13 @@ export async function register(prevState: string | null, formData: FormData) {
     const id = uuidv4();
     const changePasswordSecretKey = uuidv4();
 
+    try {
+      console.log("Sending an email...");
+      await sendVerificationEmail(email, changePasswordSecretKey);
+    } catch (err) {
+      return createResponse("error", "Došlo je do greške pri slanju emaila.");
+    }
+
     const addedUser = await api.users.addUser({
       id: id,
       name: name,
@@ -102,8 +109,7 @@ export async function register(prevState: string | null, formData: FormData) {
       change_password_secret_key: changePasswordSecretKey,
     });
     console.log(addedUser);
-    console.log("Sending an email...");
-    await sendVerificationEmail(email, changePasswordSecretKey);
+
     return createResponse("success", "Korisnik je dodat.");
   } else {
     return createResponse(
@@ -175,11 +181,15 @@ export async function setPassword(
     return createResponse("error", "Došlo je do greške.");
   }
 
-  const hashedPassword = await hash(password, 10);
-  const modifiedUser = await api.users.updateUserPassword({
-    email: email,
-    newPassword: hashedPassword,
-  });
+  try {
+    const hashedPassword = await hash(password, 10);
+    await api.users.updateUserPassword({
+      email: email,
+      newPassword: hashedPassword,
+    });
+  } catch (err) {
+    return createResponse("error", "Došlo je do sistemske greške");
+  }
 
   return createResponse("success", "Lozinka uspešno postavljena");
 }
