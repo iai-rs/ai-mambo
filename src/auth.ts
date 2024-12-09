@@ -55,6 +55,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.email = token.email ?? ""; // Now all user details returned from `authorize` are attached to the session
       session.user.name = token.name; // Now all user details returned from `authorize` are attached to the session
       session.user.role = token.role;
+      console.log("************* auth.ts session *************", {
+        session,
+        token,
+      });
 
       return session;
     },

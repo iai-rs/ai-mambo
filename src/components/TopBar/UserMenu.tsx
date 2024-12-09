@@ -32,6 +32,7 @@ import {
 
 const UserMenu = async () => {
   const session = await auth();
+  console.log("************* sessions user menu *************", { session });
 
   if (!session?.user) return null;
 
