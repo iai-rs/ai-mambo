@@ -1,5 +1,5 @@
 "use client";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Search, ArrowLeftToLine } from "lucide-react";
 
 import { Button } from "../ui/button";
@@ -10,13 +10,17 @@ type Props = {
 };
 
 const SideMenu = ({ children, rightContent }: Props) => {
-  const [isOpen, setIsOpen] = useState(
-    localStorage.getItem("searchMenu") === "open" ? true : false,
-  );
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Use useEffect to safely access localStorage in the browser
+  useEffect(() => {
+    const savedState = localStorage.getItem("searchMenu");
+    setIsOpen(savedState === "open");
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    localStorage.setItem("searchMenu", isOpen ? "close" : "open");
+    localStorage.setItem("searchMenu", !isOpen ? "open" : "close");
   };
 
   return (

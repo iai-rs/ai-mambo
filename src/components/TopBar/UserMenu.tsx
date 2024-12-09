@@ -32,7 +32,6 @@ import {
 
 const UserMenu = async () => {
   const session = await auth();
-  console.log("************* sessions user menu *************", { session });
 
   if (!session?.user) return null;
 
@@ -43,8 +42,6 @@ const UserMenu = async () => {
   const isAdmin = role === Role.ADMIN;
 
   const results = await api.feedback.getFeedbackByUser({ userEmail: email });
-
-  if (!results.length) return null;
 
   return (
     <DropdownMenu>
@@ -60,7 +57,7 @@ const UserMenu = async () => {
         <DropdownMenuLabel>
           <div className="flex items-center justify-between leading-none">
             {name}
-            {results.length && (
+            {results?.length && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
