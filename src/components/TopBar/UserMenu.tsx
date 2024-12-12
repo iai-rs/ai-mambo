@@ -41,7 +41,9 @@ const UserMenu = async () => {
 
   const isAdmin = role === Role.ADMIN;
 
-  const results = await api.feedback.getFeedbackByUser({ userEmail: email });
+  const { uniquePatientCount } = await api.feedback.getFeedbackByUser({
+    userEmail: email,
+  });
 
   return (
     <DropdownMenu>
@@ -57,12 +59,12 @@ const UserMenu = async () => {
         <DropdownMenuLabel>
           <div className="flex items-center justify-between leading-none">
             {name}
-            {!!results?.length && (
+            {!!uniquePatientCount && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
                     <div className="rounded-sm bg-red-50 p-1 text-red-400">
-                      {results.length}
+                      {uniquePatientCount}
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>

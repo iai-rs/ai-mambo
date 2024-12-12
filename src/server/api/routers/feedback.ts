@@ -20,18 +20,29 @@ export const feedbackRouter = createTRPCRouter({
         include: {
           biradsResults: {
             include: {
-              dicomMetadata: true,
+              dicomMetadata: {
+                select: {
+                  patient_name: true, // Include patient_name from DicomMetadata
+                },
+              },
             },
           },
         },
       });
 
-      if (!feedback) {
+      if (!feedback || feedback.length === 0) {
         throw new Error("No feedback found for this user");
       }
 
-      return feedback;
+      const uniquePatients = new Set(
+        feedback
+          .map((item) => item.biradsResults?.dicomMetadata?.patient_name)
+          .filter((name) => name !== null && name !== undefined),
+      );
+
+      return { feedback, uniquePatientCount: uniquePatients.size };
     }),
+
   getAllUsersWithResults: publicProcedure.query(async ({ ctx }) => {
     const users = await ctx.db.users.findMany({});
 
