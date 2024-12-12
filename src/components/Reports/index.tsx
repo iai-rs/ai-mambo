@@ -12,10 +12,6 @@ const columnHelper = createColumnHelper<UsersWithResults[0]>();
 
 const Reports = () => {
   const { data, isLoading } = api.feedback.getAllUsersWithResults.useQuery();
-  const filteredData = useMemo(
-    () => data?.filter((item) => item.feedback.length),
-    [data],
-  );
 
   const columns: ColumnDef<UsersWithResults[0]>[] = useMemo(
     () => [
@@ -29,8 +25,7 @@ const Reports = () => {
         header: "Rola",
         cell: (props) => <Badge variant="outline">{props.getValue()}</Badge>,
       }),
-      columnHelper.accessor((row) => row.feedback.length, {
-        id: "feedback",
+      columnHelper.accessor("patientCount", {
         enableColumnFilter: false,
         header: "Broj analiza",
         cell: (props) => (
@@ -62,7 +57,7 @@ const Reports = () => {
       </h1>
       <DataTable<UsersWithResults[0], any>
         columns={columns}
-        data={(filteredData as any) ?? []} // TODO: check as any later
+        data={(data as any) ?? []} // TODO: check as any later
         enableSorting
         isLoading={isLoading}
         defaultSorting={[{ id: "feedback", desc: true }]}
