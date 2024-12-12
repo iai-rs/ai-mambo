@@ -17,8 +17,10 @@ const FullImgDialog = ({ imageUrl }: Props) => {
           <ExpandIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="flex h-[98vh] w-full max-w-screen-lg items-center justify-center p-0">
-        <ImageWithLoader url={imageUrl} width={800} height={1000} />
+      <DialogContent className="flex h-[100vh] w-full max-w-screen-lg items-center justify-center p-0">
+        <div className="overflow-auto p-3">
+          <ImageWithLoader url={imageUrl} width={800} height={1000} />
+        </div>
       </DialogContent>
     </Dialog>
   );
