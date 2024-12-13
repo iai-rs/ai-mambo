@@ -20,35 +20,65 @@ export const feedbackRouter = createTRPCRouter({
         include: {
           biradsResults: {
             include: {
-              dicomMetadata: true,
+              dicomMetadata: {
+                select: {
+                  patient_name: true, // Include patient_name from DicomMetadata
+                },
+              },
             },
           },
         },
       });
 
-      if (!feedback) {
+      if (!feedback || feedback.length === 0) {
         throw new Error("No feedback found for this user");
       }
 
-      return feedback;
+      const uniquePatients = new Set(
+        feedback
+          .map((item) => item.biradsResults?.dicomMetadata?.patient_name)
+          .filter((name) => name !== null && name !== undefined),
+      );
+
+      return { feedback, uniquePatientCount: uniquePatients.size };
     }),
+
   getAllUsersWithResults: publicProcedure.query(async ({ ctx }) => {
     const users = await ctx.db.users.findMany({});
 
     const feedback = await ctx.db.biradsFeedback.findMany({
       include: {
-        biradsResults: true,
+        biradsResults: {
+          include: {
+            dicomMetadata: {
+              select: {
+                patient_name: true, // Include patient_name
+              },
+            },
+          },
+        },
       },
     });
 
-    const userResults = users.map((user) => ({
-      id: user.id || "",
-      name: user.name || "",
-      email: user.email || "",
-      role: user.role || "USER", // Default to 'USER' if role is undefined
-      feedback: feedback
-        .filter((entry) => entry.user_email === user.email)
-        .map((entry) => ({
+    const userResults = users.map((user) => {
+      // Filter feedback for the current user
+      const userFeedback = feedback.filter(
+        (entry) => entry.user_email === user.email,
+      );
+
+      // Extract unique patient names
+      const uniquePatients = new Set(
+        userFeedback
+          .map((entry) => entry.biradsResults?.dicomMetadata?.patient_name)
+          .filter((name) => name !== null && name !== undefined), // Exclude null/undefined names
+      );
+
+      return {
+        id: user.id || "",
+        name: user.name || "",
+        email: user.email || "",
+        role: user.role || "USER", // Default to 'USER' if role is undefined
+        feedback: userFeedback.map((entry) => ({
           study_uid: entry.study_uid || "",
           suspect_lesion: entry.suspect_lesion ?? false,
           shadow: entry.shadow ?? false,
@@ -61,13 +91,18 @@ export const feedbackRouter = createTRPCRouter({
             ? {
                 study_uid: entry.biradsResults.study_uid || "",
                 model_1_result: entry.biradsResults.model_1_result || "0",
+                patient_name:
+                  entry.biradsResults.dicomMetadata?.patient_name || "", // Include patient_name
               }
-            : { study_uid: "", model_1_result: "0" },
+            : { study_uid: "", model_1_result: "0", patient_name: "" },
         })),
-    }));
+        patientCount: uniquePatients.size, // Add patient count
+      };
+    });
 
     return userResults;
   }),
+
   createFeedback: publicProcedure
     .input(
       z.object({
