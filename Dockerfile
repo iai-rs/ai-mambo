@@ -26,6 +26,8 @@ ENV MINIO_ENDPOINT=$MINIO_ENDPOINT
 ENV NEXTAUTH_URL=$NEXTAUTH_URL
 ENV AUTH_TRUST_HOST=$AUTH_TRUST_HOST
 
+RUN apk add --no-cache openssl1.1-compat
+
 RUN npm install -g pnpm
 
 # Create a directory to hold the application code inside the image
