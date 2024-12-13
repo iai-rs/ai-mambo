@@ -18,24 +18,67 @@ type Props = {
   role: string;
 };
 
-const viewOrder = {
-  RMLO: 0,
-  LMLO: 1,
-  RCC: 2,
-  LCC: 3,
-};
+function sortPatientDataForGrid(data: PatientData[]): PatientData[] {
+  const leftLateralityPriority = ["RMLO", "RCC", "R"]; // Include 'R' for fallback
+  const rightLateralityMap: Record<string, string> = {
+    RMLO: "LMLO",
+    RCC: "LCC",
+    R: "L", // Fallback: R pairs with L
+  };
+
+  // Preprocess: Combine `laterality` and `view` (if available)
+  const processedData = data.map((item) => ({
+    ...item,
+    mergedLaterality:
+      `${item.laterality ?? ""}${item.view ?? ""}`.toUpperCase(), // Combine and standardize
+  }));
+
+  // Split data into left and right images
+  const leftImages = processedData.filter(
+    (item) =>
+      leftLateralityPriority.includes(item.mergedLaterality) ||
+      item.laterality === "R",
+  );
+  const rightImages = processedData.filter(
+    (item) =>
+      Object.values(rightLateralityMap).includes(item.mergedLaterality) ||
+      item.laterality === "L",
+  );
+
+  const sortedGrid: PatientData[] = [];
+  const unmatched: PatientData[] = [...processedData]; // Track unmatched images
+
+  // Match left images with corresponding right images
+  for (const left of leftImages) {
+    const correspondingRight = rightImages.find(
+      (right) =>
+        right.mergedLaterality === rightLateralityMap[left.mergedLaterality] || // Standard rule
+        (left.laterality === "R" && right.laterality === "L"), // Fallback rule
+    );
+
+    if (correspondingRight) {
+      // Add the matched pair to the grid
+      sortedGrid.push(left, correspondingRight);
+
+      // Remove matched items from the unmatched list
+      unmatched.splice(unmatched.indexOf(left), 1);
+      unmatched.splice(unmatched.indexOf(correspondingRight), 1);
+
+      // Remove the matched right image to avoid duplication
+      const index = rightImages.indexOf(correspondingRight);
+      rightImages.splice(index, 1);
+    }
+  }
+
+  // Append unmatched images at the end
+  return [...sortedGrid, ...unmatched];
+}
 
 const PatientGallery = ({ data, email, role }: Props) => {
   const [showDetails, setShowDetails] = useState(true);
   const [showHeatMap, setShowHeatMap] = useState(false);
 
-  const sortedData = useMemo(() => {
-    return [...data].sort((a, b) => {
-      const aKey = `${a.laterality}${a.view}` as keyof typeof viewOrder;
-      const bKey = `${b.laterality}${b.view}` as keyof typeof viewOrder;
-      return viewOrder[aKey] - viewOrder[bKey];
-    });
-  }, [data]);
+  const sortedData = useMemo(() => sortPatientDataForGrid(data), [data]);
 
   return (
     <div className="pb-4">

@@ -122,12 +122,29 @@ export const feedbackRouter = createTRPCRouter({
           birads_classification.birads_4c,
           birads_classification.birads_5,
           birads_classification.birads_6,
+          birads_classification.na,
         ]),
         user_email: z.string().email(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.biradsFeedback.create({
+      // Fetch the `laterality` and `patient_id` for the given `study_uid`
+      const dicomRecord = await ctx.db.dicomMetadata.findUnique({
+        where: { mammography_id: input.study_uid },
+        select: {
+          laterality: true,
+          patient_id: true, // Include patient_id to identify related records
+        },
+      });
+
+      if (!dicomRecord) {
+        throw new Error("Study not found.");
+      }
+
+      const { laterality, patient_id } = dicomRecord;
+
+      // Create the primary feedback
+      const feedback = await ctx.db.biradsFeedback.create({
         data: {
           study_uid: input.study_uid,
           suspect_lesion: input.suspect_lesion,
@@ -139,11 +156,53 @@ export const feedbackRouter = createTRPCRouter({
           user_email: input.user_email,
         },
       });
+
+      // Fetch all related `study_uid`s with the same `laterality` for the same patient
+      const relatedStudies = await ctx.db.dicomMetadata.findMany({
+        where: {
+          laterality,
+          patient_id,
+          NOT: {
+            mammography_id: input.study_uid, // Exclude the original `study_uid`
+          },
+        },
+        select: { mammography_id: true },
+      });
+
+      // Create minimal feedback for each related study
+      const relatedFeedbackPromises = relatedStudies.map(async (study) => {
+        // Check if a feedback record already exists for this study_uid
+        const existingFeedback = await ctx.db.biradsFeedback.findUnique({
+          where: { study_uid: study.mammography_id },
+        });
+
+        if (!existingFeedback) {
+          return ctx.db.biradsFeedback.create({
+            data: {
+              study_uid: study.mammography_id,
+              birads_class: input.birads_class as birads_classification,
+              user_email: input.user_email,
+              suspect_lesion: false,
+              shadow: false,
+              microcalcifications: false,
+              symmetry: false,
+              architectonics: false,
+            },
+          });
+        }
+
+        return null;
+      });
+
+      await Promise.all(relatedFeedbackPromises);
+
+      return feedback; // Return the primary feedback
     }),
+
   updateFeedback: publicProcedure
     .input(
       z.object({
-        id: z.number(), // Assuming you have an `id` field to uniquely identify the record
+        id: z.number(), // Unique identifier for the feedback
         study_uid: z.string(),
         suspect_lesion: z.boolean(),
         shadow: z.boolean(),
@@ -166,9 +225,10 @@ export const feedbackRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.biradsFeedback.update({
+      // Update the primary feedback
+      const feedback = await ctx.db.biradsFeedback.update({
         where: {
-          id: input.id, // Use the unique identifier for the update
+          id: input.id,
         },
         data: {
           study_uid: input.study_uid,
@@ -182,6 +242,55 @@ export const feedbackRouter = createTRPCRouter({
           createdAt: new Date(),
         },
       });
+
+      // Fetch the `laterality` and `patient_id` for the given `study_uid`
+      const dicomRecord = await ctx.db.dicomMetadata.findUnique({
+        where: { mammography_id: input.study_uid },
+        select: {
+          laterality: true,
+          patient_id: true,
+        },
+      });
+
+      if (!dicomRecord) {
+        throw new Error("Study not found.");
+      }
+
+      const { laterality, patient_id } = dicomRecord;
+
+      // Fetch all related `study_uid`s with the same `laterality` for the same patient
+      const relatedStudies = await ctx.db.dicomMetadata.findMany({
+        where: {
+          laterality,
+          patient_id,
+          NOT: {
+            mammography_id: input.study_uid, // Exclude the original `study_uid`
+          },
+        },
+        select: { mammography_id: true },
+      });
+
+      // Update the `birads_class` for each related study
+      const relatedFeedbackPromises = relatedStudies.map(async (study) => {
+        const existingFeedback = await ctx.db.biradsFeedback.findUnique({
+          where: { study_uid: study.mammography_id },
+        });
+
+        if (existingFeedback) {
+          return ctx.db.biradsFeedback.update({
+            where: { id: existingFeedback.id },
+            data: {
+              birads_class: input.birads_class as birads_classification, // Only update the birads_class field
+            },
+          });
+        }
+
+        return null;
+      });
+
+      await Promise.all(relatedFeedbackPromises);
+
+      return feedback; // Return the updated primary feedback
     }),
 });
 

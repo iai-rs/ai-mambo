@@ -63,18 +63,12 @@ type Props = {
 const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
   const { toast } = useToast();
   const [shadow, setShadow] = useState(feedback?.shadow ?? false);
-  const [microcalcifications, setMicrocalcifications] = useState(
-    feedback?.microcalcifications ?? false,
-  );
-  const [symmetry, setSymmetry] = useState(feedback?.symmetry ?? false);
-  const [suspectLesion, setSuspectLesion] = useState(
-    feedback?.suspect_lesion ?? false,
-  );
-  const [architectonics, setArchitectonics] = useState(
-    feedback?.architectonics ?? false,
-  );
+  const [microcalcifications, setMicrocalcifications] = useState(false);
+  const [symmetry, setSymmetry] = useState(false);
+  const [suspectLesion, setSuspectLesion] = useState(false);
+  const [architectonics, setArchitectonics] = useState(false);
   const [birads, setBirads] = useState<birads_classification>(
-    feedback?.birads_class ?? birads_classification.birads_0,
+    birads_classification.birads_0,
   );
 
   const router = useRouter();
@@ -93,7 +87,7 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
       {
         shadow,
         architectonics,
-        birads_class: birads_classification.birads_4a,
+        birads_class: birads,
         microcalcifications,
         study_uid: studyUid,
         suspect_lesion: suspectLesion,
@@ -151,6 +145,17 @@ const FeedbackDialog = ({ studyUid, email, imageUrl, feedback }: Props) => {
       },
     );
   };
+
+  useEffect(() => {
+    if (feedback) {
+      setShadow((prev) => feedback.shadow ?? prev);
+      setMicrocalcifications((prev) => feedback.microcalcifications ?? prev);
+      setSymmetry((prev) => feedback.symmetry ?? prev);
+      setSuspectLesion((prev) => feedback.suspect_lesion ?? prev);
+      setArchitectonics((prev) => feedback.architectonics ?? prev);
+      setBirads((prev) => feedback.birads_class ?? prev);
+    }
+  }, [feedback]);
 
   useEffect(() => {
     if (shadow || microcalcifications || architectonics || symmetry) {
