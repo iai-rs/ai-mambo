@@ -19,25 +19,30 @@ type Props = {
 };
 
 function sortPatientDataForGrid(data: PatientData[]): PatientData[] {
-  const leftLateralityPriority = ["RMLO", "RCC"]; // Left image priority
+  const leftLateralityPriority = ["RMLO", "RCC", "R"]; // Include 'R' for fallback
   const rightLateralityMap: Record<string, string> = {
     RMLO: "LMLO",
     RCC: "LCC",
+    R: "L", // Fallback: R pairs with L
   };
 
-  // Preprocess data: combine `laterality` and `view` to form a new `mergedLaterality` property
+  // Preprocess: Combine `laterality` and `view` (if available)
   const processedData = data.map((item) => ({
     ...item,
     mergedLaterality:
       `${item.laterality ?? ""}${item.view ?? ""}`.toUpperCase(), // Combine and standardize
   }));
 
-  // Separate data by merged laterality for sorting
-  const leftImages = processedData.filter((item) =>
-    leftLateralityPriority.includes(item.mergedLaterality),
+  // Split data into left and right images
+  const leftImages = processedData.filter(
+    (item) =>
+      leftLateralityPriority.includes(item.mergedLaterality) ||
+      item.laterality === "R",
   );
-  const rightImages = processedData.filter((item) =>
-    Object.values(rightLateralityMap).includes(item.mergedLaterality),
+  const rightImages = processedData.filter(
+    (item) =>
+      Object.values(rightLateralityMap).includes(item.mergedLaterality) ||
+      item.laterality === "L",
   );
 
   const sortedGrid: PatientData[] = [];
@@ -47,7 +52,8 @@ function sortPatientDataForGrid(data: PatientData[]): PatientData[] {
   for (const left of leftImages) {
     const correspondingRight = rightImages.find(
       (right) =>
-        right.mergedLaterality === rightLateralityMap[left.mergedLaterality],
+        right.mergedLaterality === rightLateralityMap[left.mergedLaterality] || // Standard rule
+        (left.laterality === "R" && right.laterality === "L"), // Fallback rule
     );
 
     if (correspondingRight) {
@@ -64,7 +70,7 @@ function sortPatientDataForGrid(data: PatientData[]): PatientData[] {
     }
   }
 
-  // Add unmatched images at the end
+  // Append unmatched images at the end
   return [...sortedGrid, ...unmatched];
 }
 
