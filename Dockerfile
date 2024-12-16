@@ -26,15 +26,15 @@ ENV MINIO_ENDPOINT=$MINIO_ENDPOINT
 ENV NEXTAUTH_URL=$NEXTAUTH_URL
 ENV AUTH_TRUST_HOST=$AUTH_TRUST_HOST
 
-RUN wget http://dl-cdn.alpinelinux.org/alpine/v3.18/community/x86_64/libcrypto1.1-1.1.1u-r1.apk && \
-    wget http://dl-cdn.alpinelinux.org/alpine/v3.18/community/x86_64/libssl1.1-1.1.1u-r1.apk && \
-    wget http://dl-cdn.alpinelinux.org/alpine/v3.18/community/x86_64/openssl1.1-compat-dev-1.1.1u-r1.apk
+# RUN wget http://dl-cdn.alpinelinux.org/alpine/v3.18/community/x86_64/libcrypto1.1-1.1.1u-r1.apk && \
+    # wget http://dl-cdn.alpinelinux.org/alpine/v3.18/community/x86_64/libssl1.1-1.1.1u-r1.apk && \
+    # wget http://dl-cdn.alpinelinux.org/alpine/v3.18/community/x86_64/openssl1.1-compat-dev-1.1.1u-r1.apk
 
-RUN apk add --allow-untrusted libcrypto1.1-1.1.1u-r1.apk && \
-    apk add --allow-untrusted libssl1.1-1.1.1u-r1.apk && \
-    apk add --allow-untrusted openssl1.1-compat-dev-1.1.1u-r1.apk
+# RUN apk add --allow-untrusted libcrypto1.1-1.1.1u-r1.apk && \
+    # apk add --allow-untrusted libssl1.1-1.1.1u-r1.apk && \
+    # apk add --allow-untrusted openssl1.1-compat-dev-1.1.1u-r1.apk
 
-RUN rm -f libcrypto1.1-1.1.1u-r1.apk libssl1.1-1.1.1u-r1.apk openssl1.1-compat-dev-1.1.1u-r1.apk
+# RUN rm -f libcrypto1.1-1.1.1u-r1.apk libssl1.1-1.1.1u-r1.apk openssl1.1-compat-dev-1.1.1u-r1.apk
 
 RUN npm install -g pnpm
 
