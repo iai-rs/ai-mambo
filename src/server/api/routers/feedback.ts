@@ -31,7 +31,8 @@ export const feedbackRouter = createTRPCRouter({
       });
 
       if (!feedback || feedback.length === 0) {
-        throw new Error("No feedback found for this user");
+        console.error("No feedback found for this user");
+        return { feedback: null, uniquePatientCount: 0 };
       }
 
       const uniquePatients = new Set(
