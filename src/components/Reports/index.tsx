@@ -60,7 +60,7 @@ const Reports = () => {
         data={(data as any) ?? []} // TODO: check as any later
         enableSorting
         isLoading={isLoading}
-        defaultSorting={[{ id: "feedback", desc: true }]}
+        defaultSorting={[{ id: "patientCount", desc: true }]}
         pageSize={5}
       />
       <h1 className="mb-2 mt-4 text-2xl font-bold">
